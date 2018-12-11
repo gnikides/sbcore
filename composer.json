@@ -1,0 +1,28 @@
+{
+    "name": "webedia2-packages/content-hub-core",
+    "description": "Content-hub Core package",
+    "type": "library",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0",
+        "dingo/api": "^2.0@alpha",
+        "jenssegers/mongodb": "^3.3"
+    },
+    "autoload": {
+        "classmap": [
+          "database/seeds",
+          "database/factories"
+        ],
+        "psr-4": {
+            "Wb\\ContentHub\\Core\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": ["*"]
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}
