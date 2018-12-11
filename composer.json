@@ -1,20 +1,15 @@
 {
-    "name": "webedia2-packages/content-hub-core",
-    "description": "Content-hub Core package",
+    "name": "gnikides/sbcore",
+    "description": "Storybloks Core package",
     "type": "library",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.0",
-        "dingo/api": "^2.0@alpha",
-        "jenssegers/mongodb": "^3.3"
+        "php": ">=7.0"
     },
     "autoload": {
-        "classmap": [
-          "database/seeds",
-          "database/factories"
-        ],
+        "classmap": [],
         "psr-4": {
-            "Wb\\ContentHub\\Core\\": "src"
+            "Core\\": "src"
         }
     },
     "extra": {
