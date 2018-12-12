@@ -15,11 +15,6 @@ class Account
         
         if ($response['id'] && empty($response['failure_code'])) {
             return $response;
-            // return Merchant::strictUpdate($merchant_id, [
-            //     'stripe_account_id'     => $response['id'],
-            //     'stripe_response'       => $response,
-            //     'stripe_verified_at'    => now(),
-            // ]);
         }
         Log::error('stripe create account failed', [$merchant_id, $payload, @$response]);
         return false;
