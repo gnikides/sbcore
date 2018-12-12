@@ -11,6 +11,7 @@ $cust->billingAddress();
 
 class Model
 {
+    protected $endpoint;
     protected $attributes = [];
     protected $original_data;
     protected $is_cache;
@@ -35,7 +36,7 @@ class Model
 
     public function get($id, $is_cache)
     {
-        $this->attributes = collect(api($this->node)->get($id, $is_cache));
+        $this->attributes = collect(api($this->endpoint)->get($id, $is_cache));
     }
 
     public function create(array $params = [])
