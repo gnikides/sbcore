@@ -1,4 +1,4 @@
-<?php namespace App\Support\Foundation;
+<?php namespace Core\Support;
 
 class Platform
 {

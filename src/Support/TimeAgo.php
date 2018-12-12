@@ -1,4 +1,4 @@
-<?php namespace App\Support\Foundation;
+<?php namespace Core\Support;
 
 use DateTime;
 use DateTimeZone;
@@ -17,12 +17,9 @@ class TimeAgo
     public function getPhrase($timestamp, $timezone='')
     {    
         $str = '';
-
         $elapsedTime = $this->getElapsedSeconds($timestamp, $timezone);
-
         if ($elapsedTime <= 10) {
-            $str = __('just now');
-            
+            $str = __('just now');            
         } else {
             $periods = [
                 86400   =>  __('day'),

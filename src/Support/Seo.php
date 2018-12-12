@@ -1,6 +1,4 @@
-<?php namespace Story;
-
-use Crop;
+<?php namespace Core\Support;
 
 class Seo
 {   

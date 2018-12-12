@@ -1,6 +1,6 @@
-<?php namespace App\Support;
+<?php namespace Core\Support;
 
-use App\Exceptions\BadArgumentException;
+use Core\Exceptions\BadArgumentException;
 
 class Assert
 {

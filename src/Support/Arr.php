@@ -1,4 +1,4 @@
-<?php namespace App\Support\Foundation;
+<?php namespace Core\Support;
 
 class Arr
 {
@@ -10,17 +10,14 @@ class Arr
      * @param  array or object $array
      * @return boolean         false if no elements    
     */        
-    public static function countStrict($data)
+    public static function countStrict(array $data = null)
     {
         //  let's count false and '0' but not null and not ''
-        if ($data && ($data != '') && ($data !== null)) {
-           
+        if ($data && ($data != '') && ($data !== null)) {           
             if (!is_array($data)) {
-                return 1;
-            
+                return 1;            
             } else {
-                $count = 0;
-                
+                $count = 0;                
                 foreach ($data as $k => $v) {
                     $count += self::countStrict($v); 
                 }
@@ -39,7 +36,7 @@ class Arr
      * @param  array $options
      * @return array      
     */
-    public static function parseOptions($defaults=[], $options=[])
+    public static function parseOptions(array $defaults = [], array $options = [])
     {    
         $ay = [];
         if (is_object($options)) {

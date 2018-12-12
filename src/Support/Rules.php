@@ -1,4 +1,4 @@
-<?php namespace App\Support;
+<?php namespace Core\Support;
 
 class Rules
 {
