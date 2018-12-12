@@ -1,12 +1,12 @@
 <?php namespace App\Support;
 
-
-$cust = new Cust();
-$cust->get($id);
-$cust->create([]);
-$cust->update([]);
-$cust->delete(1);
-$cust->billingAddress();
+// 
+// $cust = new Cust();
+// $cust->get($id);
+// $cust->create([]);
+// $cust->update([]);
+// $cust->delete(1);
+// $cust->billingAddress();
 
 
 class Model
