@@ -1,4 +1,4 @@
-<?php namespace App\Services;
+<?php namespace Core\Services;
 
 class SafeUrl
 {

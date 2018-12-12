@@ -1,6 +1,6 @@
-<?php namespace App\Services;
+<?php namespace Core\Services;
 
-class Stats
+class Probability
 {
     /*
         PHP: Get all combinations of multiple arrays (preserves keys)

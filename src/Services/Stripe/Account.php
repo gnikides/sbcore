@@ -1,6 +1,8 @@
-<?php namespace App\Services\Stripe;
+<?php namespace Core\Services\Stripe;
 
-use App\Models\Merchant;
+use Log;
+use Mail;
+//use App\Models\Merchant;
 
 class Account
 { 
@@ -12,13 +14,14 @@ class Account
         $response = \Stripe\Account::create($payload); 
         
         if ($response['id'] && empty($response['failure_code'])) {
-            return Merchant::strictUpdate($merchant_id, [
-                'stripe_account_id'     => $response['id'],
-                'stripe_response'       => $response,
-                'stripe_verified_at'    => now(),
-            ]);
+            return $response;
+            // return Merchant::strictUpdate($merchant_id, [
+            //     'stripe_account_id'     => $response['id'],
+            //     'stripe_response'       => $response,
+            //     'stripe_verified_at'    => now(),
+            // ]);
         }
-        \Log::error('stripe create account failed', [$merchant_id, $payload, @$response]);
+        Log::error('stripe create account failed', [$merchant_id, $payload, @$response]);
         return false;
     }
     
@@ -115,7 +118,7 @@ class Account
             empty($account->legal_entity->verification->document) ||
             'verified' != $account->legal_entity->verification->status) {
             
-            \Mail::raw(json_encode($account), function($message) {
+            Mail::raw(json_encode($account), function($message) {
                 $message->to(trim(config('mail.admin')));
                 $message->subject('Merchant account needs verification');
             });

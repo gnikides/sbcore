@@ -1,4 +1,4 @@
-<?php namespace App\Services;
+<?php namespace Core\Services;
 
 /*
  * This file is part of the Convertor package.

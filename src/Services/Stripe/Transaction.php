@@ -1,4 +1,4 @@
-<?php namespace App\Services\Stripe;
+<?php namespace Core\Services\Stripe;
 
 class Transaction
 {

@@ -1,4 +1,4 @@
-<?php namespace App\Services\Text;
+<?php namespace Core\Services\Text;
 
 use Snipe\BanBuilder\CensorWords;
 

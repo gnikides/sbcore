@@ -1,6 +1,6 @@
-<?php namespace App\Support;
+<?php namespace Core\Services;
 
-use App\Support\Foundation\Platform;
+use Core\Support\Platform;
 use Log;
 
 class Geoplugin
