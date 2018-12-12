@@ -1,14 +1,6 @@
-<?php namespace App\Console\Commands;
+<?php namespace Core\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Http\Request;
-use App\Models\ReadOnly\Country;
-use App\Models\ReadOnly\Zone;
-use Cocur\Slugify\Slugify;
-use App\Models\ProductCompiled;
-use App\Models\ProductVersion;
-use App\Models\ProductFormat;
-use App\Models\Price;
 
 class ClearApc extends Command
 {

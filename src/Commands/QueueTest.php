@@ -1,4 +1,4 @@
-<?php namespace App\Console\Commands;
+<?php namespace Core\Commands;
 
 use Illuminate\Console\Command;
 
@@ -12,5 +12,4 @@ class QueueTest extends Command
         $this->info("Testing queue ... "); 
         \App\Jobs\QueueTest::dispatch(); 
     }
-
 }

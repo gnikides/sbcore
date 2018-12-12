@@ -3,10 +3,8 @@
 use Illuminate\Support\Debug\Dumper;
 use Carbon\Carbon;
 
+//  dump a variable
 if (!function_exists('sb')) {  
-    /**
-     * dump a variable
-     */
     function sb($var, bool $die = false)
     { 
         array_map(function($var) {
@@ -19,10 +17,8 @@ if (!function_exists('sb')) {
     }
 }
 
+//  print_r a variable
 if (!function_exists('pr')) { 
-    /**
-     * Print a variable
-     */
     function pr($var, bool $die = false)
     { 
         echo '<pre>';
@@ -35,10 +31,8 @@ if (!function_exists('pr')) {
     }
 }
 
+//  utility log function
 if (!function_exists('lg')) { 
-    /**
-     * Utility function to log
-     */
     function lg($array, string $message = 'debug')
     {   
         if (!is_array($array)) {
@@ -48,20 +42,16 @@ if (!function_exists('lg')) {
     }
 }
 
+// Format time for mysql insert
 if (!function_exists('now')) {
-    /**
-     * Format time for mysql insert
-     */
     function now($timezone = 'UTC')
     { 
         return Carbon::now($timezone);
     }
 }
 
+// truncate text
 if (!function_exists('truncate')) {
-    /**
-     * Truncate text
-     */
     function truncate(string $text, int $length = 400, string $break_at = ' ', string $message = null)
     {
         $min_length = 10;        
@@ -86,10 +76,8 @@ if (!function_exists('truncate')) {
         return false;
     }
 }
+
 if (!function_exists('sanitizeString')) {
-    /**
-     * Clean string
-     */
     function sanitizeString($value)
     {
         return filter_var($value, FILTER_SANITIZE_STRING);
@@ -97,9 +85,6 @@ if (!function_exists('sanitizeString')) {
  }
 
 if (!function_exists('sanitizeInt')) {
-    /**
-     * Clean number
-     */
     function sanitizeInt($value)
     {
         return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
@@ -107,9 +92,6 @@ if (!function_exists('sanitizeInt')) {
 }
 
 if (!function_exists('sanitizeFloat')) {
-    /**
-     * Clean number
-     */
     function sanitizeFloat($value)
     {
         return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
