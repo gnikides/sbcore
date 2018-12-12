@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Debug\Dumper;
 use Carbon\Carbon;
+use Core\Support\TimeAgo;
 
 //  dump a variable
 if (!function_exists('sb')) {  
@@ -96,4 +97,12 @@ if (!function_exists('sanitizeFloat')) {
     {
         return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
     } 
+}
+
+if (!function_exists('timeAgo')) {
+    function timeAgo($date)
+    {
+        $time = new TimeAgo(config('app.timezone'));
+        return $time->timeAgo($date);
+    }
 }
