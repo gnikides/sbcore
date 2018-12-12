@@ -1,4 +1,4 @@
-<?php namespace App\Rules;
+<?php namespace Core\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use IsoCodes\Iban;

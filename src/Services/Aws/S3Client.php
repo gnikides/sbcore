@@ -1,4 +1,4 @@
-<?php namespace App\Services\Aws;
+<?php namespace Core\Services\Aws;
 
 use Aws\S3\S3Client as Client;
 use Aws\S3\Exception\S3Exception;
