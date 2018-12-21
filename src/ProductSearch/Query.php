@@ -1,11 +1,9 @@
-<?php namespace App\Modules\ProductSearch;
+<?php namespace Core\ProductSearch;
 
-use App\Support\Elastic\Query as BaseQuery;
+use Core\Services\Elastic\QueryNew as BaseQuery;
 
 class Query extends BaseQuery
 {
-    protected $sort_column = 'uploaded_at';
-    protected $sort_direction = 'desc';
     protected $range_filters = [
         'price' => [
             'from'          => 'price_from',
