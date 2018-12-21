@@ -1,6 +1,7 @@
 <?php namespace Core\ProductSearch;
 
 use Core\Services\Elastic\QueryNew as BaseQuery;
+use Core\Services\Elastic\QueryOptions;
 
 class Query extends BaseQuery
 {
@@ -46,7 +47,7 @@ class Query extends BaseQuery
 
     public function buildQuery(
         $search_string = '',
-        array $options = [],
+        QueryOptions $options,
         $facets = null,
         $range_facets = null
     ) : array {
