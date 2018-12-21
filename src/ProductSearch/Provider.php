@@ -1,26 +1,26 @@
-<?php namespace ProductSearch;
+<?php namespace Core\ProductSearch;
 
-use App\Modules\ProductSearch\Query;
-use Core\Services\Elastic\Search as SearchEngine;
-use App\Support\Cache\Manager as CacheManager;
+use Core\ProductSearch\Query;
+use Core\Services\Elastic\Search;
+use Core\Services\Elastic\QueryOptions;
 use Core\ProductSearch\FacetTransformer;
+use App\Support\Cache\Manager as CacheManager;
 use Api\Models\Product as ProductModel;
 
 class Provider
 {
-    public function __construct(
-        Query $query,
-        SearchEngine $engine
-    )
+    public function __construct(Query $query, Search $engine)
     {
         $this->query = $query;
         $this->engine = $engine;
     }
 
-    public function search($search_string, $options = [], $facets = '', $is_cache = false)
+    public function search(string $search_string = '', QueryOptions $options, array $facets = [], bool $is_cache = false)
     {
         $query = $this->query->buildQuery($search_string, $options, $facets);
-        //print_r(json_encode($query, JSON_PRETTY_PRINT));
+        
+        //  @debug
+        //  print_r(json_encode($query, JSON_PRETTY_PRINT));
         
         return !$is_cache ? $this->rawSearch($query) : $this->cachedSearch($query);
     }
@@ -49,8 +49,8 @@ class Provider
     protected function transform($items, $facets)
     {
         return [
-            'items' => $this->transformProduct($items),
-            'facets' => (new FacetTransformer)->transform($facets)
+            'items'     => $this->transformProduct($items),
+            'facets'    => (new FacetTransformer)->transform($facets)
         ];
     }
 
