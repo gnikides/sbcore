@@ -1,4 +1,4 @@
-<?php namespace App\Support\Elastic;
+<?php namespace Core\Services\Elastic;
 
 class QueryOptions
 {    

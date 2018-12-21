@@ -2,7 +2,7 @@
 
 use Core\Services\Elastic\QueryOptions;
 
-abstract class Query
+abstract class QueryNew
 {
     //
     /*
