@@ -1,20 +1,22 @@
-<?php namespace ProductSearch\Query;
+<?php namespace App\Support\Elastic;
 
-class Options
-{
+class QueryOptions
+{    
     private $page           = 1;
     private $per_page       = 25;
     private $sort_column    = 'updated_at';
     private $sort_direction = 'desc';
     private $filters        = [];
-    private $ids;
-
+    private $ids            = [];
+    private $platform;
+    private $language       = 'en';
+    
     public function getPage()
     {
         return $this->page;
     }
 
-    public function setPage($page = 1)
+    public function setPage(int $page = 1)
     {
         $this->page = $page;
         return $this;
@@ -25,7 +27,7 @@ class Options
         return $this->per_page;
     }
 
-    public function setPerPage($per_page)
+    public function setPerPage(int $per_page)
     {
         $this->per_page = $per_page;
         return $this;
@@ -36,7 +38,7 @@ class Options
         return $this->sort_column;
     }
 
-    public function setSortColumn($sort_column)
+    public function setSortColumn(string $sort_column)
     {
         $this->sort_column = $sort_column;
         return $this;
@@ -47,7 +49,7 @@ class Options
         return $this->sort_direction;
     }
 
-    public function setSortDirection($sort_direction)
+    public function setSortDirection(string $sort_direction)
     {
         $this->sort_direction = $sort_direction;
         return $this;
@@ -58,7 +60,7 @@ class Options
         return $this->filters;
     }
 
-    public function setFilters($filters)
+    public function setFilters(array $filters = [])
     {
         $this->filters = $filters;
         return $this;
@@ -69,9 +71,31 @@ class Options
         return $this->ids;
     }
 
-    public function setIds($ids)
+    public function setIds(array $ids = [])
     {
         $this->ids = $ids;
         return $this;
     }
+    
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    public function setPlatform(string $platform)
+    {
+        $this->platform = $platform;
+        return $this;
+    } 
+    
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language)
+    {
+        $this->language = $language;
+        return $this;
+    }    
 }
