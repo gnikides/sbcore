@@ -4,6 +4,7 @@ use Core\Services\Elastic\QueryOptions;
 
 abstract class Query
 {
+    //
     /*
         Default search string, if none present
     */
