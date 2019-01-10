@@ -76,7 +76,7 @@ class FacetTransformer
 
     public function prices($buckets, $currency)
     {
-        //   how rto put currency in there ????
+        //   how put currency in there ????
         return collect($buckets)->map(function ($item) {
             return [
                 'key'       => $item['key'],

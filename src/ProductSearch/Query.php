@@ -104,7 +104,7 @@ class Query extends BaseQuery
         }
 
         //  format all other terms
-        $filters->each(function ($item, $key) use (&$formatted, $used_filters) {
+        $filters = collect($filters)->each(function ($item, $key) use (&$formatted, $used_filters) {
             if (!in_array($key, $used_filters)) {
                 $formatted[]['terms'][$key][] = $item;
             }

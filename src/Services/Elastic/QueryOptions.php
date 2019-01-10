@@ -2,15 +2,27 @@
 
 class QueryOptions
 {    
+    private $index;
     private $page           = 1;
     private $per_page       = 25;
     private $sort_column    = 'updated_at';
     private $sort_direction = 'desc';
-    private $filters        = [];
+    private $filters;
     private $ids            = [];
     private $platform;
     private $language       = 'en';
-    
+
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    public function setIndex(string $index)
+    {
+        $this->index = $index;
+        return $this;
+    }
+
     public function getPage()
     {
         return $this->page;

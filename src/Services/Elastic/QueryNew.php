@@ -45,6 +45,7 @@ abstract class QueryNew
         $body = [];
         
         $this->options = $options;
+        $body['index'] = $this->options->getIndex() ? $this->options->getIndex() : config('services.elastic.index');
         $body['size'] = $this->options->getPerPage() ? $this->options->getPerPage() : self::DEFAULT_PAGER_SIZE;
         $body['from'] = $this->options->getPage() ? $body['size'] * ($this->options->getPage() - 1) : self::DEFAULT_PAGER_FROM;
         $body['body']['sort'][][$this->options->getSortColumn()] = $this->options->getSortDirection();
