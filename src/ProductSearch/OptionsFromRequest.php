@@ -16,7 +16,7 @@ class OptionsFromRequest
         self::SORT_REVERSE_STARS
     ];
 
-    public function make(object $input)
+    public function make($input)
     {
         $options = new Options();
         $sort = $input->get('sort');
