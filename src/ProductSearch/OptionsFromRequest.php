@@ -22,7 +22,7 @@ class OptionsFromRequest
         //'price_range',
         //'tags'
     ];
-    
+
     public function make($input)
     {
         $options = new Options();
@@ -40,7 +40,7 @@ class OptionsFromRequest
             $options->setSortColumn('average_rating');
             $options->setSortDirection('asc');
         } else {
-            //  self::SORT_REVERSE_CHRONOLOGICAL is default
+            //  reverse chronological is default
             $options->setSortColumn('updated_at');
             $options->setSortDirection('desc');
         }
