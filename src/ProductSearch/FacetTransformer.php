@@ -2,7 +2,7 @@
 
 class FacetTransformer
 {
-    public function transform($facets, array $sites, array $categories, array $countries) : array
+    public function transform($facets, $sites, $categories, $countries) : array
     {
         return collect($facets)->transform(function ($item, $key) {
             if (false !== strpos($key, '_range')) {
@@ -23,7 +23,7 @@ class FacetTransformer
         });
     }
 
-    public function categories($buckets, array $categories)
+    public function categories($buckets, $categories)
     {
         return collect($buckets)->map(function ($item) use ($categories) {
             if (array_key_exists('key', $item)) {
@@ -40,7 +40,7 @@ class FacetTransformer
         })->toArray();
     }
 
-    public function sites($bucket, array $sites)
+    public function sites($bucket, $sites)
     {
         return collect($buckets)->map(function ($item) use ($sites) {
             if (array_key_exists('key', $item)) {
@@ -58,7 +58,7 @@ class FacetTransformer
         })->toArray();
     }
 
-    public function countries($buckets, array $countries)
+    public function countries($buckets, $countries)
     {
         return collect($buckets)->map(function ($item) use ($countries) {
             if (array_key_exists('key', $item)) {
