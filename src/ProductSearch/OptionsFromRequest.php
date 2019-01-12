@@ -15,7 +15,14 @@ class OptionsFromRequest
         self::SORT_STARS,
         self::SORT_REVERSE_STARS
     ];
-
+    const ACCEPTED_FILTERS = [
+        'site_id',
+        'category_id',
+        'country_code',
+        //'price_range',
+        //'tags'
+    ];
+    
     public function make($input)
     {
         $options = new Options();
