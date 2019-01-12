@@ -1,8 +1,5 @@
 <?php namespace Core\Services;
 
-
-// hello
-
 class SafeUrl
 {
     private $options = [
