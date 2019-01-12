@@ -1,6 +1,6 @@
 <?php namespace Core\ProductSearch;
 
-use Core\Services\Elastic\QueryNew as BaseQuery;
+use Core\Services\Elastic\Query as BaseQuery;
 use Core\Services\Elastic\QueryOptions;
 
 class Query extends BaseQuery

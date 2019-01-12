@@ -36,27 +36,29 @@ abstract class Query
 
     public function build(
         string $search_string = '',
-        array $options = [],
+        QueryOptions $options,
         array $range_filters = [],
         array $facets = [],
         array $range_facets = []
     ) : array {
         $body = [];
-
-        $body['size'] = $options['per_page'] ?? self::DEFAULT_PAGER_SIZE;
-        $body['from'] = isset($options['page']) ? $body['size'] * ($options['page'] - 1) : self::DEFAULT_PAGER_FROM;
-        $body['body']['sort'][][$this->sortColumn($options)] = $this->sortDirection($options);
+        
+        $this->options = $options;
+        $body['index'] = $this->options->getIndex() ? $this->options->getIndex() : config('services.elastic.index');
+        $body['size'] = $this->options->getPerPage() ? $this->options->getPerPage() : self::DEFAULT_PAGER_SIZE;
+        $body['from'] = $this->options->getPage() ? $body['size'] * ($this->options->getPage() - 1) : self::DEFAULT_PAGER_FROM;
+        $body['body']['sort'][][$this->options->getSortColumn()] = $this->options->getSortDirection();
 
         $filters = null;
-        if (array_key_exists('filters', $options) && method_exists($this, 'buildFilters')) {
-            $filters = $this->buildFilters($options['filters'], $range_filters);
+        if ($this->options->getFilters() && method_exists($this, 'buildFilters')) {
+            $filters = $this->buildFilters($this->options->getFilters(), $range_filters);
         }
-        if (array_key_exists('ids', $options) && !empty($options['ids'])) {
-            $filters[] = (object) $this->buildIdQuery($options['ids']);
+        if ($this->options->getIds()) {
+            $filters[] = (object) $this->buildIdQuery($this->options->getIds());
         }
 
         // /* the search query itself */
-        $language = $options['lang'] ?? self::DEFAULT_LANGUAGE;
+        $language = $this->options->getLanguage() ? $this->options->getLanguage() : self::DEFAULT_LANGUAGE;
         $query = $this->buildSearchFields($search_string, $language);
 
         /* if there are filters, query will be structured differently */
@@ -141,15 +143,5 @@ abstract class Query
             $body['body']['aggs'][$facet]['terms']['field'] = $facet;
         }
         return $body;
-    }
-
-    public function sortColumn(array $params) : string
-    {
-        return array_get($params, 'sort_column', $this->sort_column);
-    }
-
-    public function sortDirection(array $params) : string
-    {
-        return array_get($params, 'sort_direction', $this->sort_direction);
     }
 }
