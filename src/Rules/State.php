@@ -25,9 +25,6 @@ class State implements Rule
 
     public function validate($state)
     {        
-        if ($this->is_state_required && !$state) {  
-            return false;
-        }
-        return true;
+        return ($this->is_state_required && !$state) ? false : true;
     }
 }

@@ -27,7 +27,7 @@ class OptionsFromRequest
     public function make($input)
     {
         $options = new Options();
-        $options->setSearchString($input->get('q', self::DEFAULT_STRING));
+        $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_STRING)));
         $sort = $input->get('sort');
         if (!in_array($sort, self::ACCEPTED_SORTS)) {
             $sort = self::SORT_REVERSE_CHRONOLOGICAL;
