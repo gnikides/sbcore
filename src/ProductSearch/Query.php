@@ -51,7 +51,7 @@ class Query extends BaseQuery
         array $range_facets = []
     ) : array {
         $range_facets = (null === $range_facets) ? $this->range_facets : $range_facets;
-        return $this->build($search_string, $options, $this->range_filters, $facets, $range_facets);
+        return $this->build($options, $this->range_filters, $facets, $range_facets);
     }
 
     public function buildSearchFields(string $search_string = '', string $language = '') : array
