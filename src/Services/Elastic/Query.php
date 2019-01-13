@@ -35,7 +35,6 @@ abstract class Query
     protected $sort_direction = 'desc';
 
     public function build(
-        string $search_string = '',
         QueryOptions $options,
         array $range_filters = [],
         array $facets = [],
@@ -59,7 +58,7 @@ abstract class Query
 
         // /* the search query itself */
         $language = $this->options->getLanguage() ? $this->options->getLanguage() : self::DEFAULT_LANGUAGE;
-        $query = $this->buildSearchFields($search_string, $language);
+        $query = $this->buildSearchFields($this->options->getSearchString(), $language);
 
         /* if there are filters, query will be structured differently */
         if (is_array($filters)) {

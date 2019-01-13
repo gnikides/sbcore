@@ -5,6 +5,7 @@ class QueryOptions
     private $index;
     private $page           = 1;
     private $per_page       = 25;
+    private $search_string  = ' * ';
     private $sort_column    = 'updated_at';
     private $sort_direction = 'desc';
     private $filters;
@@ -42,6 +43,17 @@ class QueryOptions
     public function setPerPage(int $per_page)
     {
         $this->per_page = $per_page;
+        return $this;
+    }
+
+    public function getSearchString()
+    {
+        return $this->search_string;
+    }
+
+    public function setSearchString(string $string)
+    {
+        $this->search_string = $string;
         return $this;
     }
 

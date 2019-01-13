@@ -2,9 +2,9 @@
 
 class FacetTransformer
 {
-    public function transform($facets, $sites, $categories, $countries) : array
-    {
-        return collect($facets)->transform(function ($item, $key) {
+    public function transform($facets, $sites, $categories, $countries)
+    {   
+        return collect($facets)->transform(function ($item, $key) use ($sites, $categories, $countries) {
             if (false !== strpos($key, '_range')) {
                 return collect($item['buckets'])->map(function ($bucket) {
                     return (collect($bucket))->only('key', 'doc_count');
@@ -12,7 +12,8 @@ class FacetTransformer
             }
             if ('category_id' == $key) {
                 return $this->categories($item['buckets'], $categories);
-            } elseif ('site_id' == $key) {
+            }
+             elseif ('site_id' == $key) {
                 return $this->sites($item['buckets'], $sites);
             } elseif ('retail_price' == $key) {
                 //return $this->siteFacets($item['buckets'], $currency);
@@ -40,7 +41,7 @@ class FacetTransformer
         })->toArray();
     }
 
-    public function sites($bucket, $sites)
+    public function sites($buckets, $sites)
     {
         return collect($buckets)->map(function ($item) use ($sites) {
             if (array_key_exists('key', $item)) {

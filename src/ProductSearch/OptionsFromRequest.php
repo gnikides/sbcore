@@ -5,6 +5,7 @@ use Core\Services\Elastic\QueryOptions as Options;
 class OptionsFromRequest
 {
     const DEFAULT_PER_PAGE              = 500;
+    const DEFAULT_STRING                = ' * ';
     const SORT_REVERSE_CHRONOLOGICAL    = 'reverse_chronological';
     const SORT_CHRONOLOGICAL            = 'chronological';
     const SORT_STARS                    = 'stars';
@@ -26,6 +27,7 @@ class OptionsFromRequest
     public function make($input)
     {
         $options = new Options();
+        $options->setSearchString($input->get('q', self::DEFAULT_STRING));
         $sort = $input->get('sort');
         if (!in_array($sort, self::ACCEPTED_SORTS)) {
             $sort = self::SORT_REVERSE_CHRONOLOGICAL;

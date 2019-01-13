@@ -46,14 +46,11 @@ class Query extends BaseQuery
     ];
 
     public function buildQuery(
-        $search_string = '',
         QueryOptions $options,
         array $facets = [],
         array $range_facets = []
     ) : array {
-        $search_string = !empty($search_string) ? $search_string : '*';
         $range_facets = (null === $range_facets) ? $this->range_facets : $range_facets;
-
         return $this->build($search_string, $options, $this->range_filters, $facets, $range_facets);
     }
 
