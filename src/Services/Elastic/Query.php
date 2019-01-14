@@ -56,7 +56,7 @@ abstract class Query
             $filters[] = (object) $this->buildIdQuery($this->options->getIds());
         }
 
-        // /* the search query itself */
+        /* the search query itself */
         $language = $this->options->getLanguage() ? $this->options->getLanguage() : self::DEFAULT_LANGUAGE;
         $query = $this->buildSearchFields($this->options->getSearchString(), $language);
 
