@@ -11,6 +11,9 @@ trait MappingTrait
     protected $mapping = [
         'properties' => [
             /* Integers */
+            'product_id' => [
+                'type' => 'keyword'
+            ],
             'category_id' => [
                 'type' => 'keyword'
             ],
