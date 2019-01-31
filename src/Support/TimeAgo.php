@@ -7,11 +7,9 @@ class TimeAgo
 {
     public $timezone = 'UTC';
 
-    public function __construct($timezone='')
+    public function __construct(string $timezone = '')
     {
-        if ($timezone) {
-            $this->timezone = $timezone;
-        }           
+        $this->timezone = $timezone ? $timezone : 'UTC';         
     }
     
     public function getPhrase($timestamp, $timezone='')
@@ -46,14 +44,11 @@ class TimeAgo
         if (!$timezone) {
             $timezone = $this->timezone;
         }
-        $tmz = new DateTimeZone($timezone);
-        
+        $tmz = new DateTimeZone($timezone);        
         $now = new DateTime('NOW', $tmz); 
-
         $then = new DateTime();
         $then->setTimestamp($timestamp);
         $then->setTimezone($tmz); 
-
         return $now->getTimestamp() - $then->getTimestamp();      
     }
 
@@ -71,7 +66,6 @@ class TimeAgo
                 
         if ($timestamp < $now-(365*86400)) {  //  1 year ago
             return $formatter->format('M j Y');
-
         } elseif ($timestamp < $now-(14*86400)) { //  two weeks ago
             return $formatter->format('M j');
         }

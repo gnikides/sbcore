@@ -106,3 +106,10 @@ if (!function_exists('timeAgo')) {
         return $time->timeAgo($date);
     }
 }
+
+if (!function_exists('formatDate')) {
+    function formatDate($date, string $format = 'M j, Y h:i', $timezone = 'UTC')
+    {
+        return (new DateTime($date, new DateTimeZone($timezone)))->format($format);
+    }
+}
