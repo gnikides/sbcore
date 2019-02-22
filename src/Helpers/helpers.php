@@ -113,3 +113,11 @@ if (!function_exists('formatDate')) {
         return (new DateTime($date, new DateTimeZone($timezone)))->format($format);
     }
 }
+
+if (!function_exists('safeCount')) {  
+    function safeCount($var = null)
+    {   
+        //  as object must implement Countable but expensive to do that test
+        return is_array($var) || is_object($var)  ? @count($var) : 0;
+    }
+}
