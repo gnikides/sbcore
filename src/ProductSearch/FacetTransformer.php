@@ -46,7 +46,7 @@ class FacetTransformer
         return collect($buckets)->map(function ($item) use ($sites) {
             if (array_key_exists('key', $item)) {
                 $site = array_key_exists($item['key'], $sites) ? $sites[$item['key']] : null;
-                if ($site->handle() && $site->url()) {
+                if ($site && $site->handle() && $site->url()) {
                     return [
                         'key'       => $item['key'],
                         'label'     => $site->forceName(),
