@@ -8,11 +8,9 @@ class Account
 { 
     public function create(int $merchant_id, array $payload)
     {  
-        $payload = $this->formatPayload($payload);
-        
+        $payload = $this->formatPayload($payload);        
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $response = \Stripe\Account::create($payload); 
-        
+        $response = \Stripe\Account::create($payload);         
         if ($response['id'] && empty($response['failure_code'])) {
             return $response;
         }
