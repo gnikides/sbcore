@@ -2,11 +2,11 @@
 
 class Card
 {     
-    public function update(string $provider_key, string $token, bool $is_default = true)
+    public function update(string $customer_key, string $token, bool $is_default = true)
     {   
         try {                   
             \Stripe\Stripe::setApiKey(config('services.stripe.secret'));                               
-            $customer = \Stripe\Customer::retrieve($provider_key);
+            $customer = \Stripe\Customer::retrieve($customer_key);
             $customer->source = $token;
             $customer->save();            
             //  @todo get errors from stripe            
@@ -32,11 +32,11 @@ class Card
         }           
     }
 
-    public function transform(array $card, string $provider_key, bool $is_default = true)
+    public function transform(array $card, string $customer_key, bool $is_default = true)
     {
         return [
             'card_id'       => $card['id'],
-            'provider_key'  => $provider_key,
+            'customer_key'  => $customer_key,
             'brand'         => $card['brand'],
             'last_four'     => $card['last4'],
             'expiry_month'  => $card['exp_month'],
