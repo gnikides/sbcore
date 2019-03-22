@@ -32,10 +32,10 @@ class Card
         }           
     }
 
-    public function transform(array $card, string $customer_key, bool $is_default = true)
+    public function transform($card, string $customer_key, bool $is_default = true)
     {
         return [
-            'card_id'       => $card['id'],
+            'card_key'      => $card['id'],
             'customer_key'  => $customer_key,
             'brand'         => $card['brand'],
             'last_four'     => $card['last4'],
