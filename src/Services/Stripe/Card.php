@@ -9,7 +9,8 @@ class Card
             $customer = \Stripe\Customer::retrieve($customer_key);
             $customer->source = $token;
             $customer->save();            
-            //  @todo get errors from stripe            
+            //  @todo get errors from stripe    
+            \Log::info('card1', [$customer]);           
             return $customer ? $this->transform($customer['sources']['data'][0], $customer['id'], $is_default) : false;  
         } catch (\Exception $e) {
             \Log::error('Api exception', [$e]);         
@@ -24,7 +25,8 @@ class Card
             $customer = \Stripe\Customer::create([
                 'email' => time() . $email,
                 'source' => $token
-            ]);            
+            ]);
+            \Log::info('card2', [$customer]);             
             //  @todo get errors from stripe            
             return $customer ? $this->transform($customer['sources']['data'][0], $customer['id'], $is_default) : false;         
         } catch (\Exception $e) {
