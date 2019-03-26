@@ -1,12 +1,8 @@
 <?php namespace Core\Services\Stripe;
 
-use Log;
-use Mail;
-//use App\Models\Merchant;
-
 class Account
 { 
-    public function create(int $merchant_id, array $payload)
+    public function create(array $payload)
     {  
         $payload = $this->formatPayload($payload);        
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
@@ -14,7 +10,7 @@ class Account
         if ($response['id'] && empty($response['failure_code'])) {
             return $response;
         }
-        Log::error('stripe create account failed', [$merchant_id, $payload, @$response]);
+        \Log::error('stripe create account failed', [$payload, $response]);
         return false;
     }
     
@@ -25,8 +21,7 @@ class Account
             \Stripe\Account::update() did not work
         */
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));  
-        $account = \Stripe\Account::retrieve($account_id);
-        
+        $account = \Stripe\Account::retrieve($account_id);        
         if ($file) {
             $account->legal_entity->verification->document = $file;
         }
@@ -39,7 +34,7 @@ class Account
         return false; 
     }
     
-    public function formatPayload($input)
+    public function formatPayload(array $input)
     {     
         /* business address */
         $business_address = [
@@ -111,7 +106,7 @@ class Account
             empty($account->legal_entity->verification->document) ||
             'verified' != $account->legal_entity->verification->status) {
             
-            Mail::raw(json_encode($account), function($message) {
+            \Mail::raw(json_encode($account), function($message) {
                 $message->to(trim(config('mail.admin')));
                 $message->subject('Merchant account needs verification');
             });
