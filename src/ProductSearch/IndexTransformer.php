@@ -28,7 +28,7 @@ class IndexTransformer extends BaseTransformer
             'publisher_reference'   => $reference->publisher_reference,
             'category_id'           => $reference->category_id,
             'category_name'         => $reference->category->name,
-            'updated_at'            => $this->transformDate($version->updated_at),
+            'updated_at'            => isset($version->updated_at) ? $this->transformDate($version->updated_at) : now(),
             'gross_price'           => $currency->fromCents($price->gross_price),
             'net_price'             => $currency->fromCents($price->net_price),
             'site_id'               => $site->id,
