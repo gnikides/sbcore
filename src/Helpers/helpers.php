@@ -125,9 +125,6 @@ if (!function_exists('safeCount')) {
 if (!function_exists('emptyToNull')) {  
     function emptyToNull($key, array $input = [])
     {   
-        // pr($key);
-        // pr(!array_key_exists($key, $input) || empty($input[$key]) ? null : $input[$key]);
-        // exit();
         return !array_key_exists($key, $input) || empty($input[$key]) ? null : $input[$key];
     }
 }
