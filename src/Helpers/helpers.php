@@ -129,23 +129,3 @@ if (!function_exists('emptyToNull')) {
     }
 }
 
-if (!function_exists('sanitizeArray')) {  
-    function sanitizeArray(array $input = [], array $filters = [])
-    {       
-        $output = [];
-        foreach ($filters as $key => $sanitizer) {
-	        if (array_key_exists($key, $input) {
-		        if ('int' == $sanitizer) {
-		            $output[$key] = santizeInt($input[$key]);
-	            } elseif ('string' == $sanitizer) {
-                    $output[$key] = santizeString($input[$key]);
-                } elseif ('strtolower' == $sanitizer) {
-                    $output[$key] = strtolower(santizeString($input[$key]));
-                } elseif ('strtoupper' == $sanitizer) {    
-                    $output[$key] = strtoupper(santizeString($input[$key]));
-                }    
-            }
-        }
-        return $output;
-    }           
-}
