@@ -17,7 +17,7 @@ class OptionsFromRequest
         self::SORT_REVERSE_STARS
     ];
     const ACCEPTED_FILTERS = [
-        'site_id',
+        'store_id',
         'category_id',
         'country_code',
         //'price_range',
