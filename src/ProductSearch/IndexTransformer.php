@@ -14,7 +14,7 @@ class IndexTransformer extends BaseTransformer
     {
         $version = $object->version;
         $reference = $object->reference;
-        $site = $object->site;
+        $store = $object->store;
         $price = $object->price;
         $currency = new Currency($price->currency_code);
         return $this->filter([
@@ -31,11 +31,11 @@ class IndexTransformer extends BaseTransformer
             'updated_at'            => isset($version->updated_at) ? $this->transformDate($version->updated_at) : now(),
             'gross_price'           => $currency->fromCents($price->gross_price),
             'net_price'             => $currency->fromCents($price->net_price),
-            'site_id'               => $site->id,
-            'site_name'             => $site->name,
-            'handle'                => $site->handle,
-            'country_code'          => $site->country_code,
-            'country'               => $site->country->name,
+            'store_id'              => $store->id,
+            //'site_name'             => $site->name,
+            // 'handle'                => $site->handle,
+            'country_code'          => $store->country_code,
+            // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
             'attributes'            => json_encode($reference->reference_attributes),
