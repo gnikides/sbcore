@@ -17,7 +17,7 @@ trait MappingTrait
             'category_id' => [
                 'type' => 'keyword'
             ],
-            'site_id' => [
+            'store_id' => [
                 'type' => 'keyword'
             ],
             'gross_price' => [
@@ -38,11 +38,11 @@ trait MappingTrait
                 'format'    => 'yyyy-MM-dd HH:mm:ss'
             ],
             /* Keywords */
-            'handle' => [
-                'type' => 'keyword',
-                'index'     => false,
-                'copy_to'   => 'search_text'
-            ],
+            // 'handle' => [
+            //     'type' => 'keyword',
+            //     'index'     => false,
+            //     'copy_to'   => 'search_text'
+            // ],
             'country_code' => [
                 'type' => 'keyword'
             ],
@@ -53,16 +53,16 @@ trait MappingTrait
                 'index'     => false,
                 'copy_to'   => 'search_text'
             ],
-            'site_name' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text'
-            ],
-            'country' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text'
-            ],
+            // 'site_name' => [
+            //     'type'      => 'text',
+            //     'index'     => false,
+            //     'copy_to'   => 'search_text'
+            // ],
+            // 'country' => [
+            //     'type'      => 'text',
+            //     'index'     => false,
+            //     'copy_to'   => 'search_text'
+            // ],
             'descriptions' => [
                 'type'      => 'text',
                 'index'     => false,
