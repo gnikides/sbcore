@@ -14,6 +14,7 @@ class IndexTransformer extends BaseTransformer
     {
         $version = $object->version;
         $reference = $object->reference;
+        $name = is_object($reference->name) ? current((Array)$reference->name) : $reference->name;
         $store = $object->store;
         $price = $object->price;
         $currency = new Currency($price->currency_code);
@@ -21,7 +22,7 @@ class IndexTransformer extends BaseTransformer
             'product_id'            => $object->id,
             //'version_id'            => (int) $object->id,
             //'format_id'             => (int) $object->format->id,
-            'product_name'          => $reference->name,
+            'product_name'          => $name,
             'manufacturer'          => $reference->manufacturer,
             'creator'               => $reference->creator,
             'sku'                   => $reference->sku,
