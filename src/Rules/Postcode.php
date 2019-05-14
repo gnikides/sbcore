@@ -39,7 +39,8 @@ class Postcode implements Rule
             'SE' => "^(s-|S-){0,1}[0-9]{3}\s?[0-9]{2}$",
             'BE' => "^[1-9]{1}[0-9]{3}$"
         ];
-        if ($regex[$this->country_code] && !preg_match("/".$regex[$this->country_code]."/i", $postcode)) {
+        if (array_key_exists($this->country_code, $regex) 
+            && !preg_match("/".$regex[$this->country_code]."/i", $postcode)) {
             return false;
         }
         if (in_array($this->country_code, $this->countries_in_postcode_db) && !$this->checkAgainstDatabase($postcode)) {
