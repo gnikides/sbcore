@@ -33,15 +33,15 @@ class IndexTransformer extends BaseTransformer
             'gross_price'           => $currency->fromCents($price->gross_price),
             'net_price'             => $currency->fromCents($price->net_price),
             'store_id'              => $store->id,
-            //'site_name'             => $site->name,
-            // 'handle'                => $site->handle,
+            'store_name'            => $store->name,
+            'handle'                => $store->handle,
             'country_code'          => $store->country_code,
             // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
-            'attributes'            => json_encode($reference->reference_attributes),
-            'descriptions'          => json_encode($reference->descriptions),
-            'features'              => json_encode($reference->features),
+            'properties'            => json_encode($reference->properties),
+            //'descriptions'          => json_encode($reference->descriptions),
+            //'features'              => json_encode($reference->features),
             'content'               => json_encode((new ProductTransformer)->transform($object))
         ]);
     }
