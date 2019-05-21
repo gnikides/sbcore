@@ -38,11 +38,11 @@ trait MappingTrait
                 'format'    => 'yyyy-MM-dd HH:mm:ss'
             ],
             /* Keywords */
-            // 'handle' => [
-            //     'type' => 'keyword',
-            //     'index'     => false,
-            //     'copy_to'   => 'search_text'
-            // ],
+            'handle' => [
+                'type' => 'keyword',
+                'index'     => false,
+                'copy_to'   => 'search_text'
+            ],
             'country_code' => [
                 'type' => 'keyword'
             ],
@@ -53,31 +53,31 @@ trait MappingTrait
                 'index'     => false,
                 'copy_to'   => 'search_text'
             ],
-            // 'site_name' => [
-            //     'type'      => 'text',
-            //     'index'     => false,
-            //     'copy_to'   => 'search_text'
-            // ],
+            'store_name' => [
+                'type'      => 'text',
+                'index'     => false,
+                'copy_to'   => 'search_text'
+            ],
             // 'country' => [
             //     'type'      => 'text',
             //     'index'     => false,
             //     'copy_to'   => 'search_text'
             // ],
-            'descriptions' => [
+            // 'descriptions' => [
+            //     'type'      => 'text',
+            //     'index'     => false,
+            //     'copy_to'   => 'search_text',
+            // ],
+            'properties' => [
                 'type'      => 'text',
                 'index'     => false,
                 'copy_to'   => 'search_text',
             ],
-            'attributes' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text',
-            ],
-            'features' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text',
-            ],
+            // 'features' => [
+            //     'type'      => 'text',
+            //     'index'     => false,
+            //     'copy_to'   => 'search_text',
+            // ],
             /* Search text, indexed */
             'product_name' => [
                  //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
