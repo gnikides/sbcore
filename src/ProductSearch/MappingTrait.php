@@ -4,7 +4,7 @@ use Core\ProductSearch\ScoutConfigurator;
 
 trait MappingTrait
 {
-    protected $indexConfigurator = ScoutConfigurator::class;
+    //protected $indexConfigurator = ScoutConfigurator::class;
     protected $searchRules = [
         //
     ];
