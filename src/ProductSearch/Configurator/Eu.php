@@ -6,6 +6,6 @@ class Fr extends Base
 {
     public function __construct()
     {
-        $this->name = 'fr';
+        $this->name = 'eu';
     }
 }
