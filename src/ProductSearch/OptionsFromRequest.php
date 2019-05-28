@@ -27,6 +27,9 @@ class OptionsFromRequest
     public function make($input)
     {
         $options = new Options();
+        if ($input->get('index')) {
+            $options->setIndex($input->get('index'));
+        }
         $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_STRING)));
         $sort = $input->get('sort');
         if (!in_array($sort, self::ACCEPTED_SORTS)) {
