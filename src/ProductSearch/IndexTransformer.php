@@ -35,7 +35,7 @@ class IndexTransformer extends BaseTransformer
             'store_id'              => $store->id,
             'store_name'            => $store->name,
             'handle'                => $store->handle,
-            'country_code'          => $store->country_code,
+            'country_code'          => $store->platform->country_code,
             // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
