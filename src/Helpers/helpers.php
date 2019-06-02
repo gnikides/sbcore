@@ -99,6 +99,35 @@ if (!function_exists('sanitizeFloat')) {
     } 
 }
 
+if (!function_exists('sanitizeArray')) {
+    function sanitizeArray(array $input = [], array $filters = [])
+    {
+        $output = [];
+        foreach ($filters as $key => $filter) {
+            if (array_key_exists($key, $input)) {
+                if ('int' == $filter) {
+                    $output[$key] = sanitizeInt($input[$key]);
+                } elseif ('string' == $filter) {
+                    $output[$key] = sanitizeString($input[$key]);
+                } elseif ('strtolower' == $filter) {
+                    $output[$key] = strtolower(sanitizeString($input[$key]));
+                } elseif ('strtoupper' == $filter) {
+                    $output[$key] = strtoupper(sanitizeString($input[$key]));
+                } elseif ('active' == $filter) {
+                    $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
+                } elseif ('none' == $filter) {
+                    $output[$key] = $input[$key];
+                }
+            } else {
+                if ('active' == $filter) {
+                    $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
+                }
+            }    
+        }
+        return $output;
+    }
+}
+
 if (!function_exists('timeAgo')) {
     function timeAgo($date)
     {

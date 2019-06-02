@@ -18,7 +18,7 @@ class IndexTransformer extends BaseTransformer
         $store = $object->store;
         $price = $object->price;
         $currency = new Currency($price->currency_code);
-        return $this->filter([
+        $index = $this->filter([
             'product_id'            => $object->id,
             //'version_id'            => (int) $object->id,
             //'format_id'             => (int) $object->format->id,
@@ -35,7 +35,7 @@ class IndexTransformer extends BaseTransformer
             'store_id'              => $store->id,
             'store_name'            => $store->name,
             'handle'                => $store->handle,
-            'country_code'          => $store->platform->country_code,
+            'country_code'          => $store->country_code,
             // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
@@ -44,5 +44,7 @@ class IndexTransformer extends BaseTransformer
             //'features'              => json_encode($reference->features),
             'content'               => json_encode((new ProductTransformer)->transform($object))
         ]);
+        //\Log::info('index', [ $index  ] ); 
+        return $index;
     }
 }
