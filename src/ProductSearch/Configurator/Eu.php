@@ -2,7 +2,7 @@
 
 use Core\ProductSearch\Configurator\Base;
 
-class Fr extends Base
+class Eu extends Base
 {
     public function __construct()
     {
