@@ -10,7 +10,7 @@ class Transaction
         $application_fee = '',
         $charge_description = '',
         $statement_description = '',
-        $metadata = []
+        $meta = []
     ) {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         $charge = [
@@ -22,7 +22,7 @@ class Transaction
             'statement_descriptor'  => $statement_description,
             'capture'               => true,
             'application_fee'       => $application_fee,
-            'metadata'              => $metadata
+            'metadata'              => $meta
             //['stripe_account' => '{CONNECTED_STRIPE_ACCOUNT_ID}')];
             //['stripe_account'         => 'acct_1BTn2jErNBNQFUc6']            
         ];           
