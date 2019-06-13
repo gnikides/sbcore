@@ -8,7 +8,7 @@ class Rules
     const REQUIRED          = 'required';
     const NAME              = 'max:255';
     const DESCRIPTION       = 'max:10000';
-    const METADATA          = 'max:65000';
+    const META              = 'max:65000';
     const ACTIVE_INACTIVE   = 'in:active,inactive';
     const SORT_ORDER        = 'numeric|max:9999';
     const COUNTRY_CODE      = 'string|min:2|max:2';
