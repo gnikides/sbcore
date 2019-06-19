@@ -27,7 +27,7 @@ class ClearCache extends Command
         $this->call('view:clear');
         exec(escapeshellcmd('composer clear-cache'));
         exec(escapeshellcmd('composer dump-autoload'));
-        $this->call('optimize'); 
+        // $this->call('optimize'); 
         $this->call('route:cache');
         $this->call('api:cache');
     }
