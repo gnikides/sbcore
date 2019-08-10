@@ -18,6 +18,9 @@ class IndexTransformer extends BaseTransformer
         $store = $object->store;
         $price = $object->price;
         $currency = new Currency($price->currency_code);
+       
+        // sb($object->version);
+        // exit();
         $index = $this->filter([
             'product_id'            => $object->id,
             //'version_id'            => (int) $object->id,
