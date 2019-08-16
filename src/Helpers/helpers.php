@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Debug\Dumper;
+use Symfony\Component\VarDumper\VarDumper;
 use Carbon\Carbon;
 use Core\Support\TimeAgo;
 
@@ -10,9 +10,9 @@ if (!function_exists('sb')) {
     { 
         array_map(function($var) {
             echo gettype($var) . ": ";
-            (new Dumper)->dump($var);
+            (new VarDumper)->dump($var);
         }, func_get_args());
-        if ($die == true) {
+        if ($die) {
             die();
         }
     }
@@ -26,7 +26,7 @@ if (!function_exists('pr')) {
         echo gettype($var) . ": ";
         print_r($var);
         echo '</pre>';
-        if ($die == true) {
+        if ($die) {
             die();
         }
     }
