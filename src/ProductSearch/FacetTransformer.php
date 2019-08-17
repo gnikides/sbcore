@@ -28,11 +28,11 @@ class FacetTransformer
         return collect($buckets)->map(function ($item) use ($categories) {
             if (array_key_exists('key', $item)) {
                 $category = array_key_exists($item['key'], $categories) ? $categories[$item['key']] : null;
-                if ($category && $category->name() && $category->url()) {
+                if ($category && $category->name && $category->url) {
                     return [
                         'key'       => $item['key'],
-                        'label'     => $category->name(),
-                        'url'       => $category->url(),
+                        'label'     => $category->name,
+                        'url'       => $category->url,
                         'doc_count' => $item['doc_count']
                     ];
                 }
