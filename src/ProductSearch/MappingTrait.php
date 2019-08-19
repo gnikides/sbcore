@@ -20,10 +20,10 @@ trait MappingTrait
             'store_id' => [
                 'type' => 'keyword'
             ],
-            'gross_price' => [
+            'retail_price' => [
                 'type' => 'keyword'
             ],
-            'net_price' => [
+            'wholesale_price' => [
                 'type' => 'keyword'
             ],
             'average_rating' => [
