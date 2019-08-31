@@ -68,7 +68,7 @@ trait MappingTrait
             //     'index'     => false,
             //     'copy_to'   => 'search_text',
             // ],
-            'properties' => [
+            'props' => [
                 'type'      => 'text',
                 'index'     => false,
                 'copy_to'   => 'search_text',

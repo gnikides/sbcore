@@ -11,7 +11,8 @@ class ScoutConfigurator extends BaseConfigurator
 
     public function __construct()
     {
-        $this->name = config('scout.elasticsearch.index');
+        //$this->name = config('scout.elasticsearch.index');
+        $this->name = 'sb-test';
     }
 
     protected $settings = [

@@ -11,15 +11,28 @@ class IndexTransformer extends BaseTransformer
     ];
     
     public function transform($object)
-    {
-        $version = $object->version;
+    {   
         $reference = $object->reference;
-        $name = is_object($reference->name) ? current((Array)$reference->name) : $reference->name;
+        $format = $object->format;
+        $version = $object->version;
         $store = $object->store;
         $price = $object->price;
         $currency = new Currency($price->currency_code);
-       
-        // sb($object->version);
+        
+        //sb($version);
+
+        $name = '';
+        //sb($format->props);
+        if ($format && isset($format->props)) {
+            $name = isset($format->props['default']['name']['value']) ? $format->props['default']['name']['value'] : '';
+            
+            // foreach ($format->props as $prop) {
+            //     if ($prop['name'] == 'name') {
+            //         $name = $prop['value'];
+            //     }
+            // }    
+        } 
+        // sb($name);
         // exit();
         $index = $this->filter([
             'product_id'            => $object->id,
@@ -42,11 +55,12 @@ class IndexTransformer extends BaseTransformer
             // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
-            'properties'            => json_encode($reference->properties),
+            'props'                 => json_encode($reference->properties),
             //'descriptions'          => json_encode($reference->descriptions),
             //'features'              => json_encode($reference->features),
             'content'               => json_encode((new ProductTransformer)->transform($object))
         ]);
+        //sb($index);
         //\Log::info('index', [ $index  ] ); 
         return $index;
     }
