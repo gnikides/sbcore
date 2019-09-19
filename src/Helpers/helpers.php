@@ -3,6 +3,7 @@
 use Symfony\Component\VarDumper\VarDumper;
 use Carbon\Carbon;
 use Core\Support\TimeAgo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 //  dump a variable
 if (!function_exists('sb')) {  
@@ -155,6 +156,17 @@ if (!function_exists('emptyToNull')) {
     function emptyToNull($key, array $input = [])
     {   
         return !array_key_exists($key, $input) || empty($input[$key]) ? null : $input[$key];
+    }
+}
+
+if (!function_exists('getMorphedModel')) {  
+    function getMorphedModel(string $slug)
+    {   
+        $relations = Relation::morphMap();
+        if ($relations) {
+            return $relations[$slug];
+        }
+        return false;
     }
 }
 
