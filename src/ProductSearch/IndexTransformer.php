@@ -2,7 +2,7 @@
 
 use App\Support\Http\Transformer as BaseTransformer;
 use App\Modules\Currency;
-use App\Http\Transformers\ProductTransformer;
+use App\Http\Transformers\ProductSearchTransformer;
 
 class IndexTransformer extends BaseTransformer
 {
@@ -34,12 +34,11 @@ class IndexTransformer extends BaseTransformer
         } 
         // sb($name);
         // exit();
-        $index = $this->filter([
+        $s = $this->filter([
             'product_id'            => $object->id,
-            //'version_id'            => (int) $object->id,
-            //'format_id'             => (int) $object->format->id,
-            'product_name'          => $name,
+            'name'                  => $name,
             'manufacturer'          => $reference->manufacturer,
+            'brand'                 => $reference->brand,
             'creator'               => $reference->creator,
             'sku'                   => $reference->sku,
             'publisher_reference'   => $reference->publisher_reference,
@@ -50,18 +49,28 @@ class IndexTransformer extends BaseTransformer
             'wholesale_price'       => $currency->fromCents($price->wholesale_price),
             'store_id'              => $store->id,
             'store_name'            => $store->name,
-            'handle'                => $store->handle,
+            'store_handle'          => $store->handle,
             'country_code'          => $store->country_code,
             // 'country'               => $site->country->name,
             'average_rating'        => $reference->average_rating,
             'number_ratings'        => $reference->number_ratings,
-            // 'props'                 => json_encode($reference->properties),
+            'categories'            => collect($object->categories)->transform(function ($item) {
+                                            return $item->id;
+                                    }),
+
+            //  @todo
+            //  put a lot of text into search
             //'descriptions'          => json_encode($reference->descriptions),
             //'features'              => json_encode($reference->features),
-            'content'               => json_encode((new ProductTransformer)->transform($object))
+            // 'details'               => [
+            //                             'Manufacturer',
+            //                             'Author',
+            //                             'Brand'
+            //                         ],
+            'content'               => json_encode((new ProductSearchTransformer)->transform($object))
         ]);
-        //sb($index);
-        //\Log::info('index', [ $index  ] ); 
-        return $index;
+        // sb($s);
+        // exit();
+        return $s;
     }
 }
