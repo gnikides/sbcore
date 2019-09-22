@@ -10,11 +10,12 @@ trait MappingTrait
     ];
     protected $mapping = [
         'properties' => [
+            
             /* Integers */
             'product_id' => [
                 'type' => 'keyword'
             ],
-            'category_id' => [
+            'categories' => [
                 'type' => 'keyword'
             ],
             'store_id' => [
@@ -38,7 +39,7 @@ trait MappingTrait
                 'format'    => 'yyyy-MM-dd HH:mm:ss'
             ],
             /* Keywords */
-            'handle' => [
+            'store_handle' => [
                 'type' => 'keyword',
                 'index'     => false,
                 'copy_to'   => 'search_text'
@@ -48,7 +49,7 @@ trait MappingTrait
             ],
 
             /* Search text, unindexed */
-            'category_name' => [
+            'product_group_name' => [
                 'type'      => 'text',
                 'index'     => false,
                 'copy_to'   => 'search_text'
@@ -68,18 +69,13 @@ trait MappingTrait
             //     'index'     => false,
             //     'copy_to'   => 'search_text',
             // ],
-            'props' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text',
-            ],
             // 'features' => [
             //     'type'      => 'text',
             //     'index'     => false,
             //     'copy_to'   => 'search_text',
             // ],
             /* Search text, indexed */
-            'product_name' => [
+            'name' => [
                  //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
                  'type'      => 'text',
                  'analyzer'  => 'standard',
@@ -125,6 +121,29 @@ trait MappingTrait
                     ]
                  ]
             ],
+            'brand' => [
+                //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
+                'type'      => 'text',
+                'analyzer'  => 'standard',
+                'copy_to'   => 'search_text',
+                'index'     => true,
+                'fields'    => [
+                   'raw'   => [
+                       //  enables alphabetical sorting
+                       'type'      => 'text',
+                       'analyzer'  => 'keyword_lowercase_analyzer',
+                       'fielddata' => true
+                   ],
+                   'french_standard' => [
+                       'type'      => 'text',
+                       'analyzer'  => 'french_standard_analyzer'
+                   ],
+                   'english_standard' => [
+                       'type'      => 'text',
+                       'analyzer'  => 'english_standard_analyzer'
+                   ]
+                ]
+           ],            
             'sku' => [
                  //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
                  'type'      => 'text',
