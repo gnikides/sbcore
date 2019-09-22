@@ -10,9 +10,12 @@ class FacetTransformer
                     return (collect($bucket))->only('key', 'doc_count');
                 });
             }
-            if ('category_id' == $key) {
+            if ('product_group_id' == $key) {
+                return $this->productGroups($item['buckets'], []);
+            } elseif ('category_id' == $key) {
                 return $this->categories($item['buckets'], $categories);
             } elseif ('store_id' == $key) {
+                //sb($this->stores($item['buckets'], $stores));
                 return $this->stores($item['buckets'], $stores);
             } elseif ('retail_price' == $key) {
                 //return $this->siteFacets($item['buckets'], $currency);
@@ -21,6 +24,23 @@ class FacetTransformer
             }
             return $item['buckets'];
         });
+    }
+
+    public function ProductGroups($buckets, $groups)
+    {
+        return collect($buckets)->map(function ($item) use ($groups) {
+            if (array_key_exists('key', $item)) {
+                // $store = array_key_exists($item['key'], $stores) ? $stores[$item['key']] : null;
+                // if ($store) {
+                    return [
+                        'key'       => $item['key'],
+                        'label'     => $item['key'],
+                        //'url'       => $site->url(),
+                        'doc_count' => $item['doc_count']
+                    ];
+                //}
+            }
+        })->toArray();
     }
 
     public function categories($buckets, $categories)
@@ -44,16 +64,17 @@ class FacetTransformer
     {
         return collect($buckets)->map(function ($item) use ($stores) {
             if (array_key_exists('key', $item)) {
-                $store = array_key_exists($item['key'], $stores) ? $stores[$item['key']] : null;
-                if ($store) {
+                // $store = array_key_exists($item['key'], $stores) ? $stores[$item['key']] : null;
+                // if ($store) {
                     return [
                         'key'       => $item['key'],
+                        'label'     => $item['key'],
                         //'label'     => $site->forceName(),
                         //'handle'    => $site->handle(),
                         //'url'       => $site->url(),
                         'doc_count' => $item['doc_count']
                     ];
-                }
+                //}
             }
         })->toArray();
     }
