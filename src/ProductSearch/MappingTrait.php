@@ -15,6 +15,9 @@ trait MappingTrait
             'product_id' => [
                 'type' => 'keyword'
             ],
+            'product_group_id' => [
+                'type' => 'keyword'
+            ],            
             'categories' => [
                 'type' => 'keyword'
             ],

@@ -42,6 +42,7 @@ class IndexTransformer extends BaseTransformer
             'creator'               => $reference->creator,
             'sku'                   => $reference->sku,
             'publisher_reference'   => $reference->publisher_reference,
+            'product_group_id'      => $reference->product_group_id,
             // 'category_id'           => $reference->category_id,
             // 'category_name'         => $reference->category->name,
             'updated_at'            => isset($version->updated_at) ? $this->transformDate($version->updated_at) : now(),
