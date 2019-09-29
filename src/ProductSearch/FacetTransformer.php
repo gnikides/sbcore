@@ -15,7 +15,6 @@ class FacetTransformer
             } elseif ('category_id' == $key) {
                 return $this->categories($item['buckets'], $categories);
             } elseif ('store_id' == $key) {
-                //sb($this->stores($item['buckets'], $stores));
                 return $this->stores($item['buckets'], $stores);
             } elseif ('retail_price' == $key) {
                 //return $this->siteFacets($item['buckets'], $currency);
@@ -26,7 +25,7 @@ class FacetTransformer
         });
     }
 
-    public function ProductGroups($buckets, $groups)
+    public function productGroups($buckets, $groups)
     {
         return collect($buckets)->map(function ($item) use ($groups) {
             if (array_key_exists('key', $item)) {

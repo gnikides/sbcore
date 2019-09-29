@@ -18,8 +18,6 @@ class ProductTransformer extends Transformer
             'status'            => $object->status,
             'average_rating'    => isset($object->reference->average_rating) ? $object->reference->average_rating : 0,
             'number_ratings'    => isset($object->reference->number_ratings) ? $object->reference->number_ratings : 0, 
-
-
             'updated_at'    => $this->transformDate($object->updated_at),
             'meta'          => $object->meta,
             'reference'     => (new ReferenceTransformer)->setExpandable()->transform($object->reference),

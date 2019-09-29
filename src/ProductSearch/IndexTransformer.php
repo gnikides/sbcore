@@ -25,12 +25,6 @@ class IndexTransformer extends BaseTransformer
         //sb($format->props);
         if ($format && isset($format->props)) {
             $name = isset($format->props['default']['name']['value']) ? $format->props['default']['name']['value'] : '';
-            
-            // foreach ($format->props as $prop) {
-            //     if ($prop['name'] == 'name') {
-            //         $name = $prop['value'];
-            //     }
-            // }    
         } 
         // sb($name);
         // exit();
