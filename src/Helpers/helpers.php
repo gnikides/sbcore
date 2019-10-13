@@ -116,6 +116,10 @@ if (!function_exists('sanitizeArray')) {
                     $output[$key] = strtoupper(sanitizeString($input[$key]));
                 } elseif ('active' == $filter) {
                     $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
+                } elseif ('meta' == $filter) {
+                    foreach ($input[$key] as $k => $v) {
+                        $output[$key][strtolower(sanitizeString($k))] = sanitizeString($v);
+                    }                
                 } elseif ('none' == $filter) {
                     $output[$key] = $input[$key];
                 }
