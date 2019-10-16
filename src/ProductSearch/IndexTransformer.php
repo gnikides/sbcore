@@ -2,7 +2,7 @@
 
 use App\Support\Http\Transformer as BaseTransformer;
 use App\Modules\Currency;
-use App\Http\Transformers\ProductSearchTransformer;
+use App\Http\Transformers\ProductSlimTransformer;
 
 class IndexTransformer extends BaseTransformer
 {
@@ -62,7 +62,7 @@ class IndexTransformer extends BaseTransformer
             //                             'Author',
             //                             'Brand'
             //                         ],
-            'content'               => json_encode((new ProductSearchTransformer)->transform($object))
+            'content'               => json_encode((new ProductSlimTransformer)->transform($object))
         ]);
         // sb($s);
         // exit();
