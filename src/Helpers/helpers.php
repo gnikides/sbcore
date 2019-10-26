@@ -117,9 +117,11 @@ if (!function_exists('sanitizeArray')) {
                 } elseif ('active' == $filter) {
                     $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
                 } elseif ('meta' == $filter) {
-                    foreach ($input[$key] as $k => $v) {
-                        $output[$key][strtolower(sanitizeString($k))] = sanitizeString($v);
-                    }                
+                    if (is_array($input[$key])) {
+                        foreach ($input[$key] as $k => $v) {
+                            $output[$key][strtolower(sanitizeString($k))] = sanitizeString($v);
+                        }
+                    }                    
                 } elseif ('none' == $filter) {
                     $output[$key] = $input[$key];
                 }
