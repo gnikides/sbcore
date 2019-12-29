@@ -25,11 +25,47 @@ class Product
                 'label' => 'ASIN',
                 'placeholder' => 'Amazon Standard ID Number'
             ],
-            'custom' => [
-                'name' => 'custom',
-                'label' => 'Product Reference',
-                'placeholder' => ''
-            ]
+            // 'custom' => [
+            //     'name' => 'custom',
+            //     'label' => 'Product Reference',
+            //     'placeholder' => ''
+            // ]
         ];    
     }
+
+    public static function parcelFields()
+    {
+        return [
+            'length' => [
+                'name' => 'length',
+                'label' => 'Length',
+                'placeholder' => '10'
+            ],
+            'height' => [
+                'name' => 'height',
+                'label' => 'Height',
+                'placeholder' => '10'
+            ], 
+            'width' => [
+                'name' => 'width',
+                'label' => 'Width',
+                'placeholder' => '10'
+            ], 
+            'dimension_unit' => [
+                'name' => 'dimension_unit',
+                'label' => 'Dimension Unit',
+                'placeholder' => 'cm'
+            ], 
+            'weight' => [
+                'name' => 'weight',
+                'label' => 'Weight',
+                'placeholder' => '10'
+            ], 
+            'weight_unit' => [
+                'name' => 'weight_unit',
+                'label' => 'Weight Unit',
+                'placeholder' => 'kg'
+            ],                                                           
+        ];    
+    }    
 }
