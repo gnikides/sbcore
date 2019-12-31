@@ -51,9 +51,9 @@ class Product
                 'label' => 'Width',
                 'placeholder' => '10'
             ], 
-            'dimension_unit' => [
-                'name' => 'dimension_unit',
-                'label' => 'Dimension Unit',
+            'size_unit' => [
+                'name' => 'size_unit',
+                'label' => 'Size Unit',
                 'placeholder' => 'cm'
             ], 
             'weight' => [
@@ -67,5 +67,17 @@ class Product
                 'placeholder' => 'kg'
             ],                                                           
         ];    
-    }    
+    }
+    
+    public static function sizeUnits()
+    {
+        return [
+            'mm' => 'mm',
+            'cm' => 'cm',
+            'm' => 'm',
+            'in' => 'in',
+            'ft' => 'ft',
+            'yd' => 'yd'                                               
+        ];    
+    }     
 }
