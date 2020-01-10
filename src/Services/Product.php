@@ -77,7 +77,17 @@ class Product
             'm' => 'm',
             'in' => 'in',
             'ft' => 'ft',
-            'yd' => 'yd'                                               
+            'yd' => 'yd'                                            
+        ];    
+    }
+    
+    public static function weightUnits()
+    {
+        return [
+            'kg' => 'kg',
+            'g' => 'g',
+            'oz' => 'oz',
+            'lb' => 'lb'                                            
         ];    
     }     
 }
