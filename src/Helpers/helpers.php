@@ -176,3 +176,12 @@ if (!function_exists('getMorphedModel')) {
     }
 }
 
+if (!function_exists('isJson')) {  
+    function isJson($value) {
+        if (!is_string($value)) {
+            return false;
+        }    
+        json_decode($value);
+        return (json_last_error() == JSON_ERROR_NONE);
+   }
+}
