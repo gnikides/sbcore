@@ -18,7 +18,7 @@ class Rules
     const MONTH_AS_DIGIT    = 'numeric|between:1,12';
     const REQUIRED_DATE     = 'required|date';
 
-    public static function money(int $max_digits = 8)
+    public static function money(int $max_digits = 15)
     {
         return 'regex:/^(\d+(?:[\.\,]\d{2})?)$/|between:0,' . (!$max_digits ? 8 : $max_digits);
     }
