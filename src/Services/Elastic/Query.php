@@ -1,6 +1,6 @@
 <?php namespace Core\Services\Elastic;
 
-use Core\Services\Elastic\QueryOptions;
+use Core\Services\RequestOptions;
 
 abstract class Query
 {
@@ -35,7 +35,7 @@ abstract class Query
     protected $sort_direction = 'desc';
 
     public function build(
-        QueryOptions $options,
+        RequestOptions $options,
         array $range_filters = [],
         array $facets = [],
         array $range_facets = []

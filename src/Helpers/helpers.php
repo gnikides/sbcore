@@ -116,12 +116,18 @@ if (!function_exists('sanitizeArray')) {
                     $output[$key] = strtoupper(sanitizeString($input[$key]));
                 } elseif ('active' == $filter) {
                     $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
-                } elseif ('meta' == $filter) {
+                } elseif ('meta' == $filter || 'string_array' == $filter) {
                     if (is_array($input[$key])) {
                         foreach ($input[$key] as $k => $v) {
                             $output[$key][strtolower(sanitizeString($k))] = sanitizeString($v);
                         }
-                    }                    
+                    }
+                } elseif ('integer_array' == $filter) {
+                    if (is_array($input[$key])) {
+                        foreach ($input[$key] as $k => $v) {
+                            $output[$key][strtolower(sanitizeString($k))] = sanitizeInt($v);
+                        }
+                    }                                         
                 } elseif ('none' == $filter) {
                     $output[$key] = $input[$key];
                 }

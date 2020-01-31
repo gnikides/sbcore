@@ -1,6 +1,6 @@
 <?php namespace Core\ProductSearch;
 
-use Core\Services\Elastic\QueryOptions as Options;
+use Core\Services\RequestOptions as Options;
 
 class OptionsFromRequest
 {

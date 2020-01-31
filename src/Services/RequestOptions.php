@@ -1,10 +1,11 @@
-<?php namespace Core\Services\Elastic;
+<?php namespace Core\Services;
 
-class QueryOptions
+class RequestOptions
 {    
     private $index;
     private $page           = 1;
     private $per_page       = 25;
+    private $is_paged       = true;
     private $search_string  = ' * ';
     private $sort_column    = 'updated_at';
     private $sort_direction = 'desc';
@@ -21,6 +22,17 @@ class QueryOptions
     public function setIndex(string $index)
     {
         $this->index = $index;
+        return $this;
+    }
+
+    public function getIsPaged()
+    {
+        return $this->is_paged;
+    }
+
+    public function setIsPaged(bool $is_paged)
+    {
+        $this->is_paged = $is_paged;
         return $this;
     }
 
