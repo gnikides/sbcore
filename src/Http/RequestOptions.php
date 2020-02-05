@@ -1,4 +1,4 @@
-<?php namespace Core\Services;
+<?php namespace Core\Http;
 
 class RequestOptions
 {    

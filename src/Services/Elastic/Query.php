@@ -1,6 +1,6 @@
 <?php namespace Core\Services\Elastic;
 
-use Core\Services\RequestOptions;
+use Core\Http\RequestOptions;
 
 abstract class Query
 {

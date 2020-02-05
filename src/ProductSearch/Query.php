@@ -1,7 +1,7 @@
 <?php namespace Core\ProductSearch;
 
 use Core\Services\Elastic\Query as BaseQuery;
-use Core\Services\RequestOptions;
+use Core\Http\RequestOptions;
 
 class Query extends BaseQuery
 {

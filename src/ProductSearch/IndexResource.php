@@ -1,6 +1,6 @@
 <?php namespace Core\ProductSearch;
 
-use Core\Support\Resource;
+use Core\Http\Resource;
 use App\Modules\Currency;
 use App\Http\Resources\ProductSlimResource;
 

@@ -1,4 +1,4 @@
-<?php namespace Core\Support;
+<?php namespace Core\Http;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

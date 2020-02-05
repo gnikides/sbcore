@@ -1,6 +1,6 @@
 <?php namespace Core\ProductSearch;
 
-use Core\Services\RequestOptions as Options;
+use Core\Http\RequestOptions as Options;
 
 class OptionsFromRequest
 {
