@@ -150,3 +150,18 @@ if (!function_exists('isJson')) {
         return (json_last_error() == JSON_ERROR_NONE);
    }
 }
+
+if (!function_exists('propertyValue')) {
+    function propertyValue($id, $properties)
+    {
+        if (is_array($properties)) {
+            foreach ($properties as $property) {
+                if (array_key_exists('property', $property) 
+                    && $property['property']['id'] == $id) {                        
+                    return $property['value'];
+                }            
+            }
+        }    
+        return false;
+    }
+}

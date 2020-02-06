@@ -15,15 +15,21 @@ trait MappingTrait
             'product_id' => [
                 'type' => 'keyword'
             ],
-            'product_group_id' => [
-                'type' => 'keyword'
-            ],            
-            'categories' => [
+            'platform_id' => [
                 'type' => 'keyword'
             ],
             'store_id' => [
                 'type' => 'keyword'
             ],
+            'site_id' => [
+                'type' => 'keyword'
+            ],                         
+            'product_group_id' => [
+                'type' => 'keyword'
+            ],            
+            'category_ids' => [
+                'type' => 'keyword'
+            ],           
             'retail_price' => [
                 'type' => 'keyword'
             ],

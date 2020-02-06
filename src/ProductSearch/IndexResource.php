@@ -2,59 +2,57 @@
 
 use Core\Http\Resource;
 use App\Modules\Currency;
-use App\Http\Resources\ProductSlimResource;
+use App\Http\Resources\ProductResource;
 
 class IndexResource extends Resource
 { 
     protected $expandable = [
-        'store',
-        'country'
+        //
     ];
 
     public function toArray($request)
     {   
-        $reference = $this->reference;
-        $format = $this->format;
-        $version = $this->version;
-        $store = $this->store;
-        $price = $this->price;
-        $currency = new Currency($price->currency_code);
+        //lg($this->resource->toArray());
+        $currency = new Currency($this->price->currency_code);
         
-        //sb($version);
+        return [
+            'product_id'        => $this->id,
+            'platform_id'       => $this->platform_id,
+            'product_group_id'  => $this->reference->product_group_id,
+            'category_ids'      => collect($this->categories)->transform(function ($item) {
+                                    return $item->id;
+                                }),
+            'sku'               => $this->format->idenity->sku,
 
-        $name = '';
-        //sb($format->props);
-        if ($format && isset($format->props)) {
-            $name = isset($format->props['default']['name']['value']) ? $format->props['default']['name']['value'] : '';
-        } 
-        // sb($name);
-        // exit();
-        $s = $this->filter([
-            'product_id'            => $this->id,
-            'name'                  => $name,
-            'manufacturer'          => $reference->manufacturer,
-            'brand'                 => $reference->brand,
-            'creator'               => $reference->creator,
-            'sku'                   => $reference->sku,
-            'publisher_reference'   => $reference->publisher_reference,
-            'product_group_id'      => $reference->product_group_id,
-            // 'category_id'           => $reference->category_id,
+            'name'              => $this->format->name, 
+            'retail_price'      => $currency->fromCents($this->price->retail_price),
+            'wholesale_price'   => $currency->fromCents($this->price->wholesale_price),
+            
+            'store_id'          => $this->store->id,
+            'store_name'        => $this->store->name,
+            'store_handle'      => $this->store->handle,
+            'country_code'      => $this->store->country_code,
+            
+            'site_id'           => $this->site->id,
+            'updated_at'        => isset($this->updated_at) ? (string) $this->updated_at : now(),
+                        
+            'average_rating'    => $this->reference->average_rating,
+            'number_ratings'    => $this->reference->number_ratings,
+
+            'content'           => json_encode(new ProductResource($this->resource))
+
+            // 'manufacturer'      => $this->reference->manufacturer,
+            // 'brand'             => $this->reference->brand,
+            //'creator'               => $reference->creator,
+           
+            //'publisher_reference'   => $reference->publisher_reference,
+            
             // 'category_name'         => $reference->category->name,
-            'updated_at'            => isset($version->updated_at) ? (string) $version->updated_at : now(),
-            'retail_price'          => $currency->fromCents($price->retail_price),
-            'wholesale_price'       => $currency->fromCents($price->wholesale_price),
-            'store_id'              => $store->id,
-            'store_name'            => $store->name,
-            'store_handle'          => $store->handle,
-            'country_code'          => $store->country_code,
-            // 'country'               => $site->country->name,
-            'average_rating'        => $reference->average_rating,
-            'number_ratings'        => $reference->number_ratings,
+            // 'country'               => $site->country->name,            
             // 'categories'            => collect($this->categories)->transform(function ($item) {
             //                                 return $item->id;
             //                         }),
 
-            //  @todo
             //  put a lot of text into search
             //'descriptions'          => json_encode($reference->descriptions),
             //'features'              => json_encode($reference->features),
@@ -63,10 +61,6 @@ class IndexResource extends Resource
             //                             'Author',
             //                             'Brand'
             //                         ],
-            'content'               => json_encode(new ProductSlimResource($object))
-        ]);
-        // sb($s);
-        // exit();
-        return $s;
+        ];
     }
 }
