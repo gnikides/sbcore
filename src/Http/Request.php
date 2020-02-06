@@ -9,7 +9,9 @@ abstract class Request extends FormRequest
 {
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
-    
+    const CREATE = 'create';
+    const UPDATE = 'update';
+
     public function authorize()
     {
         return true;
@@ -83,20 +85,56 @@ abstract class Request extends FormRequest
         return $input;
     }
 
-    // public function sanitizeString($value)
-    // {
-    //     return filter_var($value, FILTER_SANITIZE_STRING);
-    // }
+    public function withValidator($validator)
+    {   
+        if (!$validator->fails()) {
+            $validator->after(function($validator) {    
+                $this->replace($this->formatInput($this->all()))->all();      
+            });
+        }    
+    }
 
-    // public function sanitizeInt($value)
-    // {
-    //     return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    // }
+    public function formatInput($input)
+    {
+        return $input;
+    }  
 
-    // public function sanitizeFloat($value)
-    // {
-    //     return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
-    // }
+    public function sanitizeString($value)
+    {
+        return filter_var($value, FILTER_SANITIZE_STRING);
+    }
+
+    public function sanitizeInt($value)
+    {
+        return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+    public function sanitizeFloat($value)
+    {
+        return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
+    }
+
+    public function sanitizeInts($value)
+    {
+        $output = [];
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $output[strtolower(sanitizeString($k))] = sanitizeInt($v);
+            }
+        }
+        return $output;      
+    }
+
+    public function sanitizeStrings($value)
+    {
+        $output = [];
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $output[strtolower(sanitizeString($k))] = sanitizeString($v);
+            }
+        }
+        return $output;      
+    }
 
     public function sanitizeArray(array $input = [], array $filters = [])
     {
@@ -114,17 +152,9 @@ abstract class Request extends FormRequest
                 } elseif ('active' == $filter) {
                     $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
                 } elseif ('meta' == $filter || 'string_array' == $filter) {
-                    if (is_array($input[$key])) {
-                        foreach ($input[$key] as $k => $v) {
-                            $output[$key][strtolower(sanitizeString($k))] = sanitizeString($v);
-                        }
-                    }
-                } elseif ('integer_array' == $filter) {
-                    if (is_array($input[$key])) {
-                        foreach ($input[$key] as $k => $v) {
-                            $output[$key][strtolower(sanitizeString($k))] = sanitizeInt($v);
-                        }
-                    }                                         
+                    $output[$key] = $this->sanitizeStrings($input[$key]); 
+                } elseif ('int_array' == $filter) {
+                    $output[$key] = $this->sanitizeInts($input[$key]);                                    
                 } elseif ('none' == $filter) {
                     $output[$key] = $input[$key];
                 }
