@@ -60,13 +60,15 @@ class Query extends BaseQuery
         $search_string = trim($search_string);
 
         /* search in different ways to ensure we get what we want, sorted as we want */
-        $query['bool']['should'][]['term']['title'] = (object) [ 'value' => $search_string, 'boost' => 4000 ];
+        //  $query['bool']['should'][]['term']['title'] = (object) [ 'value' => $search_string, 'boost' => 4000 ];
+        $query['bool']['should'][]['term']['name'] = (object) [ 'value' => $search_string, 'boost' => 4000 ];
         $query['bool']['should'][]['term']['search_text'] = (object) [ 'value' => $search_string, 'boost' => 1500 ];
 
         //  "simple_query_string" (as opposed to "query_string") avoids throwing exceptions on bad input
         $analyzer = ('fr' == $language) ? 'french_standard' : 'english_standard';
         $text_search['query'] = $search_string;
-        $text_search['fields'] = ['title.' . $analyzer . '^3000', 'search_text.' . $analyzer . '^1000'];
+        //text_search['fields'] = ['title.' . $analyzer . '^3000', 'search_text.' . $analyzer . '^1000'];
+        $text_search['fields'] = ['name.' . $analyzer . '^3000', 'search_text.' . $analyzer . '^1000'];
         $query['bool']['should'][]['simple_query_string'] = (object) $text_search;
 
         if ('*' == $search_string) {
@@ -74,7 +76,8 @@ class Query extends BaseQuery
         } else {
             $wildcard_string = '*' . $search_string . '*';
         }
-        $query['bool']['should'][]['wildcard']['title'] = [ 'value' => $wildcard_string, 'boost' => 800 ];
+        //$query['bool']['should'][]['wildcard']['title'] = [ 'value' => $wildcard_string, 'boost' => 800 ];
+        $query['bool']['should'][]['wildcard']['name'] = [ 'value' => $wildcard_string, 'boost' => 800 ];
         $query['bool']['should'][]['wildcard']['search_text'] = (object) [ 'value' => $wildcard_string, 'boost' => 600 ];
 
         return $query;

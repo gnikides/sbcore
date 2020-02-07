@@ -76,7 +76,7 @@ abstract class Query
         }
 
         //  @debug as json, then view in kibana, for instance
-        //  print_r(json_encode($body, JSON_PRETTY_PRINT));
+        //print_r(json_encode($body, JSON_PRETTY_PRINT));
         //  exit();
         return $body;
     }

@@ -202,7 +202,7 @@ trait MappingTrait
                     ]
                 ]
             ],
-            //  the product version in json form
+            //  the product in json form
             'content' => [
                 'type'      => 'text',
                 'index'     => false,
