@@ -105,7 +105,8 @@ abstract class Request extends FormRequest
     }
 
     public function sanitizeInt($value)
-    {
+    {   
+        $value = $this->removeNonNumeric($value);
         return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
     }
 
@@ -165,5 +166,10 @@ abstract class Request extends FormRequest
             }    
         }
         return $output;
-    }    
+    }
+    
+    public function removeNonNumeric($value)
+    {
+        return preg_replace('/[^0-9.]+/', '', $value);
+    }
 }
