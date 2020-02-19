@@ -5,6 +5,9 @@ use App\Http\Resources\ProductResource;
 
 class IndexTransformer
 { 
+    protected $api_locale;
+    protected $api_fallback_locale;
+    
     public function transform($object)
     {   
         $currency = new Currency($object->price->currency_code);
@@ -18,13 +21,13 @@ class IndexTransformer
                                 }),
             'sku'               => isset($object->format->identity->sku) ? $object->format->identity->sku : '',
 
-            'name'              => $object->format->name, 
+            'name'              => $this->resolveTranslation($object->format->name), 
             'retail_price'      => $currency->fromCents($object->price->retail_price),
             'wholesale_price'   => $currency->fromCents($object->price->wholesale_price),
             
             'store_id'          => $object->store->id,
-            'store_name'        => $object->store->name,
-            'store_handle'      => $object->store->handle,
+            'store_name'        => 'test', // $object->store->name,
+            'store_handle'      => 'test', //$object->store->handle,
             'country_code'      => $object->store->country_code,
             
             'site_id'           => $object->site->id,
@@ -58,4 +61,19 @@ class IndexTransformer
             //                         ],
         ];
     }
+
+    public function resolveTranslation(array $values)
+    {   
+        // echo 'ddd';
+        // sb($this->api_fallback_locale);
+        if ($this->api_locale && array_key_exists($this->api_locale, $values)) {
+            $value = $values[$this->api_locale];
+        } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
+            $value = $values[$this->api_fallback_locale];
+        } else {
+            $value = array_values($values)[0];
+            //echo 'ssss'; sb($value); exit();
+        }
+        return $value;
+    }        
 }

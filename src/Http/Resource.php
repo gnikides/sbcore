@@ -5,6 +5,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class Resource extends JsonResource
 {
     protected $expandable = [];
+    protected $api_locale = [];
+    protected $api_fallback_locale = [];
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
 
@@ -55,5 +57,20 @@ class Resource extends JsonResource
     public function getData($key)
     {
         return array_get($this->data, $key, null);
+    }  
+    
+    public function resolveTranslation(array $values)
+    {   
+        // echo 'ddd';
+        // sb($this->api_fallback_locale);
+        if ($this->api_locale && array_key_exists($this->api_locale, $values)) {
+            $value = $values[$this->api_locale];
+        } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
+            $value = $values[$this->api_fallback_locale];
+        } else {
+            $value = array_values($values)[0];
+            //echo 'ssss'; sb($value); exit();
+        }
+        return $value;
     }    
 }

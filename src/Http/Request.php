@@ -137,6 +137,19 @@ abstract class Request extends FormRequest
         return $output;      
     }
 
+    // public function sanitizeTranslatable($value)
+    // {
+    //     $output = [];
+    //     if (is_array($value)) {
+    //         foreach ($value as $k => $v) {
+    //             foreach ($v as $i => $j) {
+    //                 $trans[strtolower(sanitizeString($i))] = sanitizeString($v);
+    //             }    
+    //         }
+    //     }
+    //     return $output;      
+    // }
+
     public function sanitizeArray(array $input = [], array $filters = [])
     {
         $output = [];
@@ -155,7 +168,9 @@ abstract class Request extends FormRequest
                 } elseif ('meta' == $filter || 'string_array' == $filter) {
                     $output[$key] = $this->sanitizeStrings($input[$key]); 
                 } elseif ('int_array' == $filter) {
-                    $output[$key] = $this->sanitizeInts($input[$key]);                                    
+                    $output[$key] = $this->sanitizeInts($input[$key]); 
+                } elseif ('translatable' == $filter) {
+                    $output[$key] = $input[$key];                    
                 } elseif ('none' == $filter) {
                     $output[$key] = $input[$key];
                 }
