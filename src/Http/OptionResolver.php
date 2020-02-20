@@ -17,9 +17,11 @@ class OptionResolver
     ];
     const DEFAULT_PER_PAGE = 500;
     const DEFAULT_SEARCH_STRING = ' * ';
+    protected $model;
 
-    public function handle($input, $defaults = [])
+    public function handle($input, $defaults = [], \App\Support\Eloquent\Model $model = null)
     {
+        $this->model = $model;     
         $options = new RequestOptions();
         $options = $this->makeSort($input, $options, $defaults);
         $options->setPerPage($input->get('limit', $defaults['per_page']));
@@ -32,7 +34,7 @@ class OptionResolver
         if ($input->get('q')) {
             $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
         }
-        $options->setLocale($input->get('locale'));           
+        $options->setLocale($input->get('locale'));
         return $options;
     }
 
@@ -74,9 +76,7 @@ class OptionResolver
             'column' => 'country_code',
             'direction' => 'asc'
         ];         
-        $sort = $input->get('sort');
-        // sb($sort);
-        // sb($shorthands);        
+        $sort = $input->get('sort');      
         if ($sort && in_array($sort, array_keys($shorthands))) {            
             $options->setSortColumn($shorthands[$sort]['column']);
             $options->setSortDirection($shorthands[$sort]['direction']); 
@@ -88,13 +88,23 @@ class OptionResolver
                  $options->setSortDirection($direction);
              }    
         }
-        //sb($options);
         if (!array_key_exists('allowed_sorts', $defaults)) {
             $defaults['allowed_sorts'] = [ 'updated_at' ];
         }
         if (false == $options->getSortColumn() || !in_array($options->getSortColumn(), $defaults['allowed_sorts'])) {
             $options->setSortColumn($defaults['sort_column']);
             $options->setSortDirection($defaults['sort_direction']);
+        }
+        if ($this->model) {
+            $json_fields = $this->model->getJsonFields();
+            $translatable = $this->model->getTranslatable();
+            if ($translatable && in_array($options->getSortColumn(), $translatable)) {
+                if ($options->getLocale()) {  
+                    $options->setSortColumn($json_fields[$options->getSortColumn()].'->'.$options->getLocale());             
+                } else {   
+                    $options->setSortColumn($json_fields[$options->getSortColumn()]);
+                }
+            }
         }
         return $options;
     }    
