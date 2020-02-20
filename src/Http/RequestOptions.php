@@ -119,7 +119,7 @@ class RequestOptions
         return $this->platform;
     }
 
-    public function setPlatform(string $platform)
+    public function setPlatform(string $platform = null)
     {
         $this->platform = $platform;
         return $this;
@@ -130,7 +130,7 @@ class RequestOptions
         return $this->locale;
     }
 
-    public function setLocale(string $locale)
+    public function setLocale(string $locale = null)
     {
         $this->locale = $locale;
         return $this;
@@ -141,7 +141,7 @@ class RequestOptions
         return $this->language;
     }
 
-    public function setLanguage(string $language)
+    public function setLanguage(string $language = null)
     {
         $this->language = $language;
         return $this;
