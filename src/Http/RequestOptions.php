@@ -12,6 +12,7 @@ class RequestOptions
     private $filters;
     private $ids            = [];
     private $platform;
+    private $locale         = '';
     private $language       = 'en';
 
     public function getIndex()
@@ -123,7 +124,18 @@ class RequestOptions
         $this->platform = $platform;
         return $this;
     } 
-    
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale)
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
     public function getLanguage()
     {
         return $this->language;

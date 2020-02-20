@@ -62,11 +62,14 @@ class IndexTransformer
         ];
     }
 
-    public function resolveTranslation(array $values)
+    public function resolveTranslation($values)
     {   
+        if (is_string($values)) {
+            return $values;
+
         // echo 'ddd';
         // sb($this->api_fallback_locale);
-        if ($this->api_locale && array_key_exists($this->api_locale, $values)) {
+        } elseif ($this->api_locale && array_key_exists($this->api_locale, $values)) {
             $value = $values[$this->api_locale];
         } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
             $value = $values[$this->api_fallback_locale];

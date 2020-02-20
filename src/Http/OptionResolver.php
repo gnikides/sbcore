@@ -12,7 +12,6 @@ class OptionResolver
     const SORT_COUNTRY = 'country';
     const SORT_STARS_HIGHEST = 'stars_highest';
     const SORT_STARS_LOWEST = 'stars_lowest';
-
     const ALLOWED_FILTERS = [
         'status'
     ];
@@ -32,7 +31,8 @@ class OptionResolver
         }
         if ($input->get('q')) {
             $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
-        }           
+        }
+        $options->setLocale($input->get('locale'));           
         return $options;
     }
 
@@ -95,7 +95,7 @@ class OptionResolver
         if (false == $options->getSortColumn() || !in_array($options->getSortColumn(), $defaults['allowed_sorts'])) {
             $options->setSortColumn($defaults['sort_column']);
             $options->setSortDirection($defaults['sort_direction']);
-        }  
+        }
         return $options;
     }    
 }
