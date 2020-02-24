@@ -2,18 +2,31 @@
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
+use Core\Http\AnonymousResourceCollection;
 
 class Resource extends JsonResource
 {
     protected $expandable = [];
-    protected $api_locale = [];
-    protected $api_fallback_locale = [];
+    protected $api_locale = 'default';
+    protected $fallback_locale = 'default';
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
 
-    public function toArray($request)
+    public function __construct($resource, $options = null)
+    {   
+        if (is_object($options)) {
+            $this->api_locale = $options->getLocale();
+        }            
+        $this->resource = $resource;
+    }
+
+    public static function newCollection($resource, $options = null)
     {
-        return parent::toArray($request);
+        return tap(new AnonymousResourceCollection($resource, static::class, $options), function ($collection) {
+            if (property_exists(static::class, 'preserveKeys')) {
+                $collection->preserveKeys = (new static([]))->preserveKeys === true;
+            }
+        });
     }
 
     public function expands($node, $value, $relation = '')
@@ -60,17 +73,13 @@ class Resource extends JsonResource
         return Arr::get($this->data, $key, null);
     }  
     
-    public function resolveTranslation($values)
+    public function translate($values, $locale = '')
     {   
         if (is_string($values)) {
             return $values;
-        } elseif ($this->api_locale && array_key_exists($this->api_locale, $values)) {
-            $value = $values[$this->api_locale];
-        } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
-            $value = $values[$this->api_fallback_locale];
-        } else {
-            $value = array_values($values)[0];
         }
-        return $value;
+        $locale = $locale ? $locale : $this->api_locale;
+        $locale = $locale ? $locale : $this->fallback_locale;   
+        return array_key_exists($locale, $values) ? $values[$locale] : null;
     }    
 }

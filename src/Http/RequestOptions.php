@@ -12,7 +12,7 @@ class RequestOptions
     private $filters;
     private $ids            = [];
     private $platform;
-    private $locale         = '';
+    private $locale         = 'default';
     private $language       = 'en';
 
     public function getIndex()
