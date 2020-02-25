@@ -1,14 +1,13 @@
 <?php namespace Core\Http;
 
-//use Illuminate\Http\Resources\Json\AnonymousResourceCollection as Base;
 use Core\Http\ResourceCollection;
 
 class AnonymousResourceCollection extends ResourceCollection
 {
-    public function __construct($resource, $collects, $options)
+    public function __construct($resource, $collects, $request_locale = null)
     {
         $this->collects = $collects;
-
-        parent::__construct($resource, $options);
+        $this->request_locale = $request_locale;
+        parent::__construct($resource, $this->request_locale);
     }
 }

@@ -7,22 +7,20 @@ use Core\Http\AnonymousResourceCollection;
 class Resource extends JsonResource
 {
     protected $expandable = [];
-    protected $api_locale = 'default';
+    protected $request_locale = 'default';
     protected $fallback_locale = 'default';
     const ACTIVE = 'active';
     const INACTIVE = 'inactive';
 
-    public function __construct($resource, $options = null)
+    public function __construct($resource, $request_locale = 'default')
     {   
-        if (is_object($options)) {
-            $this->api_locale = $options->getLocale();
-        }            
+        $this->request_locale = $request_locale;            
         $this->resource = $resource;
     }
 
-    public static function newCollection($resource, $options = null)
-    {
-        return tap(new AnonymousResourceCollection($resource, static::class, $options), function ($collection) {
+    public static function collection($resource, $request_locale = null)
+    {   
+        return tap(new AnonymousResourceCollection($resource, static::class, $request_locale ), function ($collection) {
             if (property_exists(static::class, 'preserveKeys')) {
                 $collection->preserveKeys = (new static([]))->preserveKeys === true;
             }
@@ -62,6 +60,12 @@ class Resource extends JsonResource
         return $this;
     }
 
+    public function setRequestLocale($locale)
+    { 
+        $this->request_locale = $locale;
+        return $this;
+    }
+
     public function setData($key, $value)
     { 
         $this->data[$key] = $value;
@@ -75,11 +79,19 @@ class Resource extends JsonResource
     
     public function translate($values, $locale = '')
     {   
-        if (is_string($values)) {
+        if (!$values) {
+            return null;
+        } elseif (!is_array($values)) {
             return $values;
         }
-        $locale = $locale ? $locale : $this->api_locale;
-        $locale = $locale ? $locale : $this->fallback_locale;   
+        $locale = $locale ? $locale : $this->request_locale;
+        // sb($locale);
+        // sb($locale);
+        // sb($locale);
+        // sb($values);
+        // sb(array_key_exists($locale, $values));
+        // exit();
+        // $locale = $locale ? $locale : $this->fallback_locale;   
         return array_key_exists($locale, $values) ? $values[$locale] : null;
     }    
 }
