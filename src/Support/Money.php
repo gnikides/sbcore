@@ -123,11 +123,6 @@ class Money
         if (is_float($cents)) {
             throw new MathException(sprintf('The cents "%s" must not be a float.', $cents));
         }
-        // @todo
-//         if (!is_numeric($cents)) {
-//          pr($cents);
-//             throw new MathException(sprintf('The cents "%s" must be numeric.', $cents));
-//         }
     }
     
     private function assertNonZero($value)

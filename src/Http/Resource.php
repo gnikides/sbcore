@@ -84,14 +84,7 @@ class Resource extends JsonResource
         } elseif (!is_array($values)) {
             return $values;
         }
-        $locale = $locale ? $locale : $this->request_locale;
-        // sb($locale);
-        // sb($locale);
-        // sb($locale);
-        // sb($values);
-        // sb(array_key_exists($locale, $values));
-        // exit();
-        // $locale = $locale ? $locale : $this->fallback_locale;   
+        $locale = $locale ? $locale : $this->request_locale; 
         return array_key_exists($locale, $values) ? $values[$locale] : null;
     }    
 }

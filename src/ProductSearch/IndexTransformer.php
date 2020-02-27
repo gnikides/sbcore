@@ -67,15 +67,12 @@ class IndexTransformer
         if (is_string($values)) {
             return $values;
 
-        // echo 'ddd';
-        // sb($this->api_fallback_locale);
         } elseif ($this->api_locale && array_key_exists($this->api_locale, $values)) {
             $value = $values[$this->api_locale];
         } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
             $value = $values[$this->api_fallback_locale];
         } else {
             $value = array_values($values)[0];
-            //echo 'ssss'; sb($value); exit();
         }
         return $value;
     }        
