@@ -79,7 +79,7 @@ abstract class Request extends FormRequest
             $this->messages()
         );
     }
-    
+
     public function sanitize($input)
     {
         return $input;
@@ -172,4 +172,38 @@ abstract class Request extends FormRequest
     {
         return preg_replace('/[^0-9.]+/', '', $value);
     }
+      
+    public static function getRules()
+    {
+        $class = static::class;
+        $instance = new $class;
+        return $instance->rules();  
+    }
+
+
+    public function cleanupString(string $text)
+    {
+        $text = preg_replace("/[\r\n]+/", "\n", $text);
+        $text = str_replace("&nbsp;", " ", $text);
+        $text = str_replace("\t", "", $text);           
+        return trim($text, "\n");
+    }  
+    
+    public function properties($input, $output)
+    {   
+        foreach ($input as $key => $value) {
+            if (false !== strpos($key, 'property_')) {                
+                if (is_numeric($value)) {
+                    $value = sanitizeInt($value);
+                } else {
+                    $value = $this->cleanupString(sanitizeString($value));
+                }
+                $field = explode('_', $key);
+                $id = $field[1];
+                $type = $field[2];
+                $output['properties'][$id][$type] = $value;                
+            }
+        }
+        return $output;
+    }          
 }
