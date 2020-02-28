@@ -100,6 +100,32 @@ if (!function_exists('sanitizeFloat')) {
     } 
 }
 
+if (!function_exists('sanitizeStrings')) {
+    function sanitizeStrings($value)
+    {
+        $output = [];
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $output[strtolower(sanitizeString($k))] = sanitizeString($v);
+            }
+        }
+        return $output;      
+    }
+}
+
+if (!function_exists('sanitizeInts')) {
+    function sanitizeInts($value)
+    {
+        $output = [];
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $output[strtolower(sanitizeString($k))] = sanitizeInt($v);
+            }
+        }
+        return $output;      
+    }
+}
+
 if (!function_exists('timeAgo')) {
     function timeAgo($date)
     {
