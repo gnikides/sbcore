@@ -182,9 +182,11 @@ if (!function_exists('propertyValue')) {
     {
         if (is_array($properties)) {
             foreach ($properties as $property) {
-                if (array_key_exists('property', $property) 
-                    && $property['property']['id'] == $id) {                        
-                    return $property['value'];
+                if (is_array($property) 
+                    && array_key_exists('property', $property) 
+                    && array_key_exists('id', $property['property'])
+                    && $property['property']['id'] == $id) {                       
+                        return $property['value'];                    
                 }            
             }
         }    
