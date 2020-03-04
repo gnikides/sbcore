@@ -23,7 +23,7 @@ class Transaction
             'capture'               => true,
             'application_fee'       => $application_fee,
             'metadata'              => $meta
-            //['stripe_account' => '{CONNECTED_STRIPE_ACCOUNT_ID}')];
+            //['stripe_account' => '{CONNECTED_platform_key}')];
             //['stripe_account'         => 'acct_1BTn2jErNBNQFUc6']            
         ];           
         if ($response['failure_code']) {

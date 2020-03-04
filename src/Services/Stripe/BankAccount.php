@@ -2,10 +2,10 @@
 
 class BankAccount
 {  
-    public function create($stripe_account_id, array $payload)
+    public function create($platform_key, array $payload)
     {  
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));         
-        $account = \Stripe\Account::retrieve($stripe_account_id);  
+        $account = \Stripe\Account::retrieve($platform_key);  
         if ($account->id) {
             $params = [
                 'object'                => 'bank_account',

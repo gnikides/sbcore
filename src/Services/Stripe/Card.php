@@ -17,7 +17,6 @@ class Card
         }           
     } 
 
-
     public function store(string $token, string $email, bool $is_default = true)
     {             
         try {
