@@ -1,4 +1,4 @@
-<?php namespace Core\ProductSearch;
+<?php namespace Core\OrderSearch;
 
 use Core\Services\Elastic\BaseConfigurator;
 
@@ -6,6 +6,6 @@ class ScoutConfigurator extends BaseConfigurator
 {
     public function __construct()
     {
-        $this->name = config('scout.elasticsearch.index');
+        $this->name = 'orders';
     }
 }
