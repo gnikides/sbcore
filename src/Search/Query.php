@@ -1,4 +1,4 @@
-<?php namespace Core\Services\Elastic;
+<?php namespace Core\Search;
 
 use Core\Http\RequestOptions;
 
