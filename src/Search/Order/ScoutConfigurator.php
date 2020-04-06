@@ -1,4 +1,4 @@
-<?php namespace Core\OrderSearch;
+<?php namespace Core\Search\Order;
 
 use Core\Services\Elastic\BaseConfigurator;
 

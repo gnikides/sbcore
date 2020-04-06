@@ -1,4 +1,4 @@
-<?php namespace Core\ProductSearch;
+<?php namespace Core\Search\Product;
 
 use App\Modules\Currency;
 use App\Http\Resources\ProductResource;
@@ -66,7 +66,6 @@ class IndexTransformer
     {   
         if (is_string($values)) {
             return $values;
-
         } elseif ($this->api_locale && array_key_exists($this->api_locale, $values)) {
             $value = $values[$this->api_locale];
         } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {

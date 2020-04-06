@@ -1,4 +1,4 @@
-<?php namespace Core\ProductSearch;
+<?php namespace Core\Search\Product;
 
 use Core\Services\Elastic\Query as BaseQuery;
 use Core\Http\RequestOptions;

@@ -1,4 +1,4 @@
-<?php namespace Core\ProductSearch;
+<?php namespace Core\Search\Product;
 
 class FacetTransformer
 {

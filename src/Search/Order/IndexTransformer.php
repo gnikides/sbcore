@@ -1,79 +1,51 @@
-<?php namespace Core\OrderSearch;
+<?php namespace Core\Search\Order;
 
 use App\Modules\Currency;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\OrderStoreResource;
+use App\Http\Resources\AddressResource;
+use App\Support\Resource\Totals;
 
 class IndexTransformer
 { 
     protected $api_locale;
     protected $api_fallback_locale;
     
+
+
     public function transform($object)
-    {   
-        $currency = new Currency($object->price->currency_code);
-        
+    {    
+        lg($object->order->shipping_address);       
+        $history = isset($object->histories) && is_object($object->histories) ? $object->histories->shift() : null;
+        $currency = new Currency($object->currency_code); 
+        $totals = (new Totals($object->totals, $currency));                     
         return [
-            'product_id'        => $object->id,
-            'platform_id'       => $object->platform_id,
-            'product_group_id'  => $object->reference->product_group_id,
-            'category_ids'      => collect($object->categories)->transform(function ($item) {
-                                    return $item->id;
-                                }),
-            'sku'               => isset($object->format->identity->sku) ? $object->format->identity->sku : '',
-
-            'name'              => $this->resolveTranslation($object->format->name), 
-            'retail_price'      => $currency->fromCents($object->price->retail_price),
-            'wholesale_price'   => $currency->fromCents($object->price->wholesale_price),
-            
-            'store_id'          => $object->store->id,
-            'store_name'        => 'test', // $object->store->name,
-            'store_handle'      => 'test', //$object->store->handle,
-            'country_code'      => $object->store->country_code,
-            
-            'site_id'           => $object->site->id,
-            'updated_at'        => isset($object->updated_at) ? (string) $object->updated_at : now(),
-            //'updated_at'        => now(),
-
-            'average_rating'    => $object->reference->average_rating,
-            'number_ratings'    => $object->reference->number_ratings,
-
-            'content'           => json_encode(new ProductResource($object))
-
-            // 'manufacturer'      => $object->reference->manufacturer,
-            // 'brand'             => $object->reference->brand,
-            //'creator'               => $reference->creator,
-           
-            //'publisher_reference'   => $reference->publisher_reference,
-            
-            // 'category_name'         => $reference->category->name,
-            // 'country'               => $site->country->name,            
-            // 'categories'            => collect($object->categories)->transform(function ($item) {
-            //                                 return $item->id;
-            //                         }),
-
-            //  put a lot of text into search
-            //'descriptions'          => json_encode($reference->descriptions),
-            //'features'              => json_encode($reference->features),
-            // 'details'               => [
-            //                             'Manufacturer',
-            //                             'Author',
-            //                             'Brand'
-            //                         ],
+            'id'                => $object->id,
+            'order_id'          => $object->order_id,  
+            'store_id'          => $object->store_id,      
+            'status'            => isset($history->action) ? $history->action : '',
+            'pay_status'        => isset($history->pay_status) ? $history->pay_status : '',
+            'ship_status'       => isset($history->ship_status) ? $history->ship_status : '', 
+            'pay_brand'         => $object->order->paymethod ? $object->order->paymethod->brand : '',                          
+            'total'             => $totals->getTotal(),
+            'customer_id'       => $object->customer_id,                               
+            'email'             => $object->email,
+            'full_name'         => $object->customer->full_name,
+            'number_items'      => $this->getNumberItems($object->items),
+            'country_code'      => $object->order->shipping_address->country_code,
+            'country_name'      => '',
+            'shipping_address'  => '', // isset($object->order->shipping_address) ? (new AddressResource($object->order->shipping_address, 'default'))->noExpands() : null,
+            'product'           => '',
+            'updated_at'        => (string) $object->updated_at,                     
+            'content'           => json_encode(new OrderStoreResource($object))
         ];
     }
 
-    public function resolveTranslation($values)
-    {   
-        if (is_string($values)) {
-            return $values;
-
-        } elseif ($this->api_locale && array_key_exists($this->api_locale, $values)) {
-            $value = $values[$this->api_locale];
-        } elseif ($this->api_fallback_locale && array_key_exists($this->api_fallback_locale, $values)) {
-            $value = $values[$this->api_fallback_locale];
-        } else {
-            $value = array_values($values)[0];
-        }
-        return $value;
-    }        
+    public function getNumberItems($items)
+    {
+        $quantity = 0;
+        foreach ($items as $item) {
+            $quantity += $item->quantity;
+        } 
+        return $quantity;
+    }    
 }

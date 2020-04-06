@@ -1,10 +1,9 @@
-<?php namespace Core\ProductSearch;
+<?php namespace Core\Search\Product;
 
-use Core\ProductSearch\ScoutConfigurator;
+use Core\Search\Product\ScoutConfigurator;
 
 trait MappingTrait
 {
-    //protected $indexConfigurator = ScoutConfigurator::class;
     protected $searchRules = [
         //
     ];

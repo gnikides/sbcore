@@ -85,7 +85,7 @@ class Account
             'tos_acceptance'        => $tos_acceptance,    
             'legal_entity'          => $legal_entity                                                        
         ];
-        sb($payload);
+        //sb($payload);
         // @gotcha json transforms true to 1 but stripe expects only true, false
         if ('1' == $input["debit_negative_balances"]) {
             $payload["debit_negative_balances"] = true;

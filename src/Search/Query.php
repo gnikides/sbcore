@@ -94,6 +94,34 @@ abstract class Query
         return $query;
     }
 
+    public function buildFilters($filters, array $range_params = []) : array
+    {
+        $formatted = null;
+        $used_filters = [];
+
+        //  ranges are formatted differently than other terms
+        if ($range_params) {
+            foreach ($range_params as $config) {
+                if (empty($config['from']) || empty($config['to']) || empty($config['search_field'])) {
+                    throw new \Exception('Range filter configuration is incorrect');
+                }
+                $range = $this->makeRange($filters, $config['from'], $config['to'], $config['search_field']);
+                if ($range) {
+                    $formatted[]['range'] = $range;
+                }
+                $used_filters[] = $config['from'];
+                $used_filters[] = $config['to'];
+            }
+        }
+        //  format all other terms
+        $filters = collect($filters)->each(function ($item, $key) use (&$formatted, $used_filters) {
+            if (!in_array($key, $used_filters)) {
+                $formatted[]['terms'][$key][] = $item;
+            }
+        });
+        return $formatted;
+    }
+
     public function makeRange($filters, $from_field, $to_field, $search_field)
     {
         //  ranges are formatted differently than other terms
