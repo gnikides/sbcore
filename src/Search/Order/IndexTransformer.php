@@ -10,8 +10,6 @@ class IndexTransformer
     protected $api_locale;
     protected $api_fallback_locale;
     
-
-
     public function transform($object)
     {    
         lg($object->order->shipping_address);       
