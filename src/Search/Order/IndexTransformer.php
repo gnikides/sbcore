@@ -14,7 +14,7 @@ class IndexTransformer
 
     public function transform($object)
     {    
-        lg($object->order->shipping_address);       
+        lg($object->order);       
         $history = isset($object->histories) && is_object($object->histories) ? $object->histories->shift() : null;
         $currency = new Currency($object->currency_code); 
         $totals = (new Totals($object->totals, $currency));                     
