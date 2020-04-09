@@ -2,7 +2,6 @@
 
 use App\Modules\Currency;
 use App\Http\Resources\OrderStoreResource;
-use App\Http\Resources\AddressResource;
 use App\Support\Resource\Totals;
 
 class IndexTransformer
@@ -10,11 +9,9 @@ class IndexTransformer
     protected $api_locale;
     protected $api_fallback_locale;
     
-
-
     public function transform($object)
     {    
-        lg($object->order);       
+        lg($object->customer);       
         $history = isset($object->histories) && is_object($object->histories) ? $object->histories->shift() : null;
         $currency = new Currency($object->currency_code); 
         $totals = (new Totals($object->totals, $currency));                     
