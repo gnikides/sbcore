@@ -28,7 +28,7 @@ class IndexTransformer
             'pay_brand'         => $object->order->paymethod ? $object->order->paymethod->brand : '',                          
             'total'             => $totals->getTotal(),
             'customer_id'       => $object->customer_id,                               
-            'email'             => $object->email,
+            'email'             => $object->customer->email,
             'full_name'         => $object->customer->full_name,
             'number_items'      => $this->getNumberItems($object->items),
             'country_code'      => $object->order->shipping_address->country_code,

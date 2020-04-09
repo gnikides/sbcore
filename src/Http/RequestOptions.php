@@ -97,6 +97,17 @@ class RequestOptions
         return $this->filters;
     }
 
+    public function setFilter(string $name, $value)
+    {
+        $this->filters[$name] = $value;
+        return $this;
+    }
+
+    public function getFilter($name)
+    {
+        return $this->filters[$name];
+    }
+
     public function setFilters(array $filters = [])
     {
         $this->filters = $filters;
