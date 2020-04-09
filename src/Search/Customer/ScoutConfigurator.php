@@ -6,6 +6,6 @@ class ScoutConfigurator extends BaseConfigurator
 {
     public function __construct()
     {
-        $this->name = 'order';
+        $this->name = 'customer';
     }
 }

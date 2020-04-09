@@ -29,7 +29,7 @@ class Query extends BaseQuery
         //  "simple_query_string" (as opposed to "query_string") avoids throwing exceptions on bad input
         $analyzer = ('fr' == $language) ? 'french_standard' : 'english_standard';
         $text_search['query'] = $search_string;
-        $text_search['fields'] = ['name.' . $analyzer . '^3000', 'search_text.' . $analyzer . '^1000'];
+        $text_search['fields'] = ['search_text.' . $analyzer . '^1000'];
         $query['bool']['should'][]['simple_query_string'] = (object) $text_search;
 
         if ('*' == $search_string) {
