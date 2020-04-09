@@ -11,7 +11,8 @@ class IndexTransformer
     
     public function transform($object)
     {    
-        lg($object->customer);       
+        //  shifting original object will modify it, so OrderStoreResource below won't work. So make copy
+        $order =  json_encode(new OrderStoreResource($object));              
         $history = isset($object->histories) && is_object($object->histories) ? $object->histories->shift() : null;
         $currency = new Currency($object->currency_code); 
         $totals = (new Totals($object->totals, $currency));                     
@@ -26,14 +27,14 @@ class IndexTransformer
             'total'             => $totals->getTotal(),
             'customer_id'       => $object->customer_id,                               
             'email'             => $object->customer->email,
-            'full_name'         => $object->customer->full_name,
+            'full_name'         => trim($object->customer->first_name . ' ' . $object->customer->last_name),
             'number_items'      => $this->getNumberItems($object->items),
             'country_code'      => $object->order->shipping_address->country_code,
             'country_name'      => '',
             'shipping_address'  => '', // isset($object->order->shipping_address) ? (new AddressResource($object->order->shipping_address, 'default'))->noExpands() : null,
             'product'           => '',
             'updated_at'        => (string) $object->updated_at,                     
-            'content'           => json_encode(new OrderStoreResource($object))
+            'content'           => $order
         ];
     }
 

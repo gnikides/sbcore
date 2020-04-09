@@ -25,13 +25,15 @@ trait MappingTrait
                 'type' => 'keyword'
             ], 
             'pay_brand' => [
-                'type' => 'keyword'
+                'type' => 'keyword',
+                'copy_to' => 'search_text'  
             ],                        
             'ship_status' => [
                 'type' => 'keyword'
             ],           
             'total' => [
-                'type' => 'keyword'
+                'type' => 'keyword',
+                'copy_to' => 'search_text'
             ],
             'customer_id' => [
                 'type' => 'keyword'
@@ -54,7 +56,8 @@ trait MappingTrait
                 'format'    => 'yyyy-MM-dd HH:mm:ss'
             ],
             'country_code' => [
-                'type' => 'keyword'
+                'type' => 'keyword',
+                'copy_to' => 'search_text'  
             ],
             /* Keywords */
             'country_name' => [
