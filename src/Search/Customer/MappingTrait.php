@@ -43,7 +43,7 @@ trait MappingTrait
                 'type' => 'keyword',
                 'copy_to' => 'search_text'                
             ],
-            'store_ids' => [
+            'store_id' => [
                 'type' => 'keyword'
             ],                        
             //  aggregate text field for analyzed full-text searching

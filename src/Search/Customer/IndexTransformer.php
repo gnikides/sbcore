@@ -17,7 +17,7 @@ class IndexTransformer
             'updated_at'        => (string) $object->updated_at,     
             'ip'                => $object->ip,
             'status'            => $object->status,
-            'store_ids'         => OrderComponent::where('customer_id', $object->id)->pluck('store_id')->unique()->values()->toArray(),                                                        
+            'store_id'          => OrderComponent::where('customer_id', $object->id)->pluck('store_id')->unique()->values()->toArray(),                                                        
             'content'           => json_encode(new CustomerResource($object))             
         ];
     }
