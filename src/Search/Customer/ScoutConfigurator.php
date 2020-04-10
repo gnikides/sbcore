@@ -1,6 +1,6 @@
-<?php namespace Core\OrderSearch;
+<?php namespace Core\Search\Customer;
 
-use Core\Services\Elastic\BaseConfigurator;
+use Core\Search\BaseConfigurator;
 
 class ScoutConfigurator extends BaseConfigurator
 {

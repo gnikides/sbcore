@@ -1,6 +1,4 @@
-<?php namespace Core\OrderSearch;
-
-use Core\OrderSearch\ScoutConfigurator;
+<?php namespace Core\Search\Customer;
 
 trait MappingTrait
 {
@@ -9,182 +7,45 @@ trait MappingTrait
     ];
     protected $mapping = [
         'properties' => [
-            
-            /* Integers */
-            'product_id' => [
+            'id' => [
                 'type' => 'keyword'
             ],
-            'platform_id' => [
+            'customer_group_id' => [
                 'type' => 'keyword'
             ],
-            'store_id' => [
-                'type' => 'keyword'
+            'full_name' => [
+                'type' => 'keyword',
+                'index' => true,
+                'copy_to' => 'search_text'                
+            ],                                    
+            'email' => [
+                'type' => 'keyword',
+                'index' => true,
+                'copy_to' => 'search_text'                
             ],
-            'site_id' => [
-                'type' => 'keyword'
-            ],                         
-            'product_group_id' => [
-                'type' => 'keyword'
-            ],            
-            'category_ids' => [
-                'type' => 'keyword'
-            ],           
-            'retail_price' => [
-                'type' => 'keyword'
+            'country_code' => [
+                'type' => 'keyword',
+                'copy_to' => 'search_text'  
             ],
-            'wholesale_price' => [
-                'type' => 'keyword'
+            'country_name' => [
+                'type' => 'keyword',
+                'index' => false,
+                'copy_to' => 'search_text'
             ],
-            'average_rating' => [
-                'type' => 'integer'
-            ],
-            'number_ratings' => [
-                'type' => 'integer'
-            ],
-            /* Dates */
             'updated_at' => [
                 'type'      => 'date',
                 'format'    => 'yyyy-MM-dd HH:mm:ss'
             ],
-            /* Keywords */
-            'store_handle' => [
-                'type' => 'keyword',
-                'index'     => false,
-                'copy_to'   => 'search_text'
-            ],
-            'country_code' => [
+            'status' => [
                 'type' => 'keyword'
             ],
-
-            /* Search text, unindexed */
-            'product_group_name' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text'
+            'ip' => [
+                'type' => 'keyword',
+                'copy_to' => 'search_text'                
             ],
-            'store_name' => [
-                'type'      => 'text',
-                'index'     => false,
-                'copy_to'   => 'search_text'
-            ],
-            // 'country' => [
-            //     'type'      => 'text',
-            //     'index'     => false,
-            //     'copy_to'   => 'search_text'
-            // ],
-            // 'descriptions' => [
-            //     'type'      => 'text',
-            //     'index'     => false,
-            //     'copy_to'   => 'search_text',
-            // ],
-            // 'features' => [
-            //     'type'      => 'text',
-            //     'index'     => false,
-            //     'copy_to'   => 'search_text',
-            // ],
-            /* Search text, indexed */
-            'name' => [
-                 //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
-                 'type'      => 'text',
-                 'analyzer'  => 'standard',
-                 'copy_to'   => 'search_text',
-                 'index'     => true,
-                 'fields'    => [
-                    'raw'   => [
-                        //  enables alphabetical sorting
-                        'type'      => 'text',
-                        'analyzer'  => 'keyword_lowercase_analyzer',
-                        'fielddata' => true
-                    ],
-                    'french_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'french_standard_analyzer'
-                    ],
-                    'english_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'english_standard_analyzer'
-                    ]
-                 ]
-            ],
-            'manufacturer' => [
-                 //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
-                 'type'      => 'text',
-                 'analyzer'  => 'standard',
-                 'copy_to'   => 'search_text',
-                 'index'     => true,
-                 'fields'    => [
-                    'raw'   => [
-                        //  enables alphabetical sorting
-                        'type'      => 'text',
-                        'analyzer'  => 'keyword_lowercase_analyzer',
-                        'fielddata' => true
-                    ],
-                    'french_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'french_standard_analyzer'
-                    ],
-                    'english_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'english_standard_analyzer'
-                    ]
-                 ]
-            ],
-            'brand' => [
-                //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
-                'type'      => 'text',
-                'analyzer'  => 'standard',
-                'copy_to'   => 'search_text',
-                'index'     => true,
-                'fields'    => [
-                   'raw'   => [
-                       //  enables alphabetical sorting
-                       'type'      => 'text',
-                       'analyzer'  => 'keyword_lowercase_analyzer',
-                       'fielddata' => true
-                   ],
-                   'french_standard' => [
-                       'type'      => 'text',
-                       'analyzer'  => 'french_standard_analyzer'
-                   ],
-                   'english_standard' => [
-                       'type'      => 'text',
-                       'analyzer'  => 'english_standard_analyzer'
-                   ]
-                ]
-           ],            
-            'sku' => [
-                 //  use "fields" to create 2 types of mapping, analyzed full-text & alphabetical
-                 'type'      => 'text',
-                 'analyzer'  => 'standard',
-                 'copy_to'   => 'search_text',
-                 'index'     => true,
-                 'fields'    => [
-                    'raw'   => [
-                        //  enables alphabetical sorting
-                        'type'      => 'text',
-                        'analyzer'  => 'keyword_lowercase_analyzer',
-                        'fielddata' => true
-                    ],
-                    'french_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'french_standard_analyzer'
-                    ],
-                    'english_standard' => [
-                        'type'      => 'text',
-                        'analyzer'  => 'english_standard_analyzer'
-                    ]
-                 ]
-           ],
-            'creator' => [
-                'type'      => 'text',
-                'analyzer'  => 'standard',
-                'copy_to'   => 'search_text',
-            ],
-            'publisher_reference' => [
-                'type'      => 'text',
-                'analyzer'  => 'standard',
-                'copy_to'   => 'search_text',
-            ],
+            'store_ids' => [
+                'type' => 'keyword'
+            ],                        
             //  aggregate text field for analyzed full-text searching
             'search_text' => [
                 'type'      => 'text',
@@ -201,7 +62,7 @@ trait MappingTrait
                     ]
                 ]
             ],
-            //  the product in json form
+            //  the customer in json form
             'content' => [
                 'type'      => 'text',
                 'index'     => false,
