@@ -45,6 +45,11 @@ class Query extends BaseQuery
         ]
     ];
 
+    public function handle(RequestOptions $options) : array
+    {
+        return $this->build($options, $this->range_filters);
+    }
+    
     public function buildQuery(
         RequestOptions $options,
         array $facets = [],
