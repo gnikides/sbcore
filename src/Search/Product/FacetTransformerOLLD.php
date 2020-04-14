@@ -12,7 +12,7 @@ class FacetTransformer
             }
             if ('product_group_id' == $key) {
                 // return $this->productGroups($item['buckets'], []);
-            } elseif ('category_ids' == $key) {
+            } elseif ('category_id' == $key) {
                 return $this->categories($item['buckets'], $categories);
             // } elseif ('store_id' == $key) {
             //     return $this->stores($item['buckets'], $stores);
