@@ -2,18 +2,18 @@
 
 class FacetTransformer
 {
-    public function transform($facets, $data = [])
+    public function transform($facets, $categories, $groups)
     {   
-        return collect($facets)->transform(function ($item, $key) use ($data) {
+        return collect($facets)->transform(function ($item, $key) use ($categories, $groups) {
             if (false !== strpos($key, '_range')) {
                 return collect($item['buckets'])->map(function ($bucket) {
                     return (collect($bucket))->only('key', 'doc_count');
                 });
             }
-            if ('product_group_id' == $key && array_key_exists('groups', $data)) {
-                return $this->productGroups($item['buckets'], $data['groups']);
-            } elseif ('category_ids' == $key && array_key_exists('categories', $data)) {
-                return $this->categories($item['buckets'], $data['categories']);
+            if ('product_group_id' == $key) {
+                // return $this->productGroups($item['buckets'], []);
+            } elseif ('category_ids' == $key) {
+                return $this->categories($item['buckets'], $categories);
             // } elseif ('store_id' == $key) {
             //     return $this->stores($item['buckets'], $stores);
             // } elseif ('retail_price' == $key) {
@@ -22,8 +22,6 @@ class FacetTransformer
             //     return $this->countries($item['buckets'], $countries);
             }
             //return $item['buckets'];
-        })->reject(function ($item) {
-            return is_null($item);
         });
     }
 
@@ -31,17 +29,15 @@ class FacetTransformer
     {
         return collect($buckets)->map(function ($item) use ($groups) {
             if (array_key_exists('key', $item)) {
-                $group = $groups->first(function ($value, $key) use ($item) {
-                    return $value->id == $item['key'];                    
-                });
-                if ($group && $group->name) {
+                // $store = array_key_exists($item['key'], $stores) ? $stores[$item['key']] : null;
+                // if ($store) {
                     return [
-                        'key' => $item['key'],
-                        'name' => $group->name,
-                        'slug' => isset($group->slug) ? $group->slug : '',
+                        'key'       => $item['key'],
+                        'label'     => $item['key'],
+                        //'url'       => $site->url(),
                         'doc_count' => $item['doc_count']
                     ];
-                }
+                //}
             }
         })->toArray();
     }
@@ -49,15 +45,14 @@ class FacetTransformer
     public function categories($buckets, $categories)
     {  
         return collect($buckets)->map(function ($item) use ($categories) {
+            //sb($categories);
             if (array_key_exists('key', $item)) {
-                $category = $categories->first(function ($value, $key) use ($item) {
-                    return $value->id == $item['key'];                    
-                });
-                if ($category && $category->name) {
+                $category = array_key_exists($item['key'], $categories) ? $categories[$item['key']] : null;
+                if ($category && $category->name && $category->url) {
                     return [
-                        'key' => $item['key'],
-                        'name' => $category->name,
-                        'slug' => isset($category->slug) ? $category->slug : '',
+                        'key'       => $item['key'],
+                        'label'     => $category->name,
+                        'url'       => $category->url,
                         'doc_count' => $item['doc_count']
                     ];
                 }
