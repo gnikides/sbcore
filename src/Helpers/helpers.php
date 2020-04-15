@@ -193,3 +193,14 @@ if (!function_exists('propertyValue')) {
         return false;
     }
 }
+
+
+function sortByValue($array, $field, $dir = SORT_ASC)
+{
+    $sort = [];
+    foreach ($array as $key => $val) {
+        $sort[$key] = $val[$field];
+    }
+    array_multisort($sort, $dir, $array);
+    return $array;
+} 

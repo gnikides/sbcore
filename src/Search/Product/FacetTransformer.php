@@ -5,21 +5,18 @@ class FacetTransformer
     public function transform($facets, $data = [], $currency = null)
     {   
         return collect($facets)->transform(function ($item, $key) use ($data, $currency) {
-            // if (false !== strpos($key, '_range')) {
-            //     return collect($item['buckets'])->map(function ($bucket) {
-            //         return (collect($bucket))->only('key', 'doc_count');
-            //     });
-            // }
             if ('product_group_id' == $key && array_key_exists('groups', $data)) {
                 return $this->productGroups($item['buckets'], $data['groups']);
             } elseif ('category_id' == $key && array_key_exists('categories', $data)) {
                 return $this->categories($item['buckets'], $data['categories']);
             } elseif ('price_range' == $key) {
-                return $this->priceRanges($item['buckets'], $currency);                
+                return $this->priceRanges($item['buckets'], $currency);    
+            } elseif ('status' == $key) {
+                return $this->statuses($item['buckets']);   
+            } elseif ('updated_at_range' == $key) {
+                return $this->updatedAtRanges($item['buckets']);                                                
             // } elseif ('store_id' == $key) {
             //     return $this->stores($item['buckets'], $stores);
-            // } elseif ('retail_price' == $key) {
-            //     //return $this->siteFacets($item['buckets'], $currency);
             // } elseif ('country_code' == $key) {
             //     return $this->countries($item['buckets'], $countries);
             }  
@@ -29,7 +26,7 @@ class FacetTransformer
     }
 
     public function productGroups($buckets, $groups)
-    {
+    {   sb($buckets);
         return collect($buckets)->map(function ($item) use ($groups) {
             if (array_key_exists('key', $item)) {
                 $group = $groups->first(function ($value, $key) use ($item) {
@@ -72,7 +69,34 @@ class FacetTransformer
             if (array_key_exists('key', $item)) {
                 return [
                     'key' => $item['key'],
+                    'sort' => explode('-', $item['key'])[0],
                     'name' => $currency->getSymbol().$item['key'],
+                    'doc_count' => $item['doc_count']
+                ];
+            }
+        })->toArray();
+    }
+
+    public function statuses($buckets)
+    {  
+        return collect($buckets)->map(function ($item) {
+            if (array_key_exists('key', $item)) {
+                return [
+                    'key' => $item['key'],
+                    'name' => ucfirst(__($item['key'])),
+                    'doc_count' => $item['doc_count']
+                ];
+            }
+        })->toArray();
+    }
+
+    public function updatedAtRanges($buckets)
+    {  
+        return collect($buckets)->map(function ($item) {
+            if (array_key_exists('key', $item)) {
+                return [
+                    'key' => $item['key'],
+                    'name' => $item['key'],
                     'doc_count' => $item['doc_count']
                 ];
             }
@@ -113,16 +137,4 @@ class FacetTransformer
     //         }
     //     })->toArray();
     // }
-
-    // public function prices($buckets, $currency)
-    // {
-    //     //   how put currency in there ????
-    //     return collect($buckets)->map(function ($item) {
-    //         return [
-    //             'key'       => $item['key'],
-    //             'label'     => '$' . $item['key'],
-    //             'doc_count' => $item['doc_count']
-    //         ];
-    //     })->toArray();
-    // } 
 }
