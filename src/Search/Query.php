@@ -2,7 +2,7 @@
 
 use Core\Http\RequestOptions;
 
-abstract class Query
+class Query
 {
     /*
         Default search string, if none present
@@ -17,31 +17,20 @@ abstract class Query
     /*
         Default pager result limit
     */
-    const DEFAULT_PAGER_SIZE = 500;
+    const DEFAULT_PAGER_SIZE = 1000;
 
     /*
         Default search string, if none present
     */
     const DEFAULT_LANGUAGE = 'en';
 
-    /*
-        Default sort field
-    */
-    protected $sort_column = 'updated_at';
-
-    /*
-        Default sort direction
-    */
-    protected $sort_direction = 'desc';
-
-    public function build(
+    public function handle(
         RequestOptions $options,
-        array $range_filters = [],
         array $facets = [],
+        array $range_filters = [],        
         array $range_facets = []
     ) : array {
-        $body = [];
-        
+        $body = [];        
         $this->options = $options;
         $body['index'] = $this->options->getIndex() ? $this->options->getIndex() : config('services.elastic.index');
         $body['size'] = $this->options->getPerPage() ? $this->options->getPerPage() : self::DEFAULT_PAGER_SIZE;
@@ -49,7 +38,7 @@ abstract class Query
         $body['body']['sort'][][$this->options->getSortColumn()] = $this->options->getSortDirection();
 
         $filters = null;
-        if ($this->options->getFilters() && method_exists($this, 'buildFilters')) {
+        if ($this->options->getFilters()) {
             $filters = $this->buildFilters($this->options->getFilters(), $range_filters);
         }
         if ($this->options->getIds()) {
@@ -58,7 +47,7 @@ abstract class Query
 
         /* the search query itself */
         $language = $this->options->getLanguage() ? $this->options->getLanguage() : self::DEFAULT_LANGUAGE;
-        $query = $this->buildSearchFields($this->options->getSearchString(), $language);
+        $query = $this->buildFields($this->options->getSearchString(), $language, $this->options->getSearchFields());
 
         /* if there are filters, query will be structured differently */
         if (is_array($filters)) {
@@ -81,17 +70,59 @@ abstract class Query
         return $body;
     }
 
+    // public function buildQuery(
+    //     RequestOptions $options,
+    //     array $facets = [],
+    //     array $range_facets = []
+    // ) : array {
+    //     $range_facets = (null === $range_facets) ? $this->range_facets : $range_facets;
+    //     return $this->build($options, $this->range_filters, $facets, $range_facets);
+    // }
+
+    public function buildFields(string $search_string = '', string $language = '', $search_fields = []) : array
+    {
+        $query = [];
+        $search_string = trim($search_string);
+        if (!$search_fields) {
+            $search_fields = ['search_text'];
+        }
+        /* search in different ways to ensure we get what we want, sorted as we want */
+        if (in_array('name', $search_fields)) {
+            $query['bool']['should'][]['term']['name'] = (object) [ 'value' => $search_string, 'boost' => 4000 ];
+        }
+        if (in_array('search_text', $search_fields)) {                
+            $query['bool']['should'][]['term']['search_text'] = (object) [ 'value' => $search_string, 'boost' => 1500 ];
+        }
+        //  "simple_query_string" (as opposed to "query_string") avoids throwing exceptions on bad input
+        $analyzer = ('fr' == $language) ? 'french_standard' : 'english_standard';
+        $text_search['query'] = $search_string;        
+        if (in_array('name', $search_fields)) {
+            $text_search['fields'][] = 'name.'.$analyzer.'^3000';
+        }    
+        if (in_array('search_text', $search_fields)) {  
+            $text_search['fields'][] = 'search_text.'.$analyzer.'^1000';
+        }
+        $query['bool']['should'][]['simple_query_string'] = (object) $text_search;
+
+        if ('*' == $search_string) {
+            $wildcard_string = $search_string;
+        } else {
+            $wildcard_string = '*' . $search_string . '*';
+        }
+        if (in_array('name', $search_fields)) {
+            $query['bool']['should'][]['wildcard']['name'] = [ 'value' => $wildcard_string, 'boost' => 800 ];
+        }
+        if (in_array('search_text', $search_fields)) {    
+            $query['bool']['should'][]['wildcard']['search_text'] = (object) [ 'value' => $wildcard_string, 'boost' => 600 ];
+        }    
+        return $query;
+    }
+
     public function buildIdQuery(array $ids) : array
     {
         return [
             'ids' => (object) [ 'values' => $ids ]
         ];
-    }
-
-    public function buildSearchFields(string $search_string = '', string $language = '') : array
-    {
-        $query = [];
-        return $query;
     }
 
     public function buildFilters($filters, array $range_params = []) : array
@@ -138,10 +169,7 @@ abstract class Query
         } elseif ($to) {
             $range['to'] = $to;
         }
-        if ($range) {
-            return (object) [$search_field => $range];
-        }
-        return false;
+        return $range ? (object) [$search_field => $range] : false;
     }
 
     public function buildFacets(array $body, array $facets = [], array $ranges = []) : array
@@ -172,3 +200,45 @@ abstract class Query
         return $body;
     }
 }
+
+
+
+// protected $range_filters = [
+//     'price' => [
+//         'from'          => 'price_from',
+//         'to'            => 'price_to',
+//         'search_field'  => 'retail_price'
+//     ]
+// ];
+// protected $range_facets = [
+//     'price_range' => [
+//         'field'     => 'retail_price',
+//         'facets'    => [
+//             [
+//                 'from'      => '0',
+//                 'to'        => '100',
+//                 'name'      => '0-10'
+//             ],
+//             [
+//                 'from'      => '100',
+//                 'to'        => '1000',
+//                 'name'      => '10-20'
+//             ],
+//             [
+//                 'from'      => '1000',
+//                 'to'        => '10000',
+//                 'name'      => '20-30'
+//             ],
+//             [
+//                 'from'      => '10000',
+//                 'to'        => '100000',
+//                 'name'      => '30-40'
+//             ],
+//             [
+//                 'from'      => '1000000',
+//                 'to'        => '10000000',
+//                 'name'      => '40-50'
+//             ]
+//         ]
+//     ]
+// ];

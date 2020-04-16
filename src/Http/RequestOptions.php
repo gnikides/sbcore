@@ -7,6 +7,7 @@ class RequestOptions
     private $per_page       = 25;
     private $is_paged       = true;
     private $search_string  = ' * ';
+    private $search_fields  = [ 'search_text' ];    
     private $sort_column    = 'updated_at';
     private $sort_direction = 'desc';
     private $filters;
@@ -67,6 +68,17 @@ class RequestOptions
     public function setSearchString(string $string)
     {
         $this->search_string = $string;
+        return $this;
+    }
+
+    public function getSearchFields()
+    {
+        return $this->search_fields;
+    }
+
+    public function setSearchFields(array $array = [])
+    {
+        $this->search_fields = $array;
         return $this;
     }
 
