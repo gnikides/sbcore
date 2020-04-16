@@ -9,7 +9,7 @@ class FacetTransformer
                 return $this->productGroups($item['buckets'], $data['groups']);
             } elseif ('category_id' == $key && array_key_exists('categories', $data)) {
                 return $this->categories($item['buckets'], $data['categories']);
-            } elseif ('price_range' == $key) {
+            } elseif (in_array($key, ['price_range', 'total_range')) {
                 return $this->priceRanges($item['buckets'], $currency);    
             } elseif ('status' == $key) {
                 return $this->statuses($item['buckets']);   
@@ -26,7 +26,7 @@ class FacetTransformer
     }
 
     public function productGroups($buckets, $groups)
-    {   sb($buckets);
+    {
         return collect($buckets)->map(function ($item) use ($groups) {
             if (array_key_exists('key', $item)) {
                 $group = $groups->first(function ($value, $key) use ($item) {
