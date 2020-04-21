@@ -3,7 +3,7 @@
 class FacetTransformer
 {
     public function sluggable($buckets, $collection, $sort = true)
-    {
+    {   
         $facets = collect($buckets)->map(function ($item) use ($collection) {
             if (array_key_exists('key', $item)) {
                 $model = $collection->first(function ($value, $key) use ($item) {
