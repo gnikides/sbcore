@@ -90,6 +90,6 @@ class BankAccountNumber implements Rule
 
     public function message()
     {
-        return trans('The bank account number is invalid.');
+        return trans('Invalid field');
     }
 }

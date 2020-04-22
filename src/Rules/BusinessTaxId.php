@@ -1,11 +1,12 @@
 <?php namespace Core\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 use IsoCodes\Siren;
 
-class BusinessTaxId implements Rule
+class BusinessTaxId implements ImplicitRule
 {
     public $country_code;
+    public $message;
 
     public function __construct($country_code)
     {
@@ -16,6 +17,10 @@ class BusinessTaxId implements Rule
     {
         $value = preg_replace('/\s+/', '', $value);
         if ('FR' == $this->country_code) {
+            if (empty($value)) {
+                $this->message = trans('Required field');
+                return false;
+            }
             return Siren::validate($value);
         }
         return true;
@@ -23,6 +28,6 @@ class BusinessTaxId implements Rule
 
     public function message()
     {
-        return trans('The business tax id is invalid.');
+        return $this->message ? $this->message : trans('Invalid field');
     }
 }

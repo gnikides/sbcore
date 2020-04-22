@@ -18,6 +18,6 @@ class BankRoutingNumber implements Rule
 
     public function message()
     {
-        return trans('The bank routing number is invalid.');
+        return trans('Invalid field');
     }
 }

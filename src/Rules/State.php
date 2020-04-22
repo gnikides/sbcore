@@ -1,8 +1,8 @@
 <?php namespace Core\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
 
-class State implements Rule
+class State implements ImplicitRule
 {
     public $country_code;
     public $is_state_required;
@@ -20,7 +20,7 @@ class State implements Rule
 
     public function message()
     {
-        return trans('The state is invalid.');
+        return trans('Required field');
     }
 
     public function validate($state)

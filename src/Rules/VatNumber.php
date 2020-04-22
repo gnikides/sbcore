@@ -23,6 +23,6 @@ class VatNumber implements Rule
 
     public function message()
     {
-        return trans('The VAT number is invalid.');
+        return trans('Invalid field');
     }
 }

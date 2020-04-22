@@ -1,14 +1,18 @@
 <?php namespace Core\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ImplicitRule;
+// @gotcha
+//  use ImplicitRule when you want an empty field to be validated
+//  an empty field will be ignored by Illuminate\Contracts\Validation\Rule
 
-class Postcode implements Rule
+class Postcode implements ImplicitRule
 {
     public $country_code;
-    protected $countries_in_postcode_db = [];
+    public $countries_in_postcode_db = [];
+    public $message;
 
     public function __construct($country_code)
-    {
+    {   
         $this->country_code = strtoupper($country_code);
     }
 
@@ -16,11 +20,6 @@ class Postcode implements Rule
     {
         $value = preg_replace('/\s+/', '', $value);
         return $this->validate($value);
-    }
-
-    public function message()
-    {
-        return trans('The postcode is invalid.');
     }
 
     public function validate($postcode)
@@ -38,10 +37,15 @@ class Postcode implements Rule
             'DK' => "^([D-d][K-k])?( |-)?[1-9]{1}[0-9]{3}$",
             'SE' => "^(s-|S-){0,1}[0-9]{3}\s?[0-9]{2}$",
             'BE' => "^[1-9]{1}[0-9]{3}$"
-        ];
-        if (array_key_exists($this->country_code, $regex) 
-            && !preg_match("/".$regex[$this->country_code]."/i", $postcode)) {
-            return false;
+        ];   
+        if (array_key_exists($this->country_code, $regex)) {
+            if (empty($postcode)) {
+                $this->message = trans('Required field');
+                return false;
+            }
+            if (!preg_match("/".$regex[$this->country_code]."/i", $postcode)) {
+                return false;
+            }       
         }
         if (in_array($this->country_code, $this->countries_in_postcode_db) && !$this->checkAgainstDatabase($postcode)) {
             return false;
@@ -63,4 +67,9 @@ class Postcode implements Rule
  //       }
         return false;
     }
+
+    public function message()
+    {
+        return $this->message ? $this->message : trans('Invalid field');
+    }    
 }
