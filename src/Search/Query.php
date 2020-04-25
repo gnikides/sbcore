@@ -24,6 +24,16 @@ class Query
     */
     const DEFAULT_LANGUAGE = 'en';
 
+    /*
+        Default max number of facets show
+    */
+    const DEFAULT_MAX_FACETS = 15;
+
+    /*
+        Default min document count before a facet is shown
+    */
+    const DEFAULT_MIN_DOC_COUNT = 1;
+
     public function handle(
         RequestOptions $options,
         array $facets = [],
@@ -65,19 +75,10 @@ class Query
         }
 
         //  @debug as json, then view in kibana, for instance
-        //print_r(json_encode($body, JSON_PRETTY_PRINT));
-        //  exit();
+        // print_r(json_encode($body, JSON_PRETTY_PRINT));
+        // exit();
         return $body;
     }
-
-    // public function buildQuery(
-    //     RequestOptions $options,
-    //     array $facets = [],
-    //     array $range_facets = []
-    // ) : array {
-    //     $range_facets = (null === $range_facets) ? $this->range_facets : $range_facets;
-    //     return $this->build($options, $this->range_filters, $facets, $range_facets);
-    // }
 
     public function buildFields(string $search_string = '', string $language = '', $search_fields = []) : array
     {
@@ -144,10 +145,15 @@ class Query
                 $used_filters[] = $config['to'];
             }
         }
+        //pr($filters);
         //  format all other terms
         $filters = collect($filters)->each(function ($item, $key) use (&$formatted, $used_filters) {
             if (!in_array($key, $used_filters)) {
-                $formatted[]['terms'][$key][] = $item;
+                if (is_array($item)) {
+                    $formatted[]['terms'][$key] = $item;
+                } else {
+                    $formatted[]['terms'][$key][] = $item;
+                }    
             }
         });
         return $formatted;
@@ -175,27 +181,31 @@ class Query
     public function buildFacets(array $body, array $facets = [], array $ranges = []) : array
     {
         //  Build range facets
-        // foreach ($ranges as $name => $range) {
-        //     $body['body']['aggs'][$name]['range']['field'] = $range['field'];
-        //     foreach ($range['facets'] as $facet) {
-        //         $agg = null;
-        //         if (array_key_exists('from', $facet)) {
-        //             $agg['from'] = $facet['from'];
-        //         }
-        //         if (array_key_exists('to', $facet)) {
-        //             $agg['to'] = $facet['to'];
-        //         }
-        //         if (array_key_exists('name', $facet)) {
-        //             $agg['name'] = $facet['name'];
-        //         }
-        //         if ($agg) {
-        //             $body['body']['aggs'][$name]['range']['ranges'][] = (object) $agg;
-        //         }
-        //     }
-        // }
+        foreach ($ranges as $name => $range) {
+            $body['body']['aggs'][$name]['range']['field'] = $range['field'];
+            foreach ($range['facets'] as $facet) {
+                $agg = null;
+                if (array_key_exists('from', $facet)) {
+                    $agg['from'] = $facet['from'];
+                }
+                if (array_key_exists('to', $facet)) {
+                    $agg['to'] = $facet['to'];
+                }
+                if (array_key_exists('name', $facet)) {
+                    $agg['name'] = $facet['name'];
+                }
+                if ($agg) {
+                    $body['body']['aggs'][$name]['range']['ranges'][] = (object) $agg;
+                }
+            }
+        }
+
         //   Build term facets
         foreach ($facets as $facet) {
             $body['body']['aggs'][$facet]['terms']['field'] = $facet;
+            $body['body']['aggs'][$facet]['terms']['size'] = $this->options->getMaxFacets() ? $this->options->getMaxFacets() : self::DEFAULT_MAX_FACETS;
+            $body['body']['aggs'][$facet]['terms']['min_doc_count'] = $this->options->getMinDocCount() ? $this->options->getMinDocCount() : self::DEFAULT_MIN_DOC_COUNT;
+            //$body['body']['aggs'][$facet]['terms']['missing'] = "N/A";
         }
         return $body;
     }

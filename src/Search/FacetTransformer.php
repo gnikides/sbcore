@@ -25,6 +25,30 @@ class FacetTransformer
         return $facets;
     }
 
+    public function productGroup($buckets, $collection, $sort = true)
+    {   
+        $facets = collect($buckets)->map(function ($item) use ($collection) {
+            if (array_key_exists('key', $item)) {
+                $model = $collection->first(function ($value, $key) use ($item) {
+                    return $value->id == $item['key'];                    
+                });
+                if ($model && $model->name) {
+                    return [
+                        'key' => $item['key'],
+                        'name' => $model->name,
+                        'slug' => isset($model->slug) ? $model->slug : '',
+                        'uri' => $model->slug . '/g',
+                        'doc_count' => $item['doc_count']
+                    ];
+                }
+            }
+        })->toArray();
+        if ($sort) {
+            return sortByValue($facets, 'name'); 
+        }
+        return $facets;
+    }
+
     public function priceRange($buckets, $currency, $sort = true)
     {
         $facets = collect($buckets)->map(function ($item) use ($currency) {
@@ -97,38 +121,27 @@ class FacetTransformer
         return $facets;         
     }
 
-    // public function stores($buckets, $stores)
-    // {
-    //     return collect($buckets)->map(function ($item) use ($stores) {
-    //         if (array_key_exists('key', $item)) {
-    //             // $store = array_key_exists($item['key'], $stores) ? $stores[$item['key']] : null;
-    //             // if ($store) {
-    //                 return [
-    //                     'key'       => $item['key'],
-    //                     'label'     => $item['key'],
-    //                     //'label'     => $site->forceName(),
-    //                     //'handle'    => $site->handle(),
-    //                     //'url'       => $site->url(),
-    //                     'doc_count' => $item['doc_count']
-    //                 ];
-    //             //}
-    //         }
-    //     })->toArray();
-    // }
-
-    // public function countries($buckets, $countries)
-    // {
-    //     return collect($buckets)->map(function ($item) use ($countries) {
-    //         if (array_key_exists('key', $item)) {
-    //             $country = array_key_exists($item['key'], $countries) ? $countries[$item['key']] : null;
-    //             if ($country) {
-    //                 return [
-    //                     'key'       => $item['key'],
-    //                     'label'     => $country->name,
-    //                     'doc_count' => $item['doc_count']
-    //                 ];
-    //             }
-    //         }
-    //     })->toArray();
-    // }
+    public function stores($buckets, $collection, $sort = true)
+    {
+        $facets = collect($buckets)->map(function ($item) use ($collection) {
+            if (array_key_exists('key', $item)) {            
+                $model = $collection->first(function($value, $key) use ($item) {                    
+                    return $value->id == $item['key'];                    
+                });
+                if ($model && $model->forced_name) {
+                    return [
+                        'key'       => $item['key'],
+                        'label'     => $model->forced_name,
+                        'handle'    => $model->handle,
+                        'url'       => $model->slug,   // @todo fukk urk
+                        'doc_count' => $item['doc_count']
+                    ];
+                }
+            }
+        })->toArray();
+        if ($sort) {
+            return sortByValue($facets, 'name'); 
+        }
+        return $facets;  
+    }
 }

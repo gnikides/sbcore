@@ -33,7 +33,7 @@ class OptionResolver
         }
         if ($input->get('q')) {
             $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
-        }
+        }       
         $options->setLocale($input->get('locale', 'default'));
         return $options;
     }
@@ -43,10 +43,6 @@ class OptionResolver
         if (!array_key_exists('allowed_filters', $defaults)) {
             $defaults['allowed_filters'] = [];
         }      
-        \Log::info('fil', [ 
-            $defaults['allowed_filters'],
-            $input->only($defaults['allowed_filters'])->toArray()
-        ]); 
         return $input->only($defaults['allowed_filters'])->toArray();
     }
     
