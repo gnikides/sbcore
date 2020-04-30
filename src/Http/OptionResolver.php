@@ -17,6 +17,7 @@ class OptionResolver
     ];
     const DEFAULT_PER_PAGE = 500;
     const DEFAULT_SEARCH_STRING = ' * ';
+    const DEFAULT_SEARCH_FIELD = 'q';    
     protected $model;
 
     public function handle($input, $defaults = [], \App\Support\Eloquent\Model $model = null)
@@ -31,8 +32,9 @@ class OptionResolver
         if ($input->get('index')) {
             $options->setIndex($input->get('index'));
         }
-        if ($input->get('q')) {
-            $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
+        $search_field = array_key_exists('search_field', $defaults) ? $defaults['search_field'] : self::DEFAULT_SEARCH_FIELD; 
+        if ($input->get($search_field)) {
+            $options->setSearchString(sanitizeString($input->get($search_field, self::DEFAULT_SEARCH_STRING))); 
         }       
         $options->setLocale($input->get('locale', 'default'));
         return $options;
