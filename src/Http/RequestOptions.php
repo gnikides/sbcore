@@ -3,18 +3,20 @@
 class RequestOptions
 {    
     private $index;
-    private $page           = 1;
-    private $per_page       = 25;
-    private $is_paged       = true;
-    private $search_string  = ' * ';
-    private $search_fields  = [ 'search_text' ];    
-    private $sort_column    = 'updated_at';
-    private $sort_direction = 'desc';
+    private $page               = 1;
+    private $per_page           = 25;
+    private $is_paged           = true;
+    private $search_string      = ' * ';
+    private $search_fields      = [ 'search_text' ];
+    private $max_facets         = 15; // the max number of buckets returned for one facet
+    private $min_doc_count      = 1; // min number of documents for a facet to be displayed          
+    private $sort_column        = 'updated_at';
+    private $sort_direction     = 'desc';
     private $filters;
-    private $ids            = [];
+    private $ids                = [];
     private $platform;
-    private $locale         = 'default';
-    private $language       = 'en';
+    private $locale             = 'default';
+    private $language           = 'en';
 
     public function getIndex()
     {
@@ -79,6 +81,28 @@ class RequestOptions
     public function setSearchFields(array $array = [])
     {
         $this->search_fields = $array;
+        return $this;
+    }
+
+    public function getMaxFacets()
+    {
+        return $this->max_facets;
+    }
+
+    public function setMaxFacets(int $max_facets)
+    {
+        $this->max_facets = $max_facets;
+        return $this;
+    }
+
+    public function getMinDocCount()
+    {
+        return $this->min_doc_count;
+    }
+
+    public function setMinDocCount(int $min_doc_count)
+    {
+        $this->min_doc_count = $min_doc_count;
         return $this;
     }
 
