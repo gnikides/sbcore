@@ -12,7 +12,7 @@ class TimeAgo
         $this->timezone = $timezone ? $timezone : 'UTC';         
     }
     
-    public function getPhrase($timestamp, $timezone='')
+    public function getPhrase($timestamp, string $timezone = '')
     {    
         $str = '';
         $elapsedTime = $this->getElapsedSeconds($timestamp, $timezone);
@@ -39,7 +39,7 @@ class TimeAgo
         return $str;        
     }
 
-    public function getElapsedSeconds($timestamp, $timezone='')
+    public function getElapsedSeconds($timestamp, string $timezone = '')
     {    
         if (!$timezone) {
             $timezone = $this->timezone;
@@ -52,7 +52,7 @@ class TimeAgo
         return $now->getTimestamp() - $then->getTimestamp();      
     }
 
-    public function timeAgo($date, $timezone='UTC')
+    public function timeAgo($date, string $timezone = '')
     {
         if (!$timezone) {
             $timezone = $this->timezone;

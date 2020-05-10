@@ -1,4 +1,4 @@
-<?php namespace Core\Search;
+<?php namespace Core\Services\Elastic;
 
 class Search
 {
@@ -12,7 +12,7 @@ class Search
     {
         if (!$client) {
             $this->client = \Elasticsearch\ClientBuilder::create()
-            ->setHosts([ config('services.elastic.host') . ':' . config('services.elastic.port') ])
+            ->setHosts([ config('services.elastic.host').':'.config('services.elastic.port') ])
             ->build();
         } else {
             $this->client = $client;

@@ -142,7 +142,6 @@ abstract class Request extends FormRequest
         return $instance->rules();  
     }
 
-
     public function cleanupString(string $text)
     {
         $text = preg_replace("/[\r\n]+/", "\n", $text);

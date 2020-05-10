@@ -13,7 +13,7 @@ class Money
     const ROUND_UP          = 5;
     const ROUND_DOWN        = 6;
 
-    public function __construct($cents='')
+    public function __construct(int $cents = null)
     {
         $this->cents = $this->setCents($cents);
     }
@@ -156,7 +156,7 @@ class Money
         }
     }
 
-    public function setCents($cents)
+    public function setCents(int $cents)
     { 
         $this->assertNumeric($cents);
         $this->cents = $cents;
@@ -168,7 +168,7 @@ class Money
         return $this->cents;
     }
 
-    public function addCents($cents=1)
+    public function addCents(int $cents = 1)
     {
         $this->cents += $cents;
         return $this->cents;

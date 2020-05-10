@@ -1,6 +1,6 @@
 <?php namespace Core\Support;
 
-class Arithmetic
+class Arith
 {               
     public static function getPercentage(int $val, int $total)
     {

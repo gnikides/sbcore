@@ -294,7 +294,6 @@ class Convertor
 
     }
 
-
     /**
      * Add Conversion Unit
      *
@@ -320,7 +319,6 @@ class Convertor
         }
 
     }
-
 
     /**
      * Remove Conversion Unit

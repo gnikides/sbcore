@@ -24,7 +24,7 @@ class Geoplugin
     ];
     private $geoPluginUrl = "http://www.geoplugin.net/json.gp?ip=";
 
-    public function search($ip=null)
+    public function search(string $ip = null)
     {   
         if (empty($ip) || !filter_var($ip, FILTER_VALIDATE_IP)) {
             $ip = Platform::getIp();
@@ -68,7 +68,7 @@ class Geoplugin
         return $this->regionCode;
     }
     
-    public function getCountry($default='US')
+    public function getCountry(string $default = 'US')
     {
         if (!empty($this->country)) {
             return $this->country;
@@ -76,7 +76,7 @@ class Geoplugin
         return $default;
     }
 
-    public function getCountryCode($default='en')
+    public function getCountryCode(string $default = 'en')
     {
         if (!empty($this->countryCode)) {
             return $this->countryCode;

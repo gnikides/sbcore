@@ -1,4 +1,4 @@
-<?php namespace Core\Search;
+<?php namespace Core\Services\Elastic;
 
 class FacetTransformer
 {
