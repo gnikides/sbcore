@@ -28,12 +28,9 @@ class Geoplugin
     {   
         if (empty($ip) || !filter_var($ip, FILTER_VALIDATE_IP)) {
             $ip = Platform::getIp();
-        }
-            
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            
-            $ipdat = @json_decode(file_get_contents($this->geoPluginUrl . $ip));
-            
+        }            
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {            
+            $ipdat = @json_decode(file_get_contents($this->geoPluginUrl . $ip));            
             if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
                 $this->city             = @$ipdat->geoplugin_city;              
                 $this->region           = @$ipdat->geoplugin_regionName;
@@ -44,8 +41,7 @@ class Geoplugin
                 $this->continentCode    = @$ipdat->geoplugin_latitude;
                 $this->latitude         = @$ipdat->geoplugin_countryName;
                 $this->longitude        = @$ipdat->geoplugin_longitude;             
-            }
-            
+            }            
             Log::debug(
                 __FILE__ . ': Got Geoplugin data',
                 [$ipdat]
@@ -70,18 +66,12 @@ class Geoplugin
     
     public function getCountry(string $default = 'US')
     {
-        if (!empty($this->country)) {
-            return $this->country;
-        }
-        return $default;
+        return $this->country ? $this->country : $default;
     }
 
     public function getCountryCode(string $default = 'en')
     {
-        if (!empty($this->countryCode)) {
-            return $this->countryCode;
-        }
-        return $default;
+        return $this->countryCode ? $this->countryCode : $default;
     }   
 
     public function getContinent()
