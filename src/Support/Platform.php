@@ -24,10 +24,7 @@ class Platform
     ];
     
     public static function getIp()
-    {   
-        // if ('local' == config('app.env')) {
-        //     return '127.0.0.1';
-        // }   
+    {    
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) 
             && filter_var(@$_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP)) {
             return $_SERVER["HTTP_X_FORWARDED_FOR"];

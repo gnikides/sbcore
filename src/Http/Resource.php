@@ -14,7 +14,7 @@ class Resource extends JsonResource
 
     public function __construct($resource, $request_locale = 'default')
     {   
-        $this->request_locale = $request_locale;            
+        $this->request_locale = $request_locale ? $request_locale : 'default';            
         $this->resource = $resource;
     }
 
@@ -85,6 +85,9 @@ class Resource extends JsonResource
             return $values;
         }
         $locale = $locale ? $locale : $this->request_locale; 
+        if (empty($locale)) {
+             $locale = 'default';
+        }
         return array_key_exists($locale, $values) ? $values[$locale] : null;
     }    
 }
