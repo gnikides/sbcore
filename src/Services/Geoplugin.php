@@ -42,10 +42,10 @@ class Geoplugin
                 $this->latitude         = @$ipdat->geoplugin_countryName;
                 $this->longitude        = @$ipdat->geoplugin_longitude;             
             }            
-            Log::debug(
-                __FILE__ . ': Got Geoplugin data',
-                [$ipdat]
-            );
+            // Log::debug(
+            //     __FILE__ . ': Got Geoplugin data',
+            //     [$ipdat]
+            // );
         }   
     }
         
