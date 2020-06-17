@@ -100,9 +100,9 @@ class OptionResolver
             $translatable = $this->model->getTranslatable();
             if ($translatable && in_array($options->getSortColumn(), $translatable)) {
                 if ($options->getLocale()) {  
-                    $options->setSortColumn($json_fields[$options->getSortColumn()].'->'.$options->getLocale());             
+                    $options->setSortColumn('info->'.$options->getSortColumn().'->'.$options->getLocale());             
                 } else {   
-                    $options->setSortColumn($json_fields[$options->getSortColumn()]);
+                    $options->setSortColumn('info->'.$options->getSortColumn());
                 }
             }
         }

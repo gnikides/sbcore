@@ -101,10 +101,10 @@ if (!function_exists('sanitizeFloat')) {
 }
 
 if (!function_exists('sanitizeStrings')) {
-    function sanitizeStrings($value)
+    function sanitizeStrings($value = '')
     {
         $output = [];
-        if (is_array($value)) {
+        if ($value && is_array($value)) {
             foreach ($value as $k => $v) {
                 $output[strtolower(sanitizeString($k))] = sanitizeString($v);
             }

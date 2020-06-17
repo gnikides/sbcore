@@ -1,6 +1,7 @@
 <?php namespace Core\Services\Elastic;
 
 use Core\Http\RequestOptions;
+use Illuminate\Support\Arr;
 
 class Query
 {
@@ -162,8 +163,8 @@ class Query
     public function makeRange($filters, $from_field, $to_field, $search_field)
     {
         //  ranges are formatted differently than other terms
-        $from = array_get($filters, $from_field);
-        $to = array_get($filters, $to_field);
+        $from = Arr::get($filters, $from_field);
+        $to = Arr::get($filters, $to_field);
         $range = null;
         if ($from && $to) {
             $range = (object) [

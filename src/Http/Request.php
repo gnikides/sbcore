@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Arr;
 use Response;
 
 abstract class Request extends FormRequest
@@ -72,7 +73,7 @@ abstract class Request extends FormRequest
     }
     
     public function validator($factory)
-    {
+    {  
         return $factory->make(
             $this->replace($this->sanitize($this->all()))->all(),
             $this->container->call([$this, 'rules']),
@@ -86,7 +87,7 @@ abstract class Request extends FormRequest
     }
 
     public function withValidator($validator)
-    {   
+    {  
         if (!$validator->fails()) {
             $validator->after(function($validator) {    
                 $this->replace($this->formatInput($this->all()))->all();      
@@ -100,7 +101,7 @@ abstract class Request extends FormRequest
     }  
 
     public function sanitizeArray(array $input = [], array $filters = [])
-    {
+    {  
         $output = [];
         foreach ($filters as $key => $filter) {
             if (array_key_exists($key, $input)) {
@@ -113,17 +114,19 @@ abstract class Request extends FormRequest
                 } elseif ('strtoupper' == $filter) {
                     $output[$key] = strtoupper(sanitizeString($input[$key]));
                 } elseif ('active' == $filter) {
-                    $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
+                    $output[$key] = strtolower(sanitizeString(Arr::get($input, $key, 'active')));
                 } elseif ('meta' == $filter || 'string_array' == $filter) {
                     $output[$key] = sanitizeStrings($input[$key]); 
                 } elseif ('int_array' == $filter) {
-                    $output[$key] = sanitizeInts($input[$key]);                  
+                    $output[$key] = sanitizeInts($input[$key]);   
+                } elseif ('string_array' == $filter) {
+                    $output[$key] = sanitizeStrings($input[$key]);       
                 } elseif ('none' == $filter) {
-                    $output[$key] = $input[$key];
+                $output[$key] = $input[$key];
                 }
             } else {
                 if ('active' == $filter) {
-                    $output[$key] = strtolower(sanitizeString(array_get($input, $key, 'active')));
+                    $output[$key] = strtolower(sanitizeString(Arr::get($input, $key, 'active')));
                 }
             }    
         }

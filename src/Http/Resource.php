@@ -89,5 +89,20 @@ class Resource extends JsonResource
              $locale = 'default';
         }
         return array_key_exists($locale, $values) ? $values[$locale] : null;
-    }    
+    } 
+    
+    public function translateArray($values)
+    {
+        $translated = [];
+        if (is_array($values)) {
+            foreach ($values as $k => $v) {
+                if (!is_array($v)){
+                    $translated[$k] = $v;
+                } else {    
+                    $translated[$k] = $this->translate($v);
+                }
+            }
+        }    
+        return $translated;
+    }      
 }
