@@ -7,7 +7,7 @@ class Shipping
     const FLEXIBLE_RATE     = 'flexible_rate';   
     const BY_WEIGHT_RULE    = 'by_weight';
     const PER_ITEM_RULE     = 'per_item';
-    const PER_ORDER_RULE    = 'per_order';
+    const BY_SUBTOTAL_RULE  = 'by_subtotal';
     const ALLOWED_METHODS = [
         self::FREE_SHIPPING,
         self::FIXED_RATE,
