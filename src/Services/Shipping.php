@@ -5,9 +5,9 @@ class Shipping
     const FREE_SHIPPING     = 'free_shipping';
     const FIXED_RATE        = 'fixed_rate';  
     const FLEXIBLE_RATE     = 'flexible_rate';   
-    const BY_WEIGHT_RULE    = 'by_weight';
-    const BY_ITEMS_RULE     = 'by_number_items';
-    const BY_SUBTOTAL_RULE  = 'by_subtotal';
+    const BY_WEIGHT         = 'by_weight';
+    const BY_ITEMS          = 'by_items';
+    const BY_SUBTOTAL       = 'by_subtotal';
     const ALLOWED_METHODS = [
         self::FREE_SHIPPING,
         self::FIXED_RATE,
