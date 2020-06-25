@@ -5,8 +5,9 @@ class Shipping
     const BY_WEIGHT         = 'by_weight';
     const BY_ITEMS          = 'by_items';
     const BY_SUBTOTAL       = 'by_subtotal';
-    
-    const SPEED_1000 = 100;
+    const FREE              = 'free';
+
+    const SPEED_1000 = 1000;
     const SPEED_2000 = 2000;    
     const SPEED_2500 = 2500;
     const SPEED_2600 = 2600;
