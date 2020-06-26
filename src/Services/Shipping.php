@@ -6,7 +6,12 @@ class Shipping
     const BY_ITEMS          = 'by_items';
     const BY_SUBTOTAL       = 'by_subtotal';
     const FREE              = 'free';
-
+    const ALLOWED_TYPES = [
+        self::BY_WEIGHT,
+        self::BY_ITEMS,
+        self::BY_SUBTOTAL,
+        self::FREE
+    ];    
     const SPEED_1000 = 1000;
     const SPEED_2000 = 2000;    
     const SPEED_2500 = 2500;
