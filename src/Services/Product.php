@@ -68,4 +68,25 @@ class Product
             ],                                                           
         ];    
     }
+
+    public static function descriptionFields()
+    {
+        return [
+            'main' => [
+                'name' => 'length',
+                'label' => 'Length',
+                'placeholder' => '10'
+            ],
+            'short' => [
+                'name' => 'height',
+                'label' => 'Height',
+                'placeholder' => '10'
+            ], 
+            'editorial_review' => [
+                'name' => 'width',
+                'label' => 'Width',
+                'placeholder' => '10'
+            ]                                                         
+        ];    
+    }    
 }

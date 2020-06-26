@@ -122,7 +122,7 @@ abstract class Request extends FormRequest
                 } elseif ('string_array' == $filter) {
                     $output[$key] = sanitizeStrings($input[$key]);       
                 } elseif ('none' == $filter) {
-                $output[$key] = $input[$key];
+                    $output[$key] = $input[$key];
                 }
             } else {
                 if ('active' == $filter) {
