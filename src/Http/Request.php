@@ -153,21 +153,21 @@ abstract class Request extends FormRequest
         return trim($text, "\n");
     }  
     
-    public function properties($input, $output)
-    {   
-        foreach ($input as $key => $value) {
-            if (false !== strpos($key, 'property_')) {                
-                if (is_numeric($value)) {
-                    $value = sanitizeInt($value);
-                } else {
-                    $value = $this->cleanupString(sanitizeString($value));
-                }
-                $field = explode('_', $key);
-                $id = $field[1];
-                $type = $field[2];
-                $output['properties'][$id][$type] = $value;                
-            }
-        }
-        return $output;
-    }          
+    // public function properties($input, $output)
+    // {   
+    //     foreach ($input as $key => $value) {
+    //         if (false !== strpos($key, 'property_')) {                
+    //             if (is_numeric($value)) {
+    //                 $value = sanitizeInt($value);
+    //             } else {
+    //                 $value = $this->cleanupString(sanitizeString($value));
+    //             }
+    //             $field = explode('_', $key);
+    //             $id = $field[1];
+    //             $type = $field[2];
+    //             $output['properties'][$id][$type] = $value;                
+    //         }
+    //     }
+    //     return $output;
+    // }          
 }

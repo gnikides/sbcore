@@ -51,26 +51,34 @@ class Shipping
     {
         return array_key_exists($speed, self::speeds()) ? self::speeds()[$speed] : '';
     } 
-        
-    public static function sizeUnits()
-    {
+
+    public static function sizeUnits($system = 'metric')
+    {   
+        if ('imperial' == $system) {            
+            return [
+                'in' => 'in',
+                'ft' => 'ft',
+                'yd' => 'yd'                                            
+            ];
+        }
         return [
             'mm' => 'mm',
             'cm' => 'cm',
-            'm' => 'm',
-            'in' => 'in',
-            'ft' => 'ft',
-            'yd' => 'yd'                                            
-        ];    
+            'm' => 'm'                                     
+        ];            
     }
     
-    public static function weightUnits()
+    public static function weightUnits($system = 'metric')
     {
+        if ('imperial' == $system) {            
+            return [
+                'oz' => 'oz',
+                'lb' => 'lb'                                            
+            ];
+        }
         return [
             'kg' => 'kg',
-            'g' => 'g',
-            'oz' => 'oz',
-            'lb' => 'lb'                                            
-        ];    
+            'g' => 'g',                                 
+        ]; 
     }     
 }
