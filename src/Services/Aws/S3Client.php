@@ -28,7 +28,8 @@ class S3Client
         $this->s3 = Client::factory([
             'key'           => $config['access_key_id'],
             'secret'        => $config['secret_key'],
-            'region'        => $config['region']
+            'region'        => $config['region'],
+            'version'       => $config['version']
         ]);
         $this->bucket       = $config['media_bucket'];
         $this->contentType  = 'text/plain';
