@@ -49,6 +49,30 @@ class FacetTransformer
         return $facets;
     }
 
+    public function category($buckets, $collection, $sort = true)
+    {   
+        $facets = collect($buckets)->map(function ($item) use ($collection) {
+            if (array_key_exists('key', $item)) {
+                $model = $collection->first(function ($value, $key) use ($item) {
+                    return $value->id == $item['key'];                    
+                });
+                if ($model && $model->name) {
+                    return [
+                        'key' => $item['key'],
+                        'name' => $model->name,
+                        'slug' => isset($model->slug) ? $model->slug : '',
+                        'uri' => $model->slug . '/c',
+                        'doc_count' => $item['doc_count']
+                    ];
+                }
+            }
+        })->toArray();
+        if ($sort) {
+            return sortByValue($facets, 'name'); 
+        }
+        return $facets;
+    }
+
     public function priceRange($buckets, $currency, $sort = true)
     {
         $facets = collect($buckets)->map(function ($item) use ($currency) {
