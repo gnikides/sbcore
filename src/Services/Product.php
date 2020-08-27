@@ -38,33 +38,39 @@ class Product
         return [
             'length' => [
                 'name' => 'length',
-                'label' => 'Length',
-                'placeholder' => '10'
+                'label' => 'Parcel Length',
+                'placeholder' => '10',
+                'type' => 'size'
             ],
             'height' => [
                 'name' => 'height',
-                'label' => 'Height',
-                'placeholder' => '10'
+                'label' => 'Parcel Height',
+                'placeholder' => '10',
+                'type' => 'size'                
             ], 
             'width' => [
                 'name' => 'width',
-                'label' => 'Width',
-                'placeholder' => '10'
+                'label' => 'Parcel Width',
+                'placeholder' => '10',
+                'type' => 'size'                
             ], 
             'size_unit' => [
                 'name' => 'size_unit',
                 'label' => 'Size Unit',
-                'placeholder' => 'cm'
+                'placeholder' => 'cm',
+                'type' => 'size'                
             ], 
             'weight' => [
                 'name' => 'weight',
-                'label' => 'Weight',
-                'placeholder' => '10'
+                'label' => 'Parcel Weight',
+                'placeholder' => '10',
+                'type' => 'weight'                
             ], 
             'weight_unit' => [
                 'name' => 'weight_unit',
                 'label' => 'Weight Unit',
-                'placeholder' => 'kg'
+                'placeholder' => 'kg',
+                'type' => 'weight'                 
             ],                                                           
         ];    
     }
