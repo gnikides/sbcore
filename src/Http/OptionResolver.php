@@ -107,5 +107,5 @@ class OptionResolver
             }
         }
         return $options;
-    }    
+     }    
 }
