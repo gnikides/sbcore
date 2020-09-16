@@ -79,7 +79,7 @@ class RequestOptions
         return $this->raw_search_string;
     }
 
-    public function setRawSearchString(string $string)
+    public function setRawSearchString(string $string = '')
     {
         $this->raw_search_string = $string;
         return $this;
