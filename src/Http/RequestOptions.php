@@ -7,6 +7,7 @@ class RequestOptions
     private $per_page           = 25;
     private $is_paged           = true;
     private $search_string      = ' * ';
+    private $raw_search_string  = '';    
     private $search_fields      = [ 'search_text' ];
     private $max_facets         = 15; // the max number of buckets returned for one facet
     private $min_doc_count      = 1; // min number of documents for a facet to be displayed          
@@ -70,6 +71,17 @@ class RequestOptions
     public function setSearchString(string $string)
     {
         $this->search_string = $string;
+        return $this;
+    }
+
+    public function getRawSearchString()
+    {
+        return $this->raw_search_string;
+    }
+
+    public function setRawSearchString(string $string)
+    {
+        $this->raw_search_string = $string;
         return $this;
     }
 
