@@ -204,3 +204,14 @@ function sortByValue($array, $field, $dir = SORT_ASC)
     array_multisort($sort, $dir, $array);
     return $array;
 } 
+
+function translateModel($values, $locale = 'default')
+{   
+    if (!$values) {
+        return null;
+    } elseif (!is_array($values)) {
+        return $values;
+    }
+    $locale = $locale ? $locale : 'default';
+    return array_key_exists($locale, $values) ? $values[$locale] : null;
+} 

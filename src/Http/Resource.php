@@ -79,16 +79,8 @@ class Resource extends JsonResource
     
     public function translate($values, $locale = '')
     {   
-        if (!$values) {
-            return null;
-        } elseif (!is_array($values)) {
-            return $values;
-        }
-        $locale = $locale ? $locale : $this->request_locale; 
-        if (empty($locale)) {
-             $locale = 'default';
-        }
-        return array_key_exists($locale, $values) ? $values[$locale] : null;
+        $locale = $locale ? $locale : $this->request_locale;
+        return translateModel($values, $locale);
     } 
     
     public function translateArray($values)
