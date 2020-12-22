@@ -205,7 +205,7 @@ function sortByValue($array, $field, $dir = SORT_ASC)
     return $array;
 } 
 
-function translateModel($values, $locale = 'default')
+function translateModel($values, $locale = 'default', $use_default = true)
 {   
     if (!$values) {
         return null;
@@ -213,5 +213,12 @@ function translateModel($values, $locale = 'default')
         return $values;
     }
     $locale = $locale ? $locale : 'default';
-    return array_key_exists($locale, $values) ? $values[$locale] : null;
+    $value = array_key_exists($locale, $values) ? $values[$locale] : null;
+    if ($value) {
+        return $value;
+    }
+    if ($use_default) {
+        return array_key_exists('default', $values) ? $values['default'] : null;
+    }
+    return false;    
 } 
