@@ -8,7 +8,8 @@ class S3Client
 {
     private $s3                     = null;
     private $bucket                 = null;
-    private $mediaUrl               = null;    
+    private $contentType            = null;
+    private $mediaUrl               = null;       
     const ACL_PRIVATE               = 'private';
     const ACL_PUBLIC_READ           = 'public-read';
     const ACL_PUBLIC_READ_WRITE     = 'public-read-write';
@@ -20,12 +21,12 @@ class S3Client
     const SSE_NONE                  = '';
     const SSE_AES256                = 'AES256';
      
-    public function __construct($config=null)
+    public function __construct($config = null)
     { 
         if (empty($config)) {
             $config = config('services.aws');
         }
-        $this->s3 = Client::factory([
+        $this->s3 = new Client([
             'key'           => $config['access_key_id'],
             'secret'        => $config['secret_key'],
             'region'        => $config['region'],
@@ -38,13 +39,13 @@ class S3Client
     
     public function put($path, $key)
     {   
-        try {
-         
+        try {         
             $result = $this->s3->putObject(array(
                 'Bucket'       => $this->bucket,
                 'Key'          => $key,
                 'SourceFile'   => $path,
-                'ContentType'  => $this->contentType,
+                //'Body'         => fopen('/path/to/file', 'r'),
+                'ContentType'  => 'image/jpeg',
                 'ACL'          => 'public-read-write',
                 'CacheControl' => 'max-age=31536000',
                 'StorageClass' => 'REDUCED_REDUNDANCY'//,
@@ -52,8 +53,7 @@ class S3Client
                 //  'param1' => 'value 1',
                 //  'param2' => 'value 2'
                 //)
-            ));
-            
+            ));            
             Log::debug(
                 'Amazon S3 Put', [
                     'Bucket'       => $this->bucket,
@@ -64,16 +64,13 @@ class S3Client
                     'StorageClass' => 'REDUCED_REDUNDANCY',
                     'ObjectURL'    => $result['ObjectURL']
             ]);
-            
             return $result;
-        
         } catch (S3Exception $e) {}  
     }
 
     public function copy($source, $target)
     {
         try {
-    
             $result = $this->s3->copyObject([
                 'Bucket'       => $this->bucket,    // target bucket
                 'Key'          => $target,
@@ -111,8 +108,7 @@ class S3Client
                 'Bucket' => $this->bucket,
                 'Key'    => $key,
                 'SaveAs' => $path . DS . $key
-            ]);
-            
+            ]);            
             Log::debug(
                 __FILE__ . ': Amazon S3 get', 
                 [
