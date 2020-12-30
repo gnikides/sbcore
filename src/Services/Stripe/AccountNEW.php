@@ -1,6 +1,6 @@
 <?php namespace Core\Services\Stripe;
 
-class Account
+class AccountNEW
 { 
     public function create(array $payload)
     {  
