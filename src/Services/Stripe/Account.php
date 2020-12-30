@@ -99,7 +99,9 @@ class Account
     {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));         
         $account = \Stripe\Account::retrieve($account_id);  
-        
+        // sb($account->charges_enabled);
+        // sb($account->payouts_enabled);
+        // sb($account->details_submitted);
         if (!empty($account->verification->due_by) ||
             !empty($account->verification->disabled_reason) ||       
             !empty($account->verification->fields_needed) ||
@@ -116,7 +118,7 @@ class Account
         return (
             ($account->id == $account_id) &&
             ('account' == $account->object) &&
-            (true == $account->charges_enabled) &&
+            // (true == $account->charges_enabled) &&
             (true == $account->details_submitted) &&
             (!empty($account->email)) &&
             (!empty($account->external_accounts->data[0]->id)) &&
@@ -124,8 +126,8 @@ class Account
             (!empty($account->legal_entity->address)) &&
             (true == $account->legal_entity->business_tax_id_provided) &&
             (true == $account->legal_entity->personal_id_number_provided) &&
-            (true == $account->legal_entity->ssn_last_4_provided) &&            
-            (true == $account->payouts_enabled)
+            (true == $account->legal_entity->ssn_last_4_provided)
+            // (true == $account->payouts_enabled)
         );
     }        
 }
