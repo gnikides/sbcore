@@ -64,12 +64,12 @@ class Geoplugin
         return $this->regionCode;
     }
     
-    public function getCountry(string $default = 'US')
+    public function getCountry(string $default = null)
     {
         return $this->country ? $this->country : $default;
     }
 
-    public function getCountryCode(string $default = 'en')
+    public function getCountryCode(string $default = null)
     {
         return $this->countryCode ? $this->countryCode : $default;
     }   
