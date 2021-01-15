@@ -5,9 +5,17 @@ class Account
     public function create(array $payload)
     {  
         $payload = $this->formatPayload($payload);        
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $response = \Stripe\Account::create($payload);         
-        if ($response['id'] && empty($response['failure_code'])) {
+        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));        
+        // $response = \Stripe\Account::create($payload);        
+        $stripe = new \Stripe\StripeClient([
+            "api_key" => config('services.stripe.secret'),
+            "stripe_version" => config('services.stripe.version')            
+        ]);
+        //sb($stripe);
+        $response = $stripe->accounts->create($payload);    
+        sb($response);
+        exit();
+        if ($response->id && empty($response->failure_code)) {
             return $response;
         }
         \Log::error('stripe create account failed', [$payload, $response]);
@@ -20,8 +28,11 @@ class Account
             If additional owners not null payouts can be disabled
             \Stripe\Account::update() did not work
         */
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));  
-        $account = \Stripe\Account::retrieve($account_id);        
+        $stripe = new \Stripe\StripeClient([
+            "api_key" => config('services.stripe.secret'),
+            "stripe_version" => config('services.stripe.version')            
+        ]);
+        $account = $stripe->accounts->retrieve($account_id);        
         if ($file) {
             $account->legal_entity->verification->document = $file;
         }
@@ -58,21 +69,47 @@ class Account
             $personal_address['state']     = $input['personal_state'];
         }
         /* legal entity */                                        
-        $legal_entity = [
-            'type'                  => $input['business_type'],
-            'business_name'         => $input['business_name'],
-            'business_tax_id'       => $input['business_tax_id'],                                            
-            'first_name'            => $input['first_name'],
-            'last_name'             => $input['last_name'],
-            'personal_id_number'    => $input['personal_id_number'],
+        // $legal_entity = [
+        //     'type'                  => $input['business_type'],
+        //     'business_name'         => $input['business_name'],
+        //     'business_tax_id'       => $input['business_tax_id'],                                            
+        //     'first_name'            => $input['first_name'],
+        //     'last_name'             => $input['last_name'],
+        //     'personal_id_number'    => $input['personal_id_number'],
+        //     'address'               => $business_address,
+        //     'dob'                   => [
+        //         'day'               => $input['dob_day'],
+        //         'month'             => $input['dob_month'],
+        //         'year'              => $input['dob_year'],            
+        //     ],
+        //     'personal_address'      => $personal_address    
+        // ];  
+        $capabilities['legacy_payments']['requested'] = true;    
+        
+        /* company */                  
+        $input['business_structure'] = 'private_corporation';
+
+        $company = [
+            'name'                  => $input['business_name'],
+            'structure'             => $input['business_structure'],
+            'tax_id'                => $input['business_tax_id'],
+            'vat_id'                => $input['business_vat_id'],
+            'phone'                 => '',
+            'registration_number'   => '',
+
+            // 'first_name'            => $input['first_name'],
+            // 'last_name'             => $input['last_name'],
+            // 'personal_id_number'    => $input['personal_id_number'],
             'address'               => $business_address,
-            'dob'                   => [
-                'day'               => $input['dob_day'],
-                'month'             => $input['dob_month'],
-                'year'              => $input['dob_year'],            
-            ],
-            'personal_address'      => $personal_address    
-        ];        
+            // 'dob'                   => [
+            //     'day'               => $input['dob_day'],
+            //     'month'             => $input['dob_month'],
+            //     'year'              => $input['dob_year'],            
+            // ],
+            // 'personal_address'      => $personal_address    
+        ];
+        $individual = [
+        ];                        
         $tos_acceptance             = [
             'date'                  => $input['tos_acceptance_date'],
             'ip'                    => $input['tos_acceptance_ip']
@@ -80,25 +117,35 @@ class Account
         $payload = [
             'type'                  => $input['account_type'],
             'country'               => $input['business_country_code'],
-            'email'                 => $input['email'],        
+            'business_type'         => $input['business_type'],            
+            'email'                 => $input['email'], 
+            'capabilities'          => [],
+            //'legal_entity'          => $legal_entity,
+            'company'               => $company,
+            'individual'            => $individual,
             'default_currency'      => $input['default_currency'],
-            'tos_acceptance'        => $tos_acceptance,    
-            'legal_entity'          => $legal_entity                                                        
+            'tos_acceptance'        => $tos_acceptance,
+            'metadata'              => []                                                                         
         ];
         //sb($payload);
         // @gotcha json transforms true to 1 but stripe expects only true, false
-        if ('1' == $input["debit_negative_balances"]) {
-            $payload["debit_negative_balances"] = true;
-        } elseif ('0' == $input["debit_negative_balances"]) {  
-            $payload["debit_negative_balances"] = false;
-        }
+        // if ('1' == $input["debit_negative_balances"]) {
+        //     $payload["debit_negative_balances"] = true;
+        // } elseif ('0' == $input["debit_negative_balances"]) {  
+        //     $payload["debit_negative_balances"] = false;
+        // }
+        sb($payload);
+        exit();
         return $payload;  
     }
     
     public function verify($account_id)
     {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));         
-        $account = \Stripe\Account::retrieve($account_id);  
+        $stripe = new \Stripe\StripeClient([
+            "api_key" => config('services.stripe.secret'),
+            "stripe_version" => config('services.stripe.version')            
+        ]);
+        $account = $stripe->accounts->retrieve($account_id); 
         // sb($account->charges_enabled);
         // sb($account->payouts_enabled);
         // sb($account->details_submitted);
@@ -117,16 +164,16 @@ class Account
         //  verify account can accept payments
         return (
             ($account->id == $account_id) &&
-            ('account' == $account->object) &&
+            ('account' == $account->object)
             // (true == $account->charges_enabled) &&
-            (true == $account->details_submitted) &&
-            (!empty($account->email)) &&
-            (!empty($account->external_accounts->data[0]->id)) &&
-            (!empty($account->external_accounts->data[0]->account)) &&
-            (!empty($account->legal_entity->address)) &&
-            (true == $account->legal_entity->business_tax_id_provided) &&
-            (true == $account->legal_entity->personal_id_number_provided) &&
-            (true == $account->legal_entity->ssn_last_4_provided)
+            // (true == $account->details_submitted) &&
+            // (!empty($account->email)) &&
+            // (!empty($account->external_accounts->data[0]->id)) &&
+            // (!empty($account->external_accounts->data[0]->account)) &&
+            // (!empty($account->legal_entity->address)) &&
+            // (true == $account->legal_entity->business_tax_id_provided) &&
+            // (true == $account->legal_entity->personal_id_number_provided) &&
+            // (true == $account->legal_entity->ssn_last_4_provided)
             // (true == $account->payouts_enabled)
         );
     }        

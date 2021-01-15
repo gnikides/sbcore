@@ -12,8 +12,11 @@ class Transaction
         $statement_description = '',
         $meta = []
     ) {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-        $charge = [
+        $stripe = new \Stripe\StripeClient([
+            "api_key" => config('services.stripe.secret'),
+            "stripe_version" => config('services.stripe.version')            
+        ]);
+        $response = $stripe->charges->create([
             'amount'                => $total,
             'currency'              => strtolower($currency_code),
             'customer'              => $provider_customer_id,
@@ -25,7 +28,7 @@ class Transaction
             'metadata'              => $meta
             //['stripe_account' => '{CONNECTED_platform_key}')];
             //['stripe_account'         => 'acct_1BTn2jErNBNQFUc6']            
-        ];           
+        ]);           
         if ($response['failure_code']) {
             \Log::error('Charge failed for customer # ' . $provider_customer_id, [json_encode($response)]);            
         } 

@@ -5,8 +5,11 @@ class Card
     public function update(string $customer_key, string $token, bool $is_default = true)
     {   
         try {                   
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));                               
-            $customer = \Stripe\Customer::retrieve($customer_key);
+            $stripe = new \Stripe\StripeClient([
+                "api_key" => config('services.stripe.secret'),
+                "stripe_version" => config('services.stripe.version')            
+            ]);
+            $customer = $stripe->customers->retrieve($customer_key);                                         
             $customer->source = $token;
             $customer->save();            
             //  @todo get errors from stripe    
@@ -20,8 +23,11 @@ class Card
     public function store(string $token, string $email, bool $is_default = true)
     {             
         try {
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));                       
-            $customer = \Stripe\Customer::create([
+            $stripe = new \Stripe\StripeClient([
+                "api_key" => config('services.stripe.secret'),
+                "stripe_version" => config('services.stripe.version')            
+            ]);                   
+            $customer = $stripe->customers->create([
                 'email' => time() . $email,
                 'source' => $token
             ]);
