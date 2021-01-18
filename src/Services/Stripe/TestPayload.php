@@ -4,6 +4,22 @@ class TestPayload
 {
     public function create()
     { 
+        $person = [
+            'title'             => 'President',
+            'first_name'        => 'Sterling',
+            'last_name'         => 'Granger',
+            'address1'          => '17 rue de la Tour',
+            'address2'          => '',
+            'city'              => 'Paris',
+            'state'             => '',
+            'postcode'          => '75116',
+            'country_code'      => 'FR',            
+            'phone'             => '621049270',         
+            'dob_day'           => '24',
+            'dob_month'         => '10',
+            'dob_year'          => '1971',
+            'email'             => 'patrickkane75@gmail.com'           
+        ];    
         return [
             'account_type'              => 'custom',
             'country'                   => 'FR',
@@ -49,27 +65,63 @@ class TestPayload
             'individual_country_code'   => 'FR',     
             
             // representative
-            'representative_first_name'     => 'Sterling',
-            'representative_last_name'      => 'Granger',
-            'representative_title'          => 'President',            
-            'representative_dob_day'        => '24',
-            'representative_dob_month'      => '10',
-            'representative_dob_year'       => '1971',
-            'representative_email'          => 'patrickkane75@gmail.com',
-            'representative_phone'          => '621049270',
-            'representative_relationship'   => 'representative',
+            'representative_first_name'     => $person['first_name'],
+            'representative_last_name'      => $person['last_name'],
+            'representative_title'          => $person['title'],         
+            'representative_address1'       => $person['address1'], 
+            'representative_address2'       => $person['address2'], 
+            'representative_city'           => $person['city'], 
+            'representative_state'          => $person['state'], 
+            'representative_postcode'       => $person['postcode'], 
+            'representative_country_code'   => $person['country_code'],    
+            'representative_dob_day'        => $person['dob_day'],
+            'representative_dob_month'      => $person['dob_month'],
+            'representative_dob_year'       => $person['dob_year'],
+            'representative_email'          => $person['email'],
+            'representative_phone'          => $person['phone'],
+            'representative_relationship'   => 'representative',            
 
             // director ...
+            'director_first_name'       => $person['first_name'],
+            'director_last_name'        => $person['last_name'],
+            'director_title'            => $person['title'],         
+            'director_address1'         => $person['address1'], 
+            'director_address2'         => $person['address2'], 
+            'director_city'             => $person['city'], 
+            'director_state'            => $person['state'], 
+            'director_postcode'         => $person['postcode'], 
+            'director_country_code'     => $person['country_code'],    
+            'director_dob_day'          => $person['dob_day'],
+            'director_dob_month'        => $person['dob_month'],
+            'director_dob_year'         => $person['dob_year'],
+            'director_email'            => $person['email'],
+            'director_phone'            => $person['phone'],
+            'director_relationship'     => 'director',  
 
             // owner ...
+            'owner_first_name'          => $person['first_name'],
+            'owner_last_name'           => $person['last_name'],
+            'owner_title'               => $person['title'],         
+            'owner_address1'            => $person['address1'], 
+            'owner_address2'            => $person['address2'], 
+            'owner_city'                => $person['city'], 
+            'owner_state'               => $person['state'], 
+            'owner_postcode'            => $person['postcode'], 
+            'owner_country_code'        => $person['country_code'],    
+            'owner_dob_day'             => $person['dob_day'],
+            'owner_dob_month'           => $person['dob_month'],
+            'owner_dob_year'            => $person['dob_year'],
+            'owner_email'               => $person['email'],
+            'owner_phone'               => $person['phone'],
+            'owner_relationship'        => 'owner',  
 
             //   bank account
-            'bank_account_holder_name'      => 'Jane Austen',
-            'bank_account_holder_type'      => 'individual',
-            'bank_account_number'           => 'DE89370400440532013000',
-            'routing_number'                => '110000000',
-            'bank_account_country'          => 'DE',
-            'bank_account_currency'         => 'eur'
+            'bank_account_holder_name'  => 'Jane Austen',
+            'bank_account_holder_type'  => 'individual',
+            'bank_account_number'       => 'DE89370400440532013000',
+            'routing_number'            => '110000000',
+            'bank_account_country'      => 'DE',
+            'bank_account_currency'     => 'eur'
         ];
     }
 }   
