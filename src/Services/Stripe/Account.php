@@ -1,12 +1,12 @@
 <?php namespace Core\Services\Stripe;
 
+use Core\Services\Stripe\Helper;
+
 class Account
 { 
     public function create(array $payload)
     {  
-        $payload = $this->formatPayload($payload);        
-        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));        
-        // $response = \Stripe\Account::create($payload);        
+        $payload = $this->formatPayload($payload);              
         $stripe = new \Stripe\StripeClient([
             "api_key" => config('services.stripe.secret'),
             "stripe_version" => config('services.stripe.version')            
@@ -65,6 +65,9 @@ class Account
             'company_state'                 => 'company.address.state',
             'company_postcode'              => 'company.address.postal_code',
             'company_country_code'          => 'company.address.country',
+            'company_directors_provided'    => 'company.directors_provided',  
+            'company_owners_provided'       => 'company.owners_provided',  
+            'company_executives_provided'   => 'company.executives_provided',  
 
             //   capabilities
             'request_card_payments'         => 'capabilities.card_payments.requested',
@@ -136,146 +139,6 @@ class Account
         // sb($output);
         // exit();
         return $output;
-    }
-
-    public function formatPayloadXXXXXXXXXXXXXX(array $input)
-    {     
-        /* company address */
-        $company_address = [
-            'line1'             => $input['company_address1'],
-            'line2'             => @$input['company_address2'],
-            'city'              => $input['company_city'],
-            'postal_code'       => $input['company_postcode']                    
-        ];
-        if ($input['company_state']) {
-            $company_address['state'] = $input['company_state'];
-        }
-
-        /* legal entity */                                        
-        // $legal_entity = [
-        //     'type'                  => $input['business_type'],
-        //     'business_name'         => $input['business_name'],
-        //     'business_tax_id'       => $input['business_tax_id'],                                            
-        //     'first_name'            => $input['first_name'],
-        //     'last_name'             => $input['last_name'],
-        //     'personal_id_number'    => $input['personal_id_number'],
-        //     'address'               => $business_address,
-        //     'dob'                   => [
-        //         'day'               => $input['dob_day'],
-        //         'month'             => $input['dob_month'],
-        //         'year'              => $input['dob_year'],            
-        //     ],
-        //     'personal_address'      => $personal_address    
-        // ];
-        $company = [
-            'name'                  => $input['company_name'],
-            'structure'             => $input['company_structure'],
-            'tax_id'                => $input['company_tax_id'],
-            'vat_id'                => $input['company_vat_id'],
-            'registration_number'   => $input['registration_number'],
-
-            // 'first_name'            => $input['first_name'],
-            // 'last_name'             => $input['last_name'],
-            // 'personal_id_number'    => $input['personal_id_number'],
-            'address'               => $company_address,
-            // 'dob'                   => [
-            //     'day'               => $input['dob_day'],
-            //     'month'             => $input['dob_month'],
-            //     'year'              => $input['dob_year'],            
-            // ],
-            // 'personal_address'      => $personal_address    
-        ];
-        if (array_key_exists('company_phone', $input) && $input['company_phone']) {
-            $company['phone'] = $input['company_phone'];    
-        }
-
-        $capabilities = [];
-        if (array_key_exists('request_card_payments', $input)) {
-            $capabilities['card_payments']['requested'] = $input['request_card_payments'];    
-        }
-        if (array_key_exists('request_transfers', $input)) {
-            $capabilities['transfers']['requested'] = $input['request_transfers'];    
-        }
-
-        $business_profile = [];
-        if (array_key_exists('business_profile_url', $input) && $input['business_profile_url']) {
-            $business_profile['url'] = $input['business_profile_url'];    
-        }        
-        if (array_key_exists('business_profile_mcc', $input) && $input['business_profile_mcc']) {
-            $business_profile['mcc'] = $input['business_profile_mcc'];    
-        } 
-
-        $representative = [];
-
-        $array = [
-            'representative_first_name' => 'dob.first_name'
-        ];
-        foreach ($input_values as $value) {
-            $representative['first_name'] = $input[$value];    
-        }    
-        if (array_key_exists('representative_first_name', $input) && $input['representative_first_name']) {
-            $representative['first_name'] = $input['representative_first_name'];    
-        }
-        if (array_key_exists('representative_last_name', $input) && $input['representative_last_name']) {
-            $representative['last_name'] = $input['representative_last_name'];    
-        }
-        if (array_key_exists('representative_dob_day', $input) && $input['representative_dob_day']) {
-            $representative['dob']['day'] = $input['representative_dob_day'];    
-        }
-        if (array_key_exists('representative_dob_month', $input) && $input['representative_dob_month']) {
-            $representative['dob']['month'] = $input['representative_dob_month'];    
-        }
-        if (array_key_exists('representative_dob_year', $input) && $input['representative_dob_year']) {
-            $representative['dob']['year'] = $input['representative_dob_year'];    
-        }        
-        if (array_key_exists('representative_address_line1', $input) && $input['representative_address_line1']) {
-            $representative['address']['line1'] = $input['representative_address_line1'];    
-        }  
-        if (array_key_exists('representative_address_line2', $input) && $input['representative_address_line2']) {
-            $representative['address']['line2'] = $input['representative_address_line2'];    
-        } 
-
-        /* individual address */            
-        $individual_address = [
-            'line1'             => $input['individual_address1'],
-            'line2'             => @$input['individual_address2'],
-            'city'              => $input['individual_city'],
-            'postal_code'       => $input['individual_postcode']                    
-        ]; 
-        if ($input['individual_state']) {
-            $individual_address['state']     = $input['individual_state'];
-        }        
-        $individual = [
-            'address'               => $individual_address,
-        ];                        
-        $tos_acceptance             = [
-            'date'                  => $input['tos_acceptance_date'],
-            'ip'                    => $input['tos_acceptance_ip']
-        ];        
-        $payload = [
-            'country'               => $input['company_country_code'],
-            'type'                  => $input['account_type'],
-            'capabilities'          => $capabilities,    
-
-            'business_type'         => $input['business_type'],            
-            'email'                 => $input['email'],
-            'company'               => $company,
-            'business_profile'      => $business_profile,
-            //'individual'            => $individual,
-            'default_currency'      => $input['default_currency'],
-            'tos_acceptance'        => $tos_acceptance,
-            'metadata'              => []                                                                         
-        ];
-        //sb($payload);
-        // @gotcha json transforms true to 1 but stripe expects only true, false
-        // if ('1' == $input["debit_negative_balances"]) {
-        //     $payload["debit_negative_balances"] = true;
-        // } elseif ('0' == $input["debit_negative_balances"]) {  
-        //     $payload["debit_negative_balances"] = false;
-        // }
-        // sb($payload);
-        // exit();
-        return $payload;  
     }
     
     public function verify($account_id)

@@ -14,7 +14,7 @@ class TestPayload
             'state'             => '',
             'postcode'          => '75116',
             'country_code'      => 'FR',            
-            'phone'             => '621049270',         
+            'phone'             => '000 000 0000',         
             'dob_day'           => '24',
             'dob_month'         => '10',
             'dob_year'          => '1971',
@@ -38,7 +38,10 @@ class TestPayload
             'company_state'             => '',
             'company_postcode'          => '75116',
             'company_country_code'      => 'FR',            
-            'company_phone'             => '621049270',  
+            'company_phone'             => '621049270',
+            'company_directors_provided'=> true,    
+            'company_owners_provided'   => true,
+            'company_executives_provided'=> true,
 
             //   capabilities
             'request_card_payments'     => true,
@@ -65,8 +68,8 @@ class TestPayload
             'individual_country_code'   => 'FR',     
             
             // representative
-            'representative_first_name'     => $person['first_name'],
-            'representative_last_name'      => $person['last_name'],
+            'representative_first_name'     => 'Sterling',
+            'representative_last_name'      => 'Granger',
             'representative_title'          => $person['title'],         
             'representative_address1'       => $person['address1'], 
             'representative_address2'       => $person['address2'], 
@@ -79,7 +82,10 @@ class TestPayload
             'representative_dob_year'       => $person['dob_year'],
             'representative_email'          => $person['email'],
             'representative_phone'          => $person['phone'],
-            'representative_relationship'   => 'representative',            
+            'representative_is_representative'=> true,
+            'representative_is_owner'       => true,
+            'representative_is_director'    => true,
+            'representative_is_executive'   => true,
 
             // director ...
             'director_first_name'       => $person['first_name'],
@@ -95,8 +101,8 @@ class TestPayload
             'director_dob_month'        => $person['dob_month'],
             'director_dob_year'         => $person['dob_year'],
             'director_email'            => $person['email'],
-            'director_phone'            => $person['phone'],
-            'director_relationship'     => 'director',  
+            //'director_phone'            => $person['phone'],
+            // 'director_relationship'     => true, 
 
             // owner ...
             'owner_first_name'          => $person['first_name'],
@@ -112,8 +118,8 @@ class TestPayload
             'owner_dob_month'           => $person['dob_month'],
             'owner_dob_year'            => $person['dob_year'],
             'owner_email'               => $person['email'],
-            'owner_phone'               => $person['phone'],
-            'owner_relationship'        => 'owner',  
+            //'owner_phone'               => $person['phone'],
+            //'relationship_owner'        => true,
 
             //   bank account
             'bank_account_holder_name'  => 'Jane Austen',
