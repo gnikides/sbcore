@@ -35,7 +35,7 @@ class OptionResolver
             $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
         }
         $options->setRawSearchString($input->get('q', '')); 
-        $options->setLocale($input->get('locale', 'default'));
+        $options->setLocale($input->get('locale', config('app.locale')));
         return $options;
     }
 
