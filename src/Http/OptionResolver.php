@@ -5,108 +5,133 @@ use Core\Http\RequestOptions;
 class OptionResolver
 {
     //  shorthand sorts
-    const SORT_NEWEST = 'newest';
-    const SORT_OLDEST = 'oldest';    
-    const SORT_AZ = 'az'; 
-    const SORT_ZA = 'za';
-    const SORT_COUNTRY = 'country';
-    const SORT_STARS_HIGHEST = 'stars_highest';
-    const SORT_STARS_LOWEST = 'stars_lowest';
-    const ALLOWED_FILTERS = [
-        'status'
-    ];
-    const DEFAULT_PER_PAGE = 500;
-    const DEFAULT_SEARCH_STRING = ' * ';
-    protected $model;
+    const SORT_NEWEST       = 'newest';
+    const SORT_OLDEST       = 'oldest';    
+    const SORT_AZ           = 'az'; 
+    const SORT_ZA           = 'za';
+    const SORT_COUNTRY      = 'country';
+    const SORT_RATING_DESC  = 'rating_desc';
+    const SORT_RATING_ASC   = 'rating_asc';
 
-    public function handle($input, $defaults = [], \App\Support\Eloquent\Model $model = null)
+    const ASC               = 'asc';
+    const DESC              = 'desc';
+    const ALLOWED_DIRECTIONS = [
+        self::ASC,
+        self::DESC
+    ];
+
+    const DEFAULT_PER_PAGE  = 500;
+    const DEFAULT_SEARCH_STRING = ' * ';
+
+    public function handle(
+        $input,
+        $defaults = [],
+        $allowed_columns = [],
+        $default_locale = ''
+    )
     {
-        $this->model = $model;     
+        if (!isset($defaults['per_page']) || empty($defaults['per_page'])) {
+            $defaults['per_page'] = 25;
+        }
+   
         $options = new RequestOptions();
-        $options = $this->makeSort($input, $options, $defaults);
+        $options = $this->makeSort($input, $options, $defaults, $allowed_columns);
         $options->setPerPage($input->get('limit', $defaults['per_page']));
         $options->setPage($input->get('page', 1));
         $options->setIds((array) $input->get('ids'));
-        $options->setFilters($this->makeFilters($input, $defaults)); 
+        
+        $options->setFilters(
+            $input->only($allowed_columns)->toArray()
+        ); 
+        
         if ($input->get('index')) {
             $options->setIndex($input->get('index'));
         }
+        
         if ($input->get('q')) {
-            $options->setSearchString(sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))); 
+            $options->setSearchString(
+                sanitizeString($input->get('q', self::DEFAULT_SEARCH_STRING))
+            ); 
         }
+        
         $options->setRawSearchString($input->get('q', '')); 
-        $options->setLocale($input->get('locale', config('app.locale')));
+        $options->setLocale($input->get('locale', $default_locale));
+        
         return $options;
-    }
-
-    public function makeFilters($input, $defaults)
-    {
-        if (!array_key_exists('allowed_filters', $defaults)) {
-            $defaults['allowed_filters'] = [];
-        }
-        return $input->only($defaults['allowed_filters'])->toArray();
     }
     
-    public function makeSort($input, $options, $defaults)
-    {
-        $shorthands[self::SORT_NEWEST] = [
-            'column' => 'updated_at',
-            'direction' => 'desc'
-        ];
-        $shorthands[self::SORT_OLDEST] = [
-            'column' => 'updated_at',
-            'direction' => 'asc'
-        ]; 
-        $shorthands[self::SORT_AZ] = [
-            'column' => 'name',
-            'direction' => 'asc'
-        ];
-        $shorthands[self::SORT_ZA] = [
-            'column' => 'name',
-            'direction' => 'desc'
-        ];
-        $shorthands[self::SORT_STARS_HIGHEST] = [
-            'column' => 'average_rating',
-            'direction' => 'desc'
-        ];
-        $shorthands[self::SORT_STARS_LOWEST] = [
-            'column' => 'average_rating',
-            'direction' => 'asc'
-        ];        
-        $shorthands[self::SORT_COUNTRY] = [
-            'column' => 'country_code',
-            'direction' => 'asc'
-        ];         
-        $sort = $input->get('sort');      
-        if ($sort && in_array($sort, array_keys($shorthands))) {            
-            $options->setSortColumn($shorthands[$sort]['column']);
-            $options->setSortDirection($shorthands[$sort]['direction']); 
-        } else {        
-             $column = $input->get('sort_column');
-             $direction = $input->get('sort_direction'); 
-             if ($column && $direction) {
-                 $options->setSortColumn($column);
-                 $options->setSortDirection($direction);
-             }    
+    public function makeSort($input, $options, $defaults, $allowed_columns)
+    {     
+        $sort = $input->get('sort'); 
+        
+        if ($shorthand = $this->matchShorthand($sort)) {          
+            $options->setSortColumn($shorthand['column']);
+            $options->setSortDirection($shorthand['direction']); 
+        
+        } elseif ($input->get('sort_column') && $input->get('sort_direction')) {
+            $options->setSortColumn($input->get('sort_column'));
+            $options->setSortDirection($input->get('sort_direction')); 
         }
-        if (!array_key_exists('allowed_sorts', $defaults)) {
-            $defaults['allowed_sorts'] = [ 'updated_at' ];
-        }
-        if (false == $options->getSortColumn() || !in_array($options->getSortColumn(), $defaults['allowed_sorts'])) {
+
+        if (false == $options->getSortColumn() 
+            || !in_array($options->getSortColumn(), $allowed_columns)) {
             $options->setSortColumn($defaults['sort_column']);
+        }
+        if (false == $options->getSortDirection() 
+            || !in_array($options->getSortDirection(), self::ALLOWED_DIRECTIONS)) {
             $options->setSortDirection($defaults['sort_direction']);
         }
-        if ($this->model) {
-            $json_fields = $this->model->getJsonFields();
-            $translatable = $this->model->getTranslatable();
-            if ($translatable && in_array($options->getSortColumn(), $translatable)) {
-                if ($options->getLocale()) {  
-                    $options->setSortColumn('info->'.$options->getSortColumn().'->'.$options->getLocale());             
-                } else {   
-                    $options->setSortColumn('info->'.$options->getSortColumn());
-                }
+        return $options;
+     }   
+     
+     public function matchShorthand(string $sort)
+     {      
+        foreach ($this->shorthands() as $shorthand) {
+            if ($shorthand['slug'] == $sort) {
+                return $shorthand;
             }
         }
-        return $options;
-     }    
+        return false;
+     }
+
+     public function shorthands()
+     {
+        return [
+            [
+                'slug' => self::SORT_NEWEST,
+                'column' => 'updated_at',
+                'direction' => self::DESC
+            ], 
+            [
+                'slug' => self::SORT_OLDEST,
+                'column' => 'updated_at',
+                'direction' => self::ASC
+            ],
+            [
+                'slug' => self::SORT_AZ,
+                'column' => 'name',
+                'direction' => self::ASC
+            ],
+            [
+                'slug' => self::SORT_ZA,
+                'column' => 'name',
+                'direction' => self::DESC
+            ],
+            [
+                'slug' => self::SORT_RATING_DESC,
+                'column' => 'average_rating',
+                'direction' => self::DESC
+            ],
+            [
+                'slug' => self::SORT_RATING_ASC,
+                'column' => 'average_rating',
+                'direction' => self::ASC
+            ],
+            [
+                'slug' => self::SORT_COUNTRY,
+                'column' => 'average_rating',
+                'direction' => self::ASC
+            ],                                                                                  
+        ];
+     }
 }
