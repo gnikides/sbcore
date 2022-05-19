@@ -84,13 +84,15 @@ class OptionResolver
         return $options;
      }   
      
-     public function matchShorthand(string $sort)
+     public function matchShorthand($sort = '')
      {      
-        foreach ($this->shorthands() as $shorthand) {
-            if ($shorthand['slug'] == $sort) {
-                return $shorthand;
+        if ($sort) {
+            foreach ($this->shorthands() as $shorthand) {
+                if ($shorthand['slug'] == $sort) {
+                    return $shorthand;
+                }
             }
-        }
+        }    
         return false;
      }
 
