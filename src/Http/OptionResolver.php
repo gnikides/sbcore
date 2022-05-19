@@ -13,11 +13,11 @@ class OptionResolver
     const SORT_RATING_DESC  = 'rating_desc';
     const SORT_RATING_ASC   = 'rating_asc';
 
-    const ASC               = 'asc';
-    const DESC              = 'desc';
+    const DIRECTION_ASC     = 'asc';
+    const DIRECTION_DESC    = 'desc';
     const ALLOWED_DIRECTIONS = [
-        self::ASC,
-        self::DESC
+        self::DIRECTION_ASC,
+        self::DIRECTION_DESC
     ];
 
     const DEFAULT_PER_PAGE  = 500;
@@ -100,37 +100,37 @@ class OptionResolver
             [
                 'slug' => self::SORT_NEWEST,
                 'column' => 'updated_at',
-                'direction' => self::DESC
+                'direction' => self::DIRECTION_DESC
             ], 
             [
                 'slug' => self::SORT_OLDEST,
                 'column' => 'updated_at',
-                'direction' => self::ASC
+                'direction' => self::DIRECTION_ASC
             ],
             [
                 'slug' => self::SORT_AZ,
                 'column' => 'name',
-                'direction' => self::ASC
+                'direction' => self::DIRECTION_ASC
             ],
             [
                 'slug' => self::SORT_ZA,
                 'column' => 'name',
-                'direction' => self::DESC
+                'direction' => self::DIRECTION_DESC
             ],
             [
                 'slug' => self::SORT_RATING_DESC,
                 'column' => 'average_rating',
-                'direction' => self::DESC
+                'direction' => self::DIRECTION_DESC
             ],
             [
                 'slug' => self::SORT_RATING_ASC,
                 'column' => 'average_rating',
-                'direction' => self::ASC
+                'direction' => self::DIRECTION_ASC
             ],
             [
                 'slug' => self::SORT_COUNTRY,
                 'column' => 'average_rating',
-                'direction' => self::ASC
+                'direction' => self::DIRECTION_ASC
             ],                                                                                  
         ];
      }
