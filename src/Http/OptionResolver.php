@@ -64,21 +64,29 @@ class OptionResolver
     {     
         $sort = $input->get('sort'); 
         
-        if ($shorthand = $this->matchShorthand($sort)) {          
+        if ($shorthand = $this->matchShorthand($sort)) {         
             $options->setSortColumn($shorthand['column']);
             $options->setSortDirection($shorthand['direction']); 
         
         } elseif ($input->get('sort_column') && $input->get('sort_direction')) {
             $options->setSortColumn($input->get('sort_column'));
             $options->setSortDirection($input->get('sort_direction')); 
-        }
 
+        } else {
+            if (isset($defaults['sort_column'])) {
+                $options->setSortColumn($defaults['sort_column']);
+            } 
+            if (isset($defaults['sort_direction'])) {
+                $options->setSortDirection($defaults['sort_direction']); 
+            }    
+        }            
+        
         if (false == $options->getSortColumn() 
             || !in_array($options->getSortColumn(), $allowed_columns)) {
             $options->setSortColumn($defaults['sort_column']);
         }
         if (false == $options->getSortDirection() 
-            || !in_array($options->getSortDirection(), self::ALLOWED_DIRECTIONS)) {
+            || !in_array($options->getSortDirection(), self::ALLOWED_DIRECTIONS)) {   
             $options->setSortDirection($defaults['sort_direction']);
         }
         return $options;
