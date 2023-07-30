@@ -37,7 +37,7 @@ class S3Client
         $this->mediaUrl     = $config['url'].'/'.$this->bucket;
     }
     
-    public function put($path, $key)
+    public function put($path, $key, $metadata = [])
     {   
         try {         
             $result = $this->s3->putObject(array(
@@ -49,11 +49,8 @@ class S3Client
                 'ACL'          => 'public-read-write',
                 'CacheControl' => 'max-age=31536000',
                 'StorageClass' => 'REDUCED_REDUNDANCY'//,
-                //'Metadata'     => array(    
-                //  'param1' => 'value 1',
-                //  'param2' => 'value 2'
-                //)
-            ));            
+                'Metadata'     => $metadata
+            ));                        
             Log::debug(
                 'Amazon S3 Put', [
                     'Bucket'       => $this->bucket,
@@ -62,13 +59,14 @@ class S3Client
                     'ContentType'  => $this->contentType,
                     'ACL'          => 'public-read-write',
                     'StorageClass' => 'REDUCED_REDUNDANCY',
-                    'ObjectURL'    => $result['ObjectURL']
+                    'ObjectURL'    => $result['ObjectURL'],
+                    'Metadata'     => $metadata
             ]);
             return $result;
         } catch (S3Exception $e) {}  
     }
 
-    public function copy($source, $target)
+    public function copy($source, $target, $metadata = [])
     {
         try {
             $result = $this->s3->copyObject([
@@ -79,10 +77,7 @@ class S3Client
                 'ACL'          => 'public-read',
                 'CacheControl' => 'max-age=31536000',
                 'StorageClass' => 'REDUCED_REDUNDANCY'//,
-                //'Metadata'     => array(    
-                //  'param1' => 'value 1',
-                //  'param2' => 'value 2'
-                //)
+                'Metadata'     => $metadata
             ]);
             Log::debug(
                 __FILE__ . ': Amazon S3 copy', 
@@ -92,7 +87,8 @@ class S3Client
                     'CopySource'   => $this->bucket . '/' . $source,
                     'ContentType'  => $this->contentType,
                     'ACL'          => 'public-read',
-                    'StorageClass' => 'REDUCED_REDUNDANCY'
+                    'StorageClass' => 'REDUCED_REDUNDANCY',
+                    'Metadata'     => $metadata
                 ],
                 'amazon'
             );
@@ -124,6 +120,19 @@ class S3Client
         } catch (S3Exception $e) {}   
     }
 
+    public function getMetadata($key)
+    {
+		try {
+               $result = $s3->headObject([
+				'Bucket' => $this->bucket,
+				'Key'    => $key
+			]);
+        	     return $result['Metadata'];
+		} catch (S3Exception $e) {
+		    echo "Error retrieving metadata.\n";
+		}
+    }
+     
     public function delete($key)
     {
         $this->s3->deleteObject([
