@@ -36,7 +36,16 @@ class OptionResolver
    
         $options = new RequestOptions();
         $options = $this->makeSort($input, $options, $defaults, $allowed_columns);
-        $options->setPerPage($input->get('limit', $defaults['per_page']));
+
+        if ($input->get('limit')) {
+            $per_page = $input->get('limit');
+        } elseif ($input->get('per_page')) {
+            $per_page = $input->get('per_page');
+        } else {
+            $per_page = $defaults['per_page'];
+        }
+        $options->setPerPage($per_page);
+        
         $options->setPage($input->get('page', 1));
         $options->setIds((array) $input->get('ids'));
         
