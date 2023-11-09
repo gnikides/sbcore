@@ -48,7 +48,7 @@ class S3Client
                 'ContentType'  => 'image/jpeg',
                 'ACL'          => 'public-read-write',
                 'CacheControl' => 'max-age=31536000',
-                'StorageClass' => 'REDUCED_REDUNDANCY'//,
+                'StorageClass' => 'REDUCED_REDUNDANCY',
                 'Metadata'     => $metadata
             ));                        
             Log::debug(
