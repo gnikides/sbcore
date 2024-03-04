@@ -5,20 +5,6 @@ use Carbon\Carbon;
 use Core\Support\TimeAgo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-//  dump a variable
-if (!function_exists('sb')) {  
-    function sb($var, bool $die = false)
-    { 
-        array_map(function($var) {
-            echo gettype($var) . ": ";
-            (new VarDumper)->dump($var);
-        }, func_get_args());
-        if ($die) {
-            die();
-        }
-    }
-}
-
 //  print_r a variable
 if (!function_exists('pr')) { 
     function pr($var, bool $die = false)
@@ -177,24 +163,6 @@ if (!function_exists('isJson')) {
    }
 }
 
-if (!function_exists('propertyValue')) {
-    function propertyValue($id, $properties)
-    {
-        if (is_array($properties)) {
-            foreach ($properties as $property) {
-                if (is_array($property) 
-                    && array_key_exists('property', $property) 
-                    && array_key_exists('id', $property['property'])
-                    && $property['property']['id'] == $id) {                       
-                        return $property['value'];                    
-                }            
-            }
-        }    
-        return false;
-    }
-}
-
-
 function sortByValue($array, $field, $dir = SORT_ASC)
 {
     $sort = [];
@@ -205,20 +173,43 @@ function sortByValue($array, $field, $dir = SORT_ASC)
     return $array;
 } 
 
-function translateModel($values, $locale = 'default', $use_default = true)
-{   
-    if (!$values) {
-        return null;
-    } elseif (!is_array($values)) {
-        return $values;
+if (!function_exists('countDirectories')) {
+    function countDirectories($dir)
+    {
+        $allDirectories = File::directories($dir);
+        $count = 0;
+
+        foreach ($allDirectories as $dir) {
+            $dirname = basename($dir);
+
+            // Skip dot files and .DS_Store files
+            if ($dirname[0] === '.'
+                || $dirname[0] === '..'
+                || $dirname === '.DS_Store') {
+                continue;
+            }
+            $count++;
+        }
+        return $count;
     }
-    $locale = $locale ? $locale : 'default';
-    $value = array_key_exists($locale, $values) ? $values[$locale] : null;
-    if ($value) {
-        return $value;
+}
+
+if (!function_exists('countFiles')) {
+    function countFiles($dir)
+    {
+        $files = File::allFiles($dir);
+        $count = 0;
+
+        foreach ($files as $file) {
+            $filename = $file->getFilename();
+
+            // Skip dot files and .DS_Store files
+            if ($filename[0] !== '.'
+                && $filename[0] !== '..'
+                && $filename !== '.DS_Store') {
+                $count++;
+            }
+        }
+        return $count;
     }
-    if ($use_default) {
-        return array_key_exists('default', $values) ? $values['default'] : null;
-    }
-    return false;    
-} 
+}
