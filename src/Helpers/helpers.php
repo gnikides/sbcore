@@ -4,6 +4,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Carbon\Carbon;
 use Core\Support\TimeAgo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\File;
 
 //  print_r a variable
 if (!function_exists('pr')) { 
