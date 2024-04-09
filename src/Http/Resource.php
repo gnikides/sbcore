@@ -6,6 +6,7 @@ use Core\Http\AnonymousResourceCollection;
 
 class Resource extends JsonResource
 {
+    protected $data = [];
     protected $expandable = [];
     protected $request_locale = 'default';
     protected $fallback_locale = 'default';
