@@ -5,6 +5,37 @@ use Carbon\Carbon;
 use Core\Support\TimeAgo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
+if (! function_exists('logError')) {
+    function logError(string $message, $context = '')
+    {
+        Log::error($message, getErrorContext($context));
+    }
+}
+
+if (! function_exists('logDebug')) {
+    function logDebug(string $message, $context = '')
+    {
+        Log::debug($message, getErrorContext($context));
+    }
+}
+
+if (! function_exists('logInfo')) {
+    function logInfo(string $message, $context = '')
+    {
+        Log::info($message, getErrorContext($context));
+    }
+}
+
+if (!function_exists('getErrorContext')) {
+    function getErrorContext($context = '')
+    {
+        return is_array($context) ? $context : [$context];
+    }
+}
 
 //  print_r a variable
 if (!function_exists('pr')) { 
@@ -17,17 +48,6 @@ if (!function_exists('pr')) {
         if ($die) {
             die();
         }
-    }
-}
-
-//  utility log function
-if (!function_exists('lg')) { 
-    function lg($array, string $message = 'debug')
-    {   
-        if (!is_array($array)) {
-            $array = [$array];
-        }
-        \Log::info($message, $array);
     }
 }
 
@@ -87,32 +107,6 @@ if (!function_exists('sanitizeFloat')) {
     } 
 }
 
-if (!function_exists('sanitizeStrings')) {
-    function sanitizeStrings($value = '')
-    {
-        $output = [];
-        if ($value && is_array($value)) {
-            foreach ($value as $k => $v) {
-                $output[strtolower(sanitizeString($k))] = sanitizeString($v);
-            }
-        }
-        return $output;      
-    }
-}
-
-if (!function_exists('sanitizeInts')) {
-    function sanitizeInts($value)
-    {
-        $output = [];
-        if (is_array($value)) {
-            foreach ($value as $k => $v) {
-                $output[strtolower(sanitizeString($k))] = sanitizeInt($v);
-            }
-        }
-        return $output;      
-    }
-}
-
 if (!function_exists('timeAgo')) {
     function timeAgo($date)
     {
@@ -154,14 +148,15 @@ if (!function_exists('getMorphedModel')) {
     }
 }
 
-if (!function_exists('isJson')) {  
-    function isJson($value) {
-        if (!is_string($value)) {
+if (! function_exists('isValidJson')) {
+    function isValidJson($data)
+    {
+        if (! isset($data) || ! is_string($data)) {
             return false;
-        }    
-        json_decode($value);
-        return (json_last_error() == JSON_ERROR_NONE);
-   }
+        }
+        json_decode($data);
+        return json_last_error() === JSON_ERROR_NONE;
+    }
 }
 
 function sortByValue($array, $field, $dir = SORT_ASC)
