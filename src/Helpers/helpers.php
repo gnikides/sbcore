@@ -156,15 +156,17 @@ if (! function_exists('isValidJson')) {
     }
 }
 
-function sortByValue($array, $field, $dir = SORT_ASC)
-{
-    $sort = [];
-    foreach ($array as $key => $val) {
-        $sort[$key] = $val[$field];
-    }
-    array_multisort($sort, $dir, $array);
-    return $array;
-} 
+if (!function_exists('sortByValue')) {
+    function sortByValue($array, $field, $dir = SORT_ASC)
+    {
+        $sort = [];
+        foreach ($array as $key => $val) {
+            $sort[$key] = $val[$field];
+        }
+        array_multisort($sort, $dir, $array);
+        return $array;
+    } 
+}
 
 if (!function_exists('countDirectories')) {
     function countDirectories($dir)
