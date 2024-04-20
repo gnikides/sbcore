@@ -99,39 +99,6 @@ abstract class Request extends FormRequest
     {
         return $input;
     }  
-
-    public function sanitizeArray(array $input = [], array $filters = [])
-    {  
-        $output = [];
-        foreach ($filters as $key => $filter) {
-            if (array_key_exists($key, $input)) {
-                if ('int' == $filter) {
-                    $output[$key] = sanitizeInt($input[$key]);
-                } elseif ('string' == $filter) {
-                    $output[$key] = sanitizeString($input[$key]);
-                } elseif ('strtolower' == $filter) {
-                    $output[$key] = strtolower(sanitizeString($input[$key]));
-                } elseif ('strtoupper' == $filter) {
-                    $output[$key] = strtoupper(sanitizeString($input[$key]));
-                } elseif ('active' == $filter) {
-                    $output[$key] = strtolower(sanitizeString(Arr::get($input, $key, 'active')));
-                } elseif ('meta' == $filter || 'string_array' == $filter) {
-                    $output[$key] = sanitizeStrings($input[$key]); 
-                } elseif ('int_array' == $filter) {
-                    $output[$key] = sanitizeInts($input[$key]);   
-                } elseif ('string_array' == $filter) {
-                    $output[$key] = sanitizeStrings($input[$key]);                         
-                } elseif ('none' == $filter) {
-                    $output[$key] = $input[$key];
-                }
-            } else {
-                if ('active' == $filter) {
-                    $output[$key] = strtolower(sanitizeString(Arr::get($input, $key, 'active')));
-                }
-            }    
-        }
-        return $output;
-    }
     
     public function removeNonNumeric($value)
     {
@@ -144,30 +111,4 @@ abstract class Request extends FormRequest
         $instance = new $class;
         return $instance->rules();  
     }
-
-    public function cleanupString(string $text)
-    {
-        $text = preg_replace("/[\r\n]+/", "\n", $text);
-        $text = str_replace("&nbsp;", " ", $text);
-        $text = str_replace("\t", "", $text);           
-        return trim($text, "\n");
-    }  
-    
-    // public function properties($input, $output)
-    // {   
-    //     foreach ($input as $key => $value) {
-    //         if (false !== strpos($key, 'property_')) {                
-    //             if (is_numeric($value)) {
-    //                 $value = sanitizeInt($value);
-    //             } else {
-    //                 $value = $this->cleanupString(sanitizeString($value));
-    //             }
-    //             $field = explode('_', $key);
-    //             $id = $field[1];
-    //             $type = $field[2];
-    //             $output['properties'][$id][$type] = $value;                
-    //         }
-    //     }
-    //     return $output;
-    // }          
 }
