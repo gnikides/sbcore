@@ -71,15 +71,16 @@ class OptionResolver
     
     public function makeSort($input, $options, $defaults, $allowed_columns)
     {     
-        $sort = $input->get('sort'); 
+        $sort = strtolower($input->get('sort')); 
         
         if ($shorthand = $this->matchShorthand($sort)) {         
             $options->setSortColumn($shorthand['column']);
             $options->setSortDirection($shorthand['direction']); 
         
         } elseif ($input->get('sort_column') && $input->get('sort_direction')) {
-            $options->setSortColumn($input->get('sort_column'));
-            $options->setSortDirection($input->get('sort_direction')); 
+            $options->setSortColumn(strtolower($input->get('sort_column')));
+            $options->setSortDirection(strtolower($input->get('sort_direction'))); 
+            dump($options);
 
         } else {
             if (isset($defaults['sort_column'])) {
