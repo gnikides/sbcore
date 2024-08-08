@@ -80,7 +80,6 @@ class OptionResolver
         } elseif ($input->get('sort_column') && $input->get('sort_direction')) {
             $options->setSortColumn(strtolower($input->get('sort_column')));
             $options->setSortDirection(strtolower($input->get('sort_direction'))); 
-            dump($options);
 
         } else {
             if (isset($defaults['sort_column'])) {
