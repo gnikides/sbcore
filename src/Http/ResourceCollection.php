@@ -59,16 +59,5 @@ class ResourceCollection extends JsonResource implements Countable, IteratorAggr
         return $this->resource instanceof AbstractPaginator
                     ? (new PaginatedResourceResponse($this))->toResponse($request)
                     : parent::toResponse($request);
-    }
-
-    public function resolveTranslation($values, $locale = '')
-    {   
-        if (!$values) {
-            return null;
-        } elseif (!is_array($values)) {
-            return $values;
-        }
-        $locale = $locale ? $locale : $this->request_locale; 
-        return array_key_exists($locale, $values) ? $values[$locale] : null;
-    }        
+    } 
 }
