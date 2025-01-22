@@ -76,26 +76,5 @@ class Resource extends JsonResource
     public function getData($key)
     {
         return Arr::get($this->data, $key, null);
-    }  
-    
-    public function translate($values, $locale = '')
-    {   
-        $locale = $locale ? $locale : $this->request_locale;
-        return translateModel($values, $locale);
-    } 
-    
-    public function translateArray($values)
-    {
-        $translated = [];
-        if (is_array($values)) {
-            foreach ($values as $k => $v) {
-                if (!is_array($v)){
-                    $translated[$k] = $v;
-                } else {    
-                    $translated[$k] = $this->translate($v);
-                }
-            }
-        }    
-        return $translated;
-    }      
+    }
 }
