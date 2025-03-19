@@ -71,7 +71,7 @@ class OptionResolver
     
     public function makeSort($input, $options, $defaults, $allowed_columns)
     {     
-        $sort = strtolower($input->get('sort')); 
+        $sort = $input->get('sort') ? strtolower($input->get('sort')) : null;
         
         if ($shorthand = $this->matchShorthand($sort)) {         
             $options->setSortColumn($shorthand['column']);
