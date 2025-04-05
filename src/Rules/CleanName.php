@@ -20,11 +20,6 @@ class CleanName implements Rule
         // Allow a single space between words
         $value = preg_replace('/\s+/', ' ', $value);
 
-        // Check for URLs (http:// or https://)
-        if (preg_match('/https?:\/\/[^\s]+/', $value)) {
-            return false;
-        }
-
         // Check for email-like strings (contains @)
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return false;
