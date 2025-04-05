@@ -7,12 +7,18 @@ use Illuminate\Contracts\Validation\Rule;
 class CleanString implements Rule
 {
     // List of reserved keywords that should not be allowed in the username
-    private $reservedKeywords = ['admin', 'root', 'superuser'];
+    private $reserved_words = [
+        'admin', 'root', 'superuser', 'administrator', 'system', 
+        'login', 'logout', 'user', 'auth', 'usr', 'delete', 'queue', 'cron'
+    ];
 
     public function passes($attribute, $value)
     {
-        // Remove leading, trailing, and internal spaces
-        $value = preg_replace('/\s+/', '', $value); // Removes all spaces
+        // Trim leading and trailing spaces
+        $value = trim($value);
+
+        // Allow a single space between words
+        $value = preg_replace('/\s+/', ' ', $value);
 
         // Check for URLs (http:// or https://)
         if (preg_match('/https?:\/\/[^\s]+/', $value)) {
@@ -31,7 +37,7 @@ class CleanString implements Rule
         }
 
         // Check for reserved keywords (case-insensitive)
-        if (in_array(strtolower($value), $this->reservedKeywords)) {
+        if (in_array(strtolower($value), $this->reserved_words)) {
             return false;
         }
 
