@@ -4,7 +4,7 @@ namespace Core\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CleanString implements Rule
+class CleanName implements Rule
 {
     // List of reserved keywords that should not be allowed in the username
     private $reserved_words = [
