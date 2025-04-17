@@ -36,11 +36,6 @@ class CleanName implements Rule
             return false;
         }
 
-        // Check for SQL injection or script attempts (simple pattern matching)
-        if (preg_match('/(\b(select|insert|delete|drop|update|union|--|\/\*|\*\/)\b)/i', $value)) {
-            return false;
-        }
-
         // If all checks pass, return true
         return true;
     }
