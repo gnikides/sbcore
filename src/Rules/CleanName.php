@@ -17,22 +17,25 @@ class CleanName implements Rule
         // Trim leading and trailing spaces
         $value = trim($value);
 
-        // Allow a single space between words
-        $value = preg_replace('/\s+/', ' ', $value);
-
         // Check for email-like strings (contains @)
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            dump('email');
+            dump($value);            
             return false;
         }
 
         // Check for special characters or emojis
         // Allow letters (including accented), numbers, underscores, hyphens, and periods
-        if (preg_match('/[^a-zA-Z0-9_\.\\-áéíóúàèìòùãõçñÁÉÍÓÚÀÈÌÒÙÃÕÇÑ ]/', $value)) { 
+        if (preg_match('/[^a-zA-Z0-9_\.,\\-áéíóúàèìòùãõçñÁÉÍÓÚÀÈÌÒÙÃÕÇÑ ]/', $value)) { 
+            dump('special');
+            dump($value);
             return false;
         }
 
         // Check for reserved keywords (case-insensitive)
         if (in_array(strtolower($value), $this->reserved_words)) {
+            dump('reserved');
+            dump($value);                 
             return false;
         }
 
