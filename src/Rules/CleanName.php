@@ -14,9 +14,6 @@ class CleanName implements Rule
 
     public function passes($attribute, $value)
     {
-        // Trim leading and trailing spaces
-        $value = trim($value);
-
         // Check for email-like strings (contains @)
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return false;
