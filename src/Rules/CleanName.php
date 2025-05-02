@@ -19,11 +19,10 @@ class CleanName implements Rule
             return false;
         }
 
-        // Check for special characters or emojis
-        // Allow letters (including accented), numbers, underscores, hyphens, and periods
-        if (preg_match('/[^a-zA-Z0-9_\.,\\-áéíóúàèìòùãõçñÁÉÍÓÚÀÈÌÒÙÃÕÇÑ ]/', $value)) { 
-            return false;
-        }
+        // Reject if string contains anything except letters, marks, spaces, numbers, commas, periods, apostrophes, or hyphens
+        // if (preg_match('/[^\p{L}\p{M}\p{Zs}0-9,\.\'\-]/u', $value)) {
+        //     return false;
+        // }
 
         // Check for reserved keywords (case-insensitive)
         if (in_array(strtolower($value), $this->reserved_words)) {
