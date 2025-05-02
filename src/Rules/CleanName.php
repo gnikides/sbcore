@@ -22,8 +22,6 @@ class CleanName implements Rule
         // Check for special characters or emojis
         // Allow letters (including accented), numbers, underscores, hyphens, and periods
         if (preg_match('/[^a-zA-Z0-9_\.,\\-áéíóúàèìòùãõçñÁÉÍÓÚÀÈÌÒÙÃÕÇÑ ]/', $value)) { 
-            logInfo($value);
-            dump($value);
             return false;
         }
 
