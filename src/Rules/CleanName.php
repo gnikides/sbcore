@@ -8,8 +8,7 @@ class CleanName implements Rule
 {
     // List of reserved keywords that should not be allowed in the username
     private $reserved_words = [
-        'admin', 'root', 'superuser', 'administrator', 'system', 
-        'login', 'logout', 'user', 'auth', 'usr', 'delete', 'queue', 'cron'
+        'admin', 'root', 'superuser', 'login', 'logout', 'auth', 'usr', 'cron'
     ];
 
     public function passes($attribute, $value)
